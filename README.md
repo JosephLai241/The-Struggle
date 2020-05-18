@@ -24,7 +24,7 @@ I have been applying to *tons* of companies in attempt to secure a job before I 
 
 ## How It Works and Use Cases
 
-This program essentially makes it easier and faster to maintain a spreadsheet of all the jobs applications you want to record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
+This program essentially makes it easier and faster to maintain a locally-stored spreadsheet of all the jobs applications you record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
 
 **Adding a job:** The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record.
 
@@ -56,11 +56,13 @@ Each Application Status is mapped to a color and will colorize your job listing 
 
 ## Read This Before You Run the Program
 
-You will have to add a job on the initial run of this program. Adding a job on the initial run will create a csv titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding a job because there is no file to read from. 
+You will have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
 
-**DO NOT** create `job_applications.csv`. The program will create the file for you. Creating an empty `job_applications.csv` before running any commands will cause issues for you later on. 
+**DO NOT** create `job_applications.csv`. The program will create the file for you. Creating an empty `job_applications.csv` before running the `-a` flag will cause issues for you later on. 
 
 ## Walkthrough
+
+Use `-h` or `--help` if you forget the arguments or do not want to read this walkthrough.
 
 ### Adding a Job
 
