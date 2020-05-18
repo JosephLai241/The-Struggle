@@ -30,6 +30,9 @@ def main():
     elif args.list:
         ### List all existing jobs in the spreadsheet
         listings.list_jobs(args,list_functions)
+    elif args.insights:
+        ### Return job application insights
+        pass
 
 
 if __name__ == "__main__":

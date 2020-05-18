@@ -11,17 +11,6 @@ init(autoreset=True)
 job_categories = global_vars.job_categories
 status_options = global_vars.status_options
 
-### Get all jobs in spreadsheet
-def get_jobs():
-    master = []
-    with open(global_vars.f_name,"r") as listing:
-        csv_file = csv.reader(listing,delimiter=",")
-        next(csv_file)
-        for row in csv_file:
-            master.append(row)
-    
-    return master
-
 ### Add jobs to table 
 def add_jobs(master,table):
     for job in master:
