@@ -28,7 +28,9 @@ This program essentially makes it easier and faster to maintain a spreadsheet of
 
 **Deleting a job:** The program will parse the existing spreadsheet, remove the job, then rewrite the spreadsheet. 
 
-**Listing all saved jobs:** The program will parse the spreadsheet and then use [PrettyTable](https://pypi.org/project/PrettyTable/) to print all the jobs you have stored into a readable format within a terminal.
+**Listing all saved jobs:** The program will parse the spreadsheet and then print all the jobs you have stored into a readable format within a terminal.
+
+This program utilizes [Colorama](https://pypi.org/project/colorama/) and [PrettyTable](https://pypi.org/project/PrettyTable/) to add color and neatly print job listings in a table within the terminal.
 
 ## Stored Attributes
 
