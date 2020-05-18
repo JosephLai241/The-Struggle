@@ -11,7 +11,11 @@ Run `pip install -r requirements.txt` to install all project dependencies.
 - [Introduction](#introduction)
 - [How it works / Use Cases](#how-it-works-and-use-cases)
 - [Stored Attributes](#stored-attributes)
+- [Read This Before You Run the Program](#read-this-before-you-run-the-program)
 - [Walkthrough](#walkthrough)
+    - [Adding a Job](#adding-a-job)
+    - [Updating or Deleting a Job](#updating-or-deleting-a-job)
+    - [Listing All Jobs](#listing-all-jobs)
 - [Releases](#releases)
  
 ## Introduction
@@ -20,7 +24,7 @@ I have been applying to *tons* of companies in attempt to secure a job before I 
 
 ## How It Works and Use Cases
 
-This program essentially makes it easier and faster to maintain a spreadsheet of all the jobs applications you want to record.
+This program essentially makes it easier and faster to maintain a spreadsheet of all the jobs applications you want to record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
 
 **Adding a job:** The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record.
 
@@ -49,6 +53,12 @@ Application Status has a few options you can choose from:
 |REJECTED|
 
 Each Application Status is mapped to a color and will colorize your job listing within a terminal.
+
+## Read This Before You Run the Program
+
+You will have to add a job on the initial run of this program. Adding a job on the initial run will create a csv titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding a job because there is no file to read from. 
+
+**DO NOT** create `job_applications.csv`. The program will create the file for you. Creating an empty `job_applications.csv` before running any commands will cause issues for you later on. 
 
 ## Walkthrough
 
@@ -82,7 +92,7 @@ For example, if you have stored job applications from Uber, Hulu, and YouTube an
 
 You can sort how jobs are listed within the terminal. The default sort method is by date (descending)
 
-type|description
+Sort By|Description
 ----|-----------
 date|sort by date (descending)
 date_reverse|sort by date (ascending) 
