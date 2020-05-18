@@ -1,8 +1,8 @@
 #===============================================================================
 #                           New Job Profile Functions
 #===============================================================================
-from . import csv_functions
 from .. import global_vars, model
+from . import csv_functions
 
 job_categories = global_vars.job_categories
 status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]
@@ -13,7 +13,7 @@ status_prompt = global_vars.status_prompt
 def new_title(args):
     while True:
         try:
-            title = str(input("\nWhat is the title of the position you are applying for at %s? " % args.new[0])).strip()
+            title = str(input("\nWhat is the title of the position you are applying for at %s? " % args.add[0])).strip()
             if not title:
                 raise ValueError
             else:
@@ -40,7 +40,7 @@ def new_notes():
 
 ### Make new Job
 def new_job(args,status,title,notes):
-    return model.Job(global_vars.date,args.new[0],title,status,notes)
+    return model.Job(global_vars.date,args.add[0],title,status,notes)
 
 ### Make master dictionary
 def make_master(job,details):
@@ -57,7 +57,7 @@ def print_settings(job):
     print(table_header)
     print("-"*len(table_header))
     description = f"{details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
-    global_vars.set_color(description,details,c_len,t_len,n_len)
+    global_vars.set_color(description,details)
 
     return details
 
