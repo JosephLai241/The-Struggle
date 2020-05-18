@@ -48,4 +48,47 @@ Application Status has a few options:
 
 ## Walkthrough
 
+### Adding a Job
+
+Adding a job at Reddit:
+
+`$ ./track.py -a Reddit`
+
+Use quotes around the company name if it is more than one word:
+
+`$ ./track.py -a "E Corp"`
+
+### Updating or Deleting a Job
+
+Updating an existing job at Reddit:
+
+`$ ./track.py -u Reddit`
+
+Deleting an existing job at E Corp:
+
+`$ ./track.py -d "E Corp"`
+
+***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter that is present in the company name to return all job listings with company names that include that letter.
+
+For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
+
+### Listing All Jobs
+
+`$ ./track.py -l`
+
+You can sort how jobs are listed within the terminal. The default sort method is by date (descending)
+
+type|description
+----|-----------
+date|sort by date (descending)
+date_reverse|sort by date (ascending) 
+company|sort by company name
+title|sort by job title
+status|sort by status
+notes|sort by notes
+
+Sort job applications by company name:
+
+`$ ./track.py -l company`
+
 ## Releases
