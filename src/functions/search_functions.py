@@ -1,9 +1,9 @@
 #===============================================================================
 #                               Search Functions
 #===============================================================================
-from colorama import Fore, Style
 import csv
 import re
+from colorama import Fore, Style
 from .. import global_vars, model
 
 job_categories = global_vars.job_categories

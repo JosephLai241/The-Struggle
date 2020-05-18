@@ -2,8 +2,7 @@
 #                               List Functions
 #===============================================================================
 
-from colorama import init, Fore, Style
-from prettytable import PrettyTable
+from colorama import init, Style
 from .. import global_vars
 import csv
 

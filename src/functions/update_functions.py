@@ -2,8 +2,8 @@
 #                               Update Functions
 #===============================================================================
 from colorama import Fore, Style
-from . import csv_functions
 from .. import global_vars
+from . import csv_functions
 
 job_categories = global_vars.job_categories
 status_options = global_vars.status_options

@@ -1,8 +1,8 @@
 #===============================================================================
 #                           New Job Profile Functions
 #===============================================================================
-from . import csv_functions
 from .. import global_vars, model
+from . import csv_functions
 
 job_categories = global_vars.job_categories
 status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]

@@ -28,6 +28,7 @@ def main():
         ### Delete an existing job in the spreadsheet
         delete.delete_job(args,delete_functions,parser,search_functions)
     elif args.list:
+        ### List all existing jobs in the spreadsheet
         listings.list_jobs(args,list_functions)
 
 
