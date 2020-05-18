@@ -10,6 +10,7 @@ Run `pip install -r requirements.txt` to install all project dependencies.
 
 - [Introduction](#introduction)
 - [How it works / Use Cases](#how-it-works-and-use-cases)
+- [Stored Attributes](#stored-attributes)
 - [Walkthrough](#walkthrough)
 - [Releases](#releases)
  
@@ -28,6 +29,22 @@ This program essentially makes it easier and faster to maintain a spreadsheet of
 **Deleting a job:** The program will parse the existing spreadsheet, remove the job, then rewrite the spreadsheet. 
 
 **Listing all saved jobs:** The program will parse the spreadsheet and then use [PrettyTable](https://pypi.org/project/PrettyTable/) to print all the jobs you have stored into a readable format within a terminal.
+
+## Stored Attributes
+
+Date is automatically calculated based on Python's [datetime](https://docs.python.org/3/library/datetime.html).
+
+Company Name, Job Title, and Notes are all based on user input.
+
+Application Status has a few options:
+
+|Application Status|
+|------------------|
+|PENDING|
+|IN PROGRESS|
+|OFFER RECEIVED|
+|HIRED|
+|REJECTED|
 
 ## Walkthrough
 
