@@ -16,7 +16,7 @@ Run `pip install -r requirements.txt` to install all project dependencies.
  
 ## Introduction
  
-I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process. I decided to make a Python command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty good, so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
+I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a Python command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty good, so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
 
 ## How It Works and Use Cases
 
@@ -36,7 +36,7 @@ Date is automatically calculated based on Python's [datetime](https://docs.pytho
 
 Company Name, Job Title, and Notes are all based on user input.
 
-Application Status has a few options:
+Application Status has a few options you can choose from:
 
 |Application Status|
 |------------------|
@@ -45,6 +45,8 @@ Application Status has a few options:
 |OFFER RECEIVED|
 |HIRED|
 |REJECTED|
+
+Each Application Status is mapped to a color and will colorize your job listing within a terminal.
 
 ## Walkthrough
 
