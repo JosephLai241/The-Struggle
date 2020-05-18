@@ -1,10 +1,9 @@
 #===============================================================================
 #                               Update Functions
 #===============================================================================
-from colorama import Style
+from colorama import Fore, Style
 from . import csv_functions
 from .. import global_vars
-from ..functions import search_functions
 
 job_categories = global_vars.job_categories
 status_options = global_vars.status_options
@@ -74,40 +73,9 @@ def update_section(section,matches,selected):
 
     return matches[selected]
 
-### Header for listing changes
-def list_changes_header(matches,selected):
-    c_len,t_len,n_len = search_functions.set_print_format(matches)
-    details = [matches[selected][0].date,matches[selected][0].company,matches[selected][0].title,matches[selected][0].status,matches[selected][0].notes]
-    description = f"{details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
-    table_header = f"\n{job_categories[0]:<{19}} {job_categories[1]:<{c_len}} {job_categories[2]:<{t_len}} {job_categories[3]:<{16}} {job_categories[4]:<{n_len}}"
-    print(table_header)
-    print("-"*len(table_header))
-
-    return c_len,t_len,n_len,details,description
-
-### List the changes made to a current listing
-def list_changes(matches,selected):
-    c_len,t_len,n_len,details,description = list_changes_header(matches,selected)
-    print(Style.BRIGHT + "\nNEW LISTING\n")
-    global_vars.set_color(description,details,c_len,t_len,n_len)
-
-### Confirm changes
-def confirm_update(parser):
-    while True:
-        try:
-            confirm = str(input("Confirm Changes? [Y/N] ")).strip().lower()
-            if confirm not in global_vars.options:
-                raise ValueError
-            elif confirm == global_vars.options[0]:
-                return
-            elif confirm == global_vars.options[1]:
-                print("\nEXITING.\n")
-                parser.exit()
-        except ValueError:
-            print("\nNot an option! Try again.\n")
-
 ### Update spreadsheet
 def write_changes(job_listing,master):
+    print(Fore.CYAN + Style.BRIGHT + "\nUPDATED LISTING.\n")
     index = job_listing[1]
     master[index] = dict(zip(job_categories,[job_listing[0].date,job_listing[0].company,job_listing[0].title,job_listing[0].status,job_listing[0].notes]))
-    csv_functions.update_job(master)
+    csv_functions.overwrite(master)

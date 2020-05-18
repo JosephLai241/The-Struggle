@@ -1,6 +1,6 @@
 #!/usr/bin/python
 """
-Created on Friday May 15 22:15:23 2020
+Created on Sat May 16 17:24:56 2020
 
 Struggle Tracker - A program that helps you track your job applications
 
@@ -8,20 +8,23 @@ Struggle Tracker - A program that helps you track your job applications
 """
 import src.cli as cli
 import src.global_vars as global_vars
+import src.programs.delete as delete
 import src.programs.new as new
 import src.programs.update as update
-from src.functions import new_functions, update_functions
+from src.functions import (delete_functions, new_functions, search_functions,
+                           update_functions)
 
 def main():
     parser,args = cli.parse_args()
-    if args.new:
+    if args.add:
         ### Add new job to spreadsheet
         new.add_job(args,new_functions,parser)
     if args.update:
         ### Update an existing job in the spreadsheet
-        update.update_job(args,update_functions,parser)
+        update.update_job(args,update_functions,parser,search_functions)
     if args.delete:
-        pass
+        ### Delete an existing job in the spreadsheet
+        delete.delete_job(args,delete_functions,parser,search_functions)
     elif args.list:
         pass
 

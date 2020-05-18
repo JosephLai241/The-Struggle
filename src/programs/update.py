@@ -8,6 +8,6 @@ def update_job(args,update_functions,parser,search_functions):
     selected = update_functions.select_job(matches,n)
     section = update_functions.update_prompt()
     job_listing = update_functions.update_section(section,matches,selected)
-    update_functions.list_changes(matches,selected)
-    update_functions.confirm_update(parser)
+    search_functions.list_changes(args,matches,selected)
+    search_functions.confirm_changes(parser)
     update_functions.write_changes(job_listing,master)

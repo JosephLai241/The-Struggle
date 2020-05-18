@@ -13,7 +13,7 @@ status_prompt = global_vars.status_prompt
 def new_title(args):
     while True:
         try:
-            title = str(input("\nWhat is the title of the position you are applying for at %s? " % args.new[0])).strip()
+            title = str(input("\nWhat is the title of the position you are applying for at %s? " % args.add[0])).strip()
             if not title:
                 raise ValueError
             else:
@@ -40,7 +40,7 @@ def new_notes():
 
 ### Make new Job
 def new_job(args,status,title,notes):
-    return model.Job(global_vars.date,args.new[0],title,status,notes)
+    return model.Job(global_vars.date,args.add[0],title,status,notes)
 
 ### Make master dictionary
 def make_master(job,details):

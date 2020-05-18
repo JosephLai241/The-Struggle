@@ -25,14 +25,9 @@ def add_job(master):
             writer = csv.writer(addjob)
             writer.writerow(list(master.values()))
 
-### Update a job in the spreadsheet
-def update_job(master):
+### Rewrite spreadsheet after changes are made (updating or deleting a job listing)
+def overwrite(master):
     with open(f_name,"w",encoding="utf-8") as updatejob:
         writer = csv.DictWriter(updatejob,fieldnames=global_vars.job_categories)
         writer.writeheader()
         writer.writerows(master)
-
-### Delete job from spreadsheet
-def delete_job(master):
-    with open(f_name,"w",encoding="utf-8"):
-        pass

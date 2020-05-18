@@ -1,6 +1,7 @@
 #===============================================================================
-#                               Export Functions
+#                               Search Functions
 #===============================================================================
+from colorama import Fore, Style
 import csv
 import re
 from .. import global_vars, model
@@ -74,3 +75,38 @@ def print_matches(matches):
         n += 1
 
     return n
+
+### Header for listing changes
+def list_header(matches,selected):
+    c_len,t_len,n_len = set_print_format([matches[selected]])
+    details = [matches[selected][0].date,matches[selected][0].company,matches[selected][0].title,matches[selected][0].status,matches[selected][0].notes]
+    description = f"{details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
+    table_header = f"\n{job_categories[0]:<{19}} {job_categories[1]:<{c_len}} {job_categories[2]:<{t_len}} {job_categories[3]:<{16}} {job_categories[4]:<{n_len}}"
+    print(table_header)
+    print("-"*len(table_header))
+
+    return c_len,t_len,n_len,details,description
+
+### List the changes made to a current listing
+def list_changes(args,matches,selected):
+    if args.update:
+        print(Fore.CYAN + Style.BRIGHT + "\nUPDATED LISTING")
+    elif args.delete:
+        print(Fore.RED + Style.BRIGHT + "\nJOB LISTING TO DELETE")
+    c_len,t_len,n_len,details,description = list_header(matches,selected)
+    global_vars.set_color(description,details,c_len,t_len,n_len)
+
+### Confirm changes
+def confirm_changes(parser):
+    while True:
+        try:
+            confirm = str(input("Confirm Changes? [Y/N] ")).strip().lower()
+            if confirm not in global_vars.options:
+                raise ValueError
+            elif confirm == global_vars.options[0]:
+                return
+            elif confirm == global_vars.options[1]:
+                print("\nEXITING.\n")
+                parser.exit()
+        except ValueError:
+            print("\nNot an option! Try again.\n")
