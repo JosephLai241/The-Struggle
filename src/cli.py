@@ -54,12 +54,13 @@ def parse_args():
     scraper.add_argument("-a","--add",nargs=1,metavar="",help="add new company to track")
     scraper.add_argument("-u","--update",nargs=1,metavar="",help="update an existing company in the spreadsheet")
     scraper.add_argument("-d","--delete",nargs=1,metavar="",help="delete an existing company in the spreadsheet")
-    scraper.add_argument("-l","--list",const="date",default="date",nargs="?",metavar="",help="list all saved job applications")
-    scraper.add_argument("-i","--insights",const="all",default="all",nargs="?",metavar="",help="display job application insights")
+    scraper.add_argument("-l","--list",const="date",default=None,nargs="?",metavar="",help="list all saved job applications")
+    scraper.add_argument("-i","--insights",const="all",default=None,nargs="?",metavar="",help="display job application insights")
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
         parser.exit()
 
     args = parser.parse_args()
+    print(args)
     return parser,args
