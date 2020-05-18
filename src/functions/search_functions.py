@@ -70,7 +70,7 @@ def print_matches(matches):
     for match in matches:
         details = [match[0].date,match[0].company,match[0].title,match[0].status,match[0].notes]
         description = f"{n:<6} {details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
-        global_vars.set_color(description,details,c_len,t_len,n_len)
+        global_vars.set_color(description,details)
 
         n += 1
 
@@ -85,7 +85,7 @@ def list_header(matches,selected):
     print(table_header)
     print("-"*len(table_header))
 
-    return c_len,t_len,n_len,details,description
+    return details,description
 
 ### List the changes made to a current listing
 def list_changes(args,matches,selected):
@@ -93,8 +93,8 @@ def list_changes(args,matches,selected):
         print(Fore.CYAN + Style.BRIGHT + "\nUPDATED LISTING")
     elif args.delete:
         print(Fore.RED + Style.BRIGHT + "\nJOB LISTING TO DELETE")
-    c_len,t_len,n_len,details,description = list_header(matches,selected)
-    global_vars.set_color(description,details,c_len,t_len,n_len)
+    details,description = list_header(matches,selected)
+    global_vars.set_color(description,details)
 
 ### Confirm changes
 def confirm_changes(parser):

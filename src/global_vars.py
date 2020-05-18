@@ -7,12 +7,12 @@ from colorama import init, Fore, Style
 ### Automatically turn off color changes at the end of every print. Ensure colorama works on Windows
 init(autoreset=True)
 
-
 date = dt.datetime.now().strftime("%m-%d-%y %H:%M:%S")
 
 options = ["y","n"]
 
 job_categories = ["DATE ADDED","COMPANY","JOB TITLE","STATUS","NOTES"]
+list_options = ["date","date_reverse","company","title","status","notes"]
 status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]
 
 status_prompt = """
@@ -29,7 +29,7 @@ status_prompt = """
 f_name = "job_applications.csv" 
 
 ### Set color of font depending on status
-def set_color(description,details,c_len,t_len,n_len):
+def set_color(description,details):
     if details[3] == status_options[0]:
         print(Fore.BLUE + Style.BRIGHT + description)
     elif details[3] == status_options[1]:

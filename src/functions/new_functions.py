@@ -57,7 +57,7 @@ def print_settings(job):
     print(table_header)
     print("-"*len(table_header))
     description = f"{details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
-    global_vars.set_color(description,details,c_len,t_len,n_len)
+    global_vars.set_color(description,details)
 
     return details
 
