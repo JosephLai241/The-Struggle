@@ -49,13 +49,17 @@ def select_sort(args, table):
         print(table.get_string(sortby=job_categories[0], reversesort=True))
         return
     elif sort_by == list_options[2]:
-        index = sort_n = 1
+        index = 2
+        sort_n = 1
     elif sort_by == list_options[3]:
-        index = sort_n = 2
+        index = 3
+        sort_n = 2
     elif sort_by == list_options[4]:
-        index = sort_n = 3
+        index = 4
+        sort_n = 3
     elif sort_by == list_options[5]:
-        index = sort_n = 4
+        index = 5
+        sort_n = 4
 
     print(Style.BRIGHT + titles[index])
     print(table.get_string(sortby=job_categories[sort_n]))
