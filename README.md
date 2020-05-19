@@ -16,6 +16,7 @@ Run `pip install -r requirements.txt` to install all project dependencies.
     - [Adding a Job](#adding-a-job)
     - [Updating or Deleting a Job](#updating-or-deleting-a-job)
     - [Listing All Jobs](#listing-all-jobs)
+    - [Showing Job Insights](#showing-job-insights)
 - [Releases](#releases)
  
 ## Introduction
@@ -96,7 +97,7 @@ You can sort how jobs are listed within the terminal. The default sort method is
 
 Sort By|Description
 ----|-----------
-date|sort by date (descending)
+date|sort by date (descending) (default)
 date_reverse|sort by date (ascending) 
 company|sort by company name
 title|sort by job title
@@ -106,5 +107,24 @@ notes|sort by notes
 Sort job applications by company name:
 
 `$ ./track.py -l company`
+
+### Showing Job Insights
+
+`$ ./track.py -i`
+
+You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are in each job status as well as its percentage within the spreadsheet. The default insight is for all job statuses.
+
+Sort By|Description
+----|-----------
+all|display all job application insights (default)
+pending|only display insights for job applications that are pending a response
+in_progress|only display insights for job applications that are currently in progress
+offers|only display insights for job applications with an offer
+hired|only display insights for jobs you were hired for
+rejected|only display insights for rejected job applications
+
+Only show job applications that are currently in progress:
+
+`$ ./track.py -i in_progress`
 
 ## Releases
