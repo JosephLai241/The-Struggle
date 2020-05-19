@@ -1,8 +1,10 @@
 #===============================================================================
 #                               Delete Functions
 #===============================================================================
-from colorama import Fore, Style
+from colorama import Fore, init, Style
 from . import csv_functions
+
+init(autoreset=True)
 
 ### Select a match
 def select_job(matches,n):

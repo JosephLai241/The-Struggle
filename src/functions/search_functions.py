@@ -11,7 +11,6 @@ job_categories = global_vars.job_categories
 ### Regex search class
 class reSearch():
     def __init__(self,args):
-        self.args = args
         self.matches = []
     
     def search(self,args,line,row):

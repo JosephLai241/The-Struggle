@@ -9,12 +9,12 @@ Struggle Tracker - A program that helps you track your job applications
 import src.cli as cli
 import src.global_vars as global_vars
 import src.programs.delete as delete
+import src.programs.insight as insight
 import src.programs.list as listings
 import src.programs.new as new
 import src.programs.update as update
-from src.functions import (delete_functions, list_functions, new_functions,
-                           search_functions, update_functions)
-
+from src.functions import (delete_functions, insight_functions, list_functions,
+                           new_functions, search_functions, update_functions)
 
 def main():
     parser,args = cli.parse_args()
@@ -27,9 +27,12 @@ def main():
     if args.delete:
         ### Delete an existing job in the spreadsheet
         delete.delete_job(args,delete_functions,parser,search_functions)
-    elif args.list:
+    if args.list:
         ### List all existing jobs in the spreadsheet
-        listings.list_jobs(args,list_functions)
+        listings.list_jobs(args,list_functions,parser)
+    if args.insights:
+        ### Return job application insights
+        insight.print_insights(args,insight_functions,parser)
 
 
 if __name__ == "__main__":

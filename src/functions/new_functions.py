@@ -1,8 +1,11 @@
 #===============================================================================
 #                           New Job Profile Functions
 #===============================================================================
+from colorama import Fore, init, Style
 from .. import global_vars, model
 from . import csv_functions
+
+init(autoreset=True)
 
 job_categories = global_vars.job_categories
 status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]
@@ -81,5 +84,5 @@ def confirm_new_job(job,parser):
 
 ### Write job to spreadsheet
 def confirm_write(master):
-    print("\nAdding new job to spreadsheet...")
+    print(Fore.WHITE + Style.BRIGHT + "\nADDED NEW LISTING.\n")
     csv_functions.add_job(master)

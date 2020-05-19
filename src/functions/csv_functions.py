@@ -31,3 +31,14 @@ def overwrite(master):
         writer = csv.DictWriter(updatejob,fieldnames=global_vars.job_categories)
         writer.writeheader()
         writer.writerows(master)
+
+### Get all jobs in spreadsheet
+def get_jobs():
+    master = []
+    with open(f_name,"r") as listing:
+        csv_file = csv.reader(listing,delimiter=",")
+        next(csv_file)
+        for row in csv_file:
+            master.append(row)
+    
+    return master
