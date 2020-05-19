@@ -20,7 +20,7 @@ def select_job(matches,n):
             print("\nNot an option! Try again.\n")
 
 ### Confirm deleting a match
-def delete_listing(master,selected):
+def delete_listing(master,matches,selected):
+    del master[matches[selected][1]]
     print(Fore.RED + Style.BRIGHT + "\nDELETED LISTING.\n")
-    del master[selected]
     csv_functions.overwrite(master)
