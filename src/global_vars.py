@@ -11,6 +11,9 @@ date = dt.datetime.now().strftime("%m-%d-%y %H:%M:%S")
 
 options = ["y","n"]
 
+f_name = "job_applications.csv" 
+
+insight_options = ["all","pending","in_progress","offers","hired","rejected"]
 job_categories = ["DATE ADDED","COMPANY","JOB TITLE","STATUS","NOTES"]
 list_options = ["date","date_reverse","company","title","status","notes"]
 status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]
@@ -25,8 +28,6 @@ status_prompt = """
     4: REJECTED
 ------------------------
             """
-
-f_name = "job_applications.csv" 
 
 ### Set color of font depending on status
 def set_color(description,details):

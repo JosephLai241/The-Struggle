@@ -5,24 +5,24 @@ import argparse
 import sys
 
 ### Argparse text
-usage = "track.py [-a COMPANY_NAME] [-u COMPANY_NAME] [-d COMPANY_NAME] [-l] [-i]"
+usage = "track.py [-a COMPANY_NAME] [-u COMPANY_NAME] [-d COMPANY_NAME] [-l LIST_OPTIONS] [-i INSIGHT_OPTIONS]"
 description = "Struggle Tracker - A program that helps you track your job applications"
 epilog = r"""
 LIST OPTIONS
-  date           sort by date (descending)
-  date_reverse   sort by date (ascending) 
-  company        sort by company name
-  title          sort by job title
-  status         sort by status
-  notes          sort by notes
+  date (default)    sort by date (descending)
+  date_reverse      sort by date (ascending) 
+  company           sort by company name
+  title             sort by job title
+  status            sort by status
+  notes             sort by notes
 
 INSIGHT OPTIONS
-  all            print all job status insights
-  pending        print percentage of pending job applications
-  in_progress    print percentage of in progress job applications
-  offers         print percentage of job applications with an offer
-  hired          print percentage of jobs you have been hired at
-  rejected       print percentage of rejected job applications
+  all (default)     print all job status insights
+  pending           print percentage of pending job applications
+  in_progress       print percentage of in progress job applications
+  offers            print percentage of job applications with an offer
+  hired             print percentage of jobs you have been hired at
+  rejected          print percentage of rejected job applications
 
 EXAMPLES
 
@@ -41,9 +41,14 @@ EXAMPLES
     List all saved job applications in the terminal and sort by company name:
 
         $ ./track.py -l company
+
+    List job application insights for rejected jobs:
+
+        $ ./track.py -i rejected
+
 """
 
-# Parse args
+### Parse args
 def parse_args():
     parser = argparse.ArgumentParser(usage = usage, \
                                     formatter_class = argparse.RawDescriptionHelpFormatter, \
@@ -62,5 +67,4 @@ def parse_args():
         parser.exit()
 
     args = parser.parse_args()
-    print(args)
     return parser,args

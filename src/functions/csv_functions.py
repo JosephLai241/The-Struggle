@@ -35,7 +35,7 @@ def overwrite(master):
 ### Get all jobs in spreadsheet
 def get_jobs():
     master = []
-    with open(global_vars.f_name,"r") as listing:
+    with open(f_name,"r") as listing:
         csv_file = csv.reader(listing,delimiter=",")
         next(csv_file)
         for row in csv_file:
