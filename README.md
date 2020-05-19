@@ -152,7 +152,7 @@ The program will print the acceptable options if you enter an invalid sort metho
 
 ### Showing Job Insights
 
-`$ ./track.py -i`
+`$ ./track.py -i OPTIONAL_DISPLAY_METHOD`
 
 You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are listed under each job status as well as its percentage within the spreadsheet. The default insight is for all job statuses.
 
