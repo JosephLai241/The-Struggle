@@ -22,7 +22,7 @@ class reSearch():
         return self.matches
 
 ### Search spreadsheet for existing job listings. Create master list of all listings
-def find_job(args):
+def find_job(args,parser):
     re_search = reSearch(args)
     master = []
     with open(global_vars.f_name,"r") as spreadsheet:
@@ -39,6 +39,10 @@ def find_job(args):
             line += 1
     
     matches = re_search.return_matches()
+    if not matches:
+        print(Style.BRIGHT + "\nNO MATCHES FOUND\n")
+        print(Style.BRIGHT + "EXITING.\n")
+        parser.exit()
     return master,matches
 
 ### Set formatting for header

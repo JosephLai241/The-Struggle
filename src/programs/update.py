@@ -3,7 +3,7 @@
 #===============================================================================
 
 def update_job(args,update_functions,parser,search_functions):
-    master,matches = search_functions.find_job(args)
+    master,matches = search_functions.find_job(args,parser)
     n = search_functions.print_matches(matches)
     selected = update_functions.select_job(matches,n)
     section = update_functions.update_prompt()
