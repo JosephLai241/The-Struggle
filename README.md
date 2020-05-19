@@ -15,7 +15,7 @@ Run `pip install -r requirements.txt` to install all project dependencies.
 - [Walkthrough](#walkthrough)
     - [Adding a Job](#adding-a-job)
     - [Updating or Deleting a Job](#updating-or-deleting-a-job)
-    - [Listing All Jobs](#listing-all-jobs)
+    - [Listing Stored Jobs](#listing-stored-jobs)
     - [Showing Job Insights](#showing-job-insights)
 - [Releases](#releases)
  
@@ -39,11 +39,11 @@ This program utilizes [Colorama](https://pypi.org/project/colorama/) and [Pretty
 
 ## Stored Attributes
 
-Date is automatically calculated based on Python's [datetime](https://docs.python.org/3/library/datetime.html).
+`Date` is automatically calculated based on Python's [datetime](https://docs.python.org/3/library/datetime.html).
 
-Company Name, Job Title, and Notes are all based on user input.
+`Company Name`, `Job Title`, and `Notes` are all based on user input.
 
-Application Status has a few options you can choose from:
+`Application Status` has a few options you can choose from:
 
 |Application Status|
 |------------------|
@@ -53,11 +53,11 @@ Application Status has a few options you can choose from:
 |HIRED|
 |REJECTED|
 
-Each Application Status is mapped to a color and will colorize your job listing within a terminal.
+Each status is mapped to a color and will colorize your job listing within a terminal.
 
 ## Read This Before You Run the Program
 
-You will have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
+You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
 
 **DO NOT** create `job_applications.csv`. The program will create the file for you. Creating an empty `job_applications.csv` before running the `-a` flag will cause issues for you later on. 
 
@@ -67,33 +67,69 @@ Use `-h` or `--help` if you forget the arguments or do not want to read this wal
 
 ### Adding a Job
 
-Adding a job at Reddit:
+As stated before, **this has to be the first command you run.** Doing so will create `job_applications.csv` in your current working directory.
 
-`$ ./track.py -a Reddit`
+`$ ./track.py -a COMPANY_NAME`
 
-Use quotes around the company name if it is more than one word:
+***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./track.py -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
-`$ ./track.py -a "E Corp"`
+Enter the job title at the company:
+
+![Add new company to track](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/add_1.png)
+
+Then select the status of the job listing:
+
+![Add job status](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/add_2.png)
+
+If you do not have any notes on the job listing, you can just enter through the notes prompt:
+
+![Add notes then submit](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/add_3.png)
+
+The job listing will be written to `job_applications.csv` after you confirm.
 
 ### Updating or Deleting a Job
 
-Updating an existing job at Reddit:
-
-`$ ./track.py -u Reddit`
-
-Deleting an existing job at E Corp:
-
-`$ ./track.py -d "E Corp"`
-
-***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter that is present in the company name to return all job listings with company names that include that letter.
+***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
 
 For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
 
-### Listing All Jobs
+**Updating an existing job**
 
-`$ ./track.py -l`
+`$ ./track.py -u COMPANY_NAME`
 
-You can sort how jobs are listed within the terminal. The default sort method is by date (descending)
+Use the number in the far left column to pick the job you want to delete:
+
+![Updating 1](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/update_1.png)
+
+Choose the section you want to update:
+
+![Updating 2](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/update_2.png)
+
+I chose to update the application status. This option will display another menu to update the job status. All other options will prompt you to type in a new company name, job title, or notes.
+
+![Updating 3](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/update_3.png)
+
+The job listing will be updated in `job_applications.csv` after you confirm.
+
+**Deleting an existing job**
+
+`$ ./track.py -d COMPANY_NAME`
+
+Identical to updating, you can just enter a letter or pattern in the company name and use the number in the far left column to choose the job you want to delete.
+
+![Deleting a job](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/delete_1.png)
+
+The job listing will be deleted from `job_applications.csv` after you confirm.
+
+### Listing Stored Jobs
+
+`$ ./track.py -l OPTIONAL_SORT_METHOD`
+
+Job applications are sorted by date (descending) if no optional sort methods are provided:
+
+![Table of job applications default](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/list_1.png)
+
+This is a table of sort options and the changes that will be reflected within a terminal:
 
 Sort By|Description
 ----|-----------
@@ -104,17 +140,25 @@ title|sort by job title
 status|sort by status
 notes|sort by notes
 
-Sort job applications by company name:
+Sort job applications by job status:
 
-`$ ./track.py -l company`
+![Table sorted](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/list_2.png)
+
+The program will print the acceptable options if you enter an invalid sort method:
+
+![Invalid sort method](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/list_3.png)
 
 ### Showing Job Insights
 
 `$ ./track.py -i`
 
-You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are in each job status as well as its percentage within the spreadsheet. The default insight is for all job statuses.
+You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are listed under each job status as well as its percentage within the spreadsheet. The default insight is for all job statuses.
 
-Sort By|Description
+![Insights default](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/insights_1.png)
+
+This is a table of display options and the changes that will be reflected within a terminal:
+
+Display|Description
 ----|-----------
 all|display all job application insights (default)
 pending|only display insights for job applications that are pending a response
@@ -123,8 +167,12 @@ offers|only display insights for job applications with an offer
 hired|only display insights for jobs you were hired for
 rejected|only display insights for rejected job applications
 
-Only show job applications that are currently in progress:
+Only show job applications that are pending a response:
 
-`$ ./track.py -i in_progress`
+![Insights pending](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/insights_2.png)
+
+The program will print the acceptable options if you enter an invalid display method:
+
+![Invalid display method](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/insights_3.png)
 
 ## Releases
