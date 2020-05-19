@@ -21,13 +21,13 @@ Run `pip install -r requirements.txt` to install all project dependencies.
  
 ## Introduction
  
-I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a Python command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty good, so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
+I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a Python command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
 
 ## How It Works and Use Cases
 
 This program essentially makes it easier and faster to maintain a locally-stored spreadsheet of all the jobs applications you record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
 
-**Adding a job:** The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record.
+**Adding a job:** The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record. If it does exist, the program will append the job to the spreadsheet.
 
 **Updating a job:** The program will parse the existing spreadsheet, find the job you want to change, edit the stored details, then rewrite the spreadsheet to reflect the new changes. 
 
@@ -176,3 +176,10 @@ The program will print the acceptable options if you enter an invalid display me
 ![Invalid display method](https://github.com/JosephLai241/The-Struggle/blob/master/.github/screenshots/insights_3.png)
 
 ## Releases
+
+- **May 18, 2020:** The Struggle v1.0 completed. Features include:
+    - Add a new job
+    - Update an existing job
+    - Delete an existing job
+    - List all stored jobs
+    - Print job application insights
