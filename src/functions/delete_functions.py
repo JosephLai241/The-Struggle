@@ -14,7 +14,6 @@ def select_job(matches,n):
             if int(selected) not in range(0,n):
                 raise ValueError
             else:
-                print((Style.BRIGHT + "\nDeleting %s listing at %s\n") % (matches[int(selected)][0].title,matches[int(selected)][0].company))
                 return int(selected)
         except ValueError:
             print("\nNot an option! Try again.\n")

@@ -95,7 +95,7 @@ def list_changes(args,matches,selected):
     if args.update:
         print(Fore.CYAN + Style.BRIGHT + "\nUPDATED LISTING")
     elif args.delete:
-        print(Fore.RED + Style.BRIGHT + "\nJOB LISTING TO DELETE")
+        print(Fore.RED + Style.BRIGHT + "\nDELETING JOB LISTING")
     details,description = list_header(matches,selected)
     global_vars.set_color(description,details)
 
