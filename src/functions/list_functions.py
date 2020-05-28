@@ -3,10 +3,11 @@
 #===============================================================================
 
 from colorama import init, Style
-from .. import global_vars
 import csv
 
-init(autoreset=True)
+from .. import global_vars
+
+init(autoreset = True)
 
 job_categories = global_vars.job_categories
 list_options = global_vars.list_options
@@ -17,11 +18,10 @@ titles = {0: "\nSorting by Date (DESCENDING)\n",
           3: "\nSorting by Job Title\n",
           4: "\nSorting by Status\n",
           5: "\nSorting by Notes\n"
-          }
+         }
 
 ### Check list arg
-def check_list_arg(args,parser):
-    options = ", ".join(list_options)
+def check_list_arg(args, parser):
     try:
         if args.list in list_options:
             return
@@ -29,7 +29,8 @@ def check_list_arg(args,parser):
             raise ValueError
     except ValueError:
         print("\nNot a sorting option!\n")
-        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % options)
+        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % ", ".join(list_options))
+        
         parser.exit()
 
 ### Add jobs to table
@@ -46,7 +47,7 @@ def select_sort(args, table):
         index = sort_n = 0
     elif sort_by == list_options[1]:
         print(Style.BRIGHT + titles[1])
-        print(table.get_string(sortby=job_categories[0], reversesort=True))
+        print(table.get_string(sortby = job_categories[0], reversesort = True))
         return
     elif sort_by == list_options[2]:
         index = 2
@@ -62,4 +63,4 @@ def select_sort(args, table):
         sort_n = 4
 
     print(Style.BRIGHT + titles[index])
-    print(table.get_string(sortby=job_categories[sort_n]))
+    print(table.get_string(sortby = job_categories[sort_n]))

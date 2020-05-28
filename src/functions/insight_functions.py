@@ -3,16 +3,16 @@
 #===============================================================================
 from colorama import init, Style
 from prettytable import PrettyTable
+
 from .. import global_vars
 
-init(autoreset=True)
+init(autoreset = True)
 
 status_options = global_vars.status_options
 insight_options = global_vars.insight_options
 
 ### Check insights arg
-def check_insight_arg(args,parser):
-    options = ", ".join(insight_options)
+def check_insight_arg(args, parser):
     try:
         if args.insights in insight_options:
             return
@@ -20,9 +20,9 @@ def check_insight_arg(args,parser):
             raise ValueError
     except ValueError:
         print("\nNot an insight option!\n")
-        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % options)
+        print(Style.BRIGHT + "CHOOSE FROM: %s\n" % ", ".join(insight_options))
+        
         parser.exit()
-
 
 ### Calculate insights
 class Calculate():
@@ -34,7 +34,7 @@ class Calculate():
                              3: "\nOFFERS RECEIVED\n",
                              4: "\nHIRES\n",
                              5: "\nREJECTIONS\n"
-                             }
+                            }
 
         self.n_pending, self.n_inprogress, self.n_offers, self.n_hired, self.n_rejected = 0, 0, 0, 0, 0
 
@@ -53,20 +53,21 @@ class Calculate():
 
         return len(master)
 
-    def t_row(self,count,n_jobs):
-        return "%s out of %s total jobs\n" % (count,n_jobs),"{:.0%} of all jobs".format(count/n_jobs)
+    def t_row(self, count, n_jobs):
+        return "%s out of %s total jobs\n" % (count, n_jobs),"{:.0%} of all jobs".format(count/n_jobs)
 
     def make_table(self, n_jobs):
         table = PrettyTable()
         headers = [self.count_titles[i].strip("\n") for i in range(1,6)]
+        
         all_counts = [self.n_pending, self.n_inprogress, self.n_offers, self.n_hired, self.n_rejected]
-        for index,count in zip([i for i in range(0,5)],all_counts):
-            row1,row2 = self.t_row(count,n_jobs)
-            table.add_column(headers[index],[row1,row2])        
+        for index, count in zip([i for i in range(0,5)], all_counts):
+            row1, row2 = self.t_row(count, n_jobs)
+            table.add_column(headers[index], [row1, row2])        
         
         return table
 
-    def print_table(self,option,table):
+    def print_table(self, option, table):
         sort_index = 0
         if option == insight_options[0]:
             print(table)
@@ -82,4 +83,4 @@ class Calculate():
         elif option == insight_options[5]:
             sort_index = 5
 
-        print(table.get_string(fields=[self.count_titles[sort_index].strip("\n")]))
+        print(table.get_string(fields = [self.count_titles[sort_index].strip("\n")]))

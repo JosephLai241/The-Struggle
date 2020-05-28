@@ -5,10 +5,10 @@ import argparse
 import sys
 
 ### Argparse text
-usage = "track.py [-a COMPANY_NAME] [-u COMPANY_NAME] [-d COMPANY_NAME] [-l LIST_OPTIONS] [-i INSIGHT_OPTIONS]"
+usage = "track.py [-a COMPANY_NAME] [-u COMPANY_NAME] [-d COMPANY_NAME] [-l OPTIONAL_SORT_METHOD] [-i OPTIONAL_DISPLAY_METHOD]"
 description = "Struggle Tracker - A program that helps you track your job applications"
 epilog = r"""
-LIST OPTIONS
+LIST SORT OPTIONS
   date (default)    sort by date (descending)
   date_reverse      sort by date (ascending) 
   company           sort by company name
@@ -16,7 +16,7 @@ LIST OPTIONS
   status            sort by status
   notes             sort by notes
 
-INSIGHT OPTIONS
+INSIGHT DISPLAY OPTIONS
   all (default)     print all job status insights
   pending           print percentage of pending job applications
   in_progress       print percentage of in progress job applications
@@ -55,16 +55,19 @@ def parse_args():
                                     description = description, \
                                     epilog = epilog)
 
-    scraper = parser.add_argument_group("TRACKING OPTIONS")
-    scraper.add_argument("-a","--add",nargs=1,metavar="",help="add new company to track")
-    scraper.add_argument("-u","--update",nargs=1,metavar="",help="update an existing company in the spreadsheet")
-    scraper.add_argument("-d","--delete",nargs=1,metavar="",help="delete an existing company in the spreadsheet")
-    scraper.add_argument("-l","--list",const="date",default=None,nargs="?",metavar="",help="list all saved job applications")
-    scraper.add_argument("-i","--insights",const="all",default=None,nargs="?",metavar="",help="display job application insights")
+    tracker = parser.add_argument_group("TRACKING OPTIONS")
+    tracker.add_argument("-a", "--add", nargs = 1, metavar = "", help = "add new company to track")
+    tracker.add_argument("-u", "--update", nargs = 1, metavar = "", help = "update an existing company in the spreadsheet")
+    tracker.add_argument("-d", "--delete", nargs = 1, metavar = "", help = "delete an existing company in the spreadsheet")
+    tracker.add_argument("-l", "--list", const = "date", default = None, nargs = "?", metavar = "", 
+                            help = "list all saved job applications")
+    tracker.add_argument("-i", "--insights", const = "all", default = None, nargs = "?", metavar = "", 
+                            help = "display job application insights")
 
     if len(sys.argv[1:]) == 0:
         parser.print_help()
         parser.exit()
 
     args = parser.parse_args()
-    return parser,args
+    
+    return parser, args

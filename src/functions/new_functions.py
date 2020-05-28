@@ -2,13 +2,14 @@
 #                           New Job Profile Functions
 #===============================================================================
 from colorama import Fore, init, Style
+
 from .. import global_vars, model
 from . import csv_functions
 
-init(autoreset=True)
+init(autoreset = True)
 
 job_categories = global_vars.job_categories
-status_options = ["PENDING","IN PROGRESS","OFFER RECEIVED","HIRED","REJECTED"]
+status_options = ["PENDING", "IN PROGRESS", "OFFER RECEIVED", "HIRED", "REJECTED"]
 
 status_prompt = global_vars.status_prompt
 
@@ -29,7 +30,7 @@ def new_status():
     while True:
         try:
             status = str(input(status_prompt).strip())
-            if not status or int(status) not in range(0,5):
+            if not status or int(status) not in range(0, 5):
                 raise ValueError
             else:
                 return status_options[int(status)]
@@ -39,35 +40,38 @@ def new_status():
 ### Enter notes
 def new_notes():
     notes = str(input("\nEnter notes regarding this position: ")).strip()
+
     return notes
 
 ### Make new Job
-def new_job(args,status,title,notes):
-    return model.Job(global_vars.date,args.add[0],title,status,notes)
+def new_job(args, status, title, notes):
+    return model.Job(global_vars.date, args.add[0], title, status, notes)
 
 ### Make master dictionary
-def make_master(job,details):
-    return dict(zip(job_categories,details))
+def make_master(job, details):
+    return dict(zip(job_categories, details))
 
 ### Print settings
 def print_settings(job):
     c_len = len(job.company) + 2
     t_len = len(job.title) + 2 if len(job.title) > 10 else len(job_categories[2]) + 2
     n_len = len(job.notes) + 2
-    details = [job.date,job.company,job.title,job.status,job.notes]
-    table_header = f"\n{job_categories[0]:<{19}} {job_categories[1]:<{c_len}} {job_categories[2]:<{t_len}} {job_categories[3]:<{16}} {job_categories[4]:<{n_len}}"
 
+    table_header = f"\n{job_categories[0]:<{19}} {job_categories[1]:<{c_len}} {job_categories[2]:<{t_len}} {job_categories[3]:<{16}} {job_categories[4]:<{n_len}}"
     print(table_header)
     print("-"*len(table_header))
+
+    details = [job.date, job.company, job.title, job.status, job.notes]
     description = f"{details[0]:<{19}} {details[1]:<{c_len}} {details[2]:<{t_len}} {details[3]:<{16}} {details[4]:<{n_len}}\n"
-    global_vars.set_color(description,details)
+    
+    global_vars.set_color(description, details)
 
     return details
 
 ### Confirm settings
-def confirm_new_job(job,parser):
+def confirm_new_job(job, parser):
     details = print_settings(job)
-    master = make_master(job,details)
+    master = make_master(job, details)
 
     while True:
         try:
@@ -84,5 +88,6 @@ def confirm_new_job(job,parser):
 
 ### Write job to spreadsheet
 def confirm_write(master):
-    print(Fore.WHITE + Style.BRIGHT + "\nADDED NEW LISTING.\n")
     csv_functions.add_job(master)
+    
+    print(Fore.WHITE + Style.BRIGHT + "\nADDED NEW LISTING.\n")
