@@ -6,8 +6,6 @@ Written in Python. Tested with Python 3.8.2.
 
 Run `pip install -r requirements.txt` to install all project dependencies.
 
-***NOTE:*** The shebang (`#!`) at the top of `track.py` assumes your Python 3.x.x is located at the path `/usr/bin/python3`. Prior to running this program, check if the shebang reflects the path at which Python 3.x.x is located in your system. You can do so by running the command `$ which python3`.
-
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -60,6 +58,12 @@ This program utilizes [Colorama](https://pypi.org/project/colorama/) and [Pretty
 Each status is mapped to a color and will colorize your job listing within a terminal.
 
 ## Read This Before You Run the Program
+
+### Shebang in `track.py`
+
+The shebang (`#!`) at the top of `track.py` assumes your Python 3.x.x is located at the path `/usr/bin/python3`. Prior to running this program, check if the shebang reflects the path at which Python 3.x.x is located in your system. You can do so by running the command `$ which python3`.
+
+### The Initial Run
 
 You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
 
