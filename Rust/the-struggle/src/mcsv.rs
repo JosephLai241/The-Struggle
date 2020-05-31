@@ -15,11 +15,11 @@ const FILENAME: &str = "job_applications.csv";
 
 #[derive(Serialize)]
 struct Listing {
-    #[serde(rename = "DATE")]
+    #[serde(rename = "DATE ADDED")]
     date: String,
     #[serde(rename = "COMPANY")]
     company: String,
-    #[serde(rename = "TITLE")]
+    #[serde(rename = "JOB TITLE")]
     title: String,
     #[serde(rename = "STATUS")]
     status: String,
@@ -28,8 +28,8 @@ struct Listing {
 }
 
 impl Listing {
-    fn serialize_job(i: u16, master: &BTreeMap<u16, Job>) -> Listing {
-        // Serialize job with struct for easy spreadsheet writing
+    fn serialize_ow(i: u16, master: &BTreeMap<u16, Job>) -> Listing {
+        // Serialize job with struct for easy spreadsheet overwriting
         Listing {
             date: master.get(&i).unwrap().date.to_string(),
             company: master.get(&i).unwrap().company.to_string(),
@@ -38,55 +38,91 @@ impl Listing {
             notes: master.get(&i).unwrap().notes.to_string()
         }
     }
+
+    fn serialize_a(job: &Job) -> Listing {
+        // Serialize job with struct for easy spreadsheet writing
+        Listing {
+            date: job.date.to_string(),
+            company: job.company.to_string(),
+            title: job.title.to_string(),
+            status: job.status.to_string(),
+            notes: job.notes.to_string()
+        }
+    }
 }
 
-pub fn existence() -> bool {
+fn existence() -> bool {
     // Check if "job_applications.csv" file exists in the current directory.
     return Path::new(FILENAME).exists();
 }
 
-fn write_job(file: File, master: BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
-    // Write jobs from master BTreeMap to spreadsheet.
+fn create(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
+    // Create new spreadsheet and add headers and job listing
 
     let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
-    for i in 0u16..master.len() as u16 {
-        writer.serialize(Listing::serialize_job(i, &master))?;
-    }
+    writer.serialize(Listing::serialize_a(&job))?;
 
     Ok(())
 }
 
-fn check_and_write(file: File, master: BTreeMap<u16, Job>) {
-    // Error handling for write_job().
+fn append(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
+    // Append new job listing to spreadsheet
 
-    match write_job(file, master) {
-        Ok(()) => (),
-        Err(e) => {
-            println!("An error has occured! {:?}", e);
-            process::exit(1);
-        }
-    };
+    let mut writer = WriterBuilder::new().from_writer(file);
+    writer.serialize((
+        job.date.to_string(), job.company.to_string(), job.title.to_string(), 
+        job.status.to_string(), job.notes.to_string()
+    ))?;
+
+    Ok(())
 }
 
-pub fn add_job(master: BTreeMap<u16, Job>) -> 
-                Result<String, Box<dyn Error>> {
+pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
     // Write jobs to spreadsheet. Add header if file does not already exist, else
     // just append the job to the spreadsheet.
     
     if existence() == true {
         let file = OpenOptions::new().append(true).open(FILENAME)?;
-        check_and_write(file, master);
+        if let Err(err) = append(file, &job) {
+            println!("An error has occured! {}", err);
+            process::exit(1);
+        } else {
+            println!("\nADDED NEW LISTING.");
+        }
     } else {
-        let file = OpenOptions::new().write(true).open(FILENAME)?;
-        check_and_write(file, master);
+        let file = OpenOptions::new().create(true).write(true).open(FILENAME)?;
+        if let Err(err) = create(file, &job) {
+            println!("An error has occured! {}", err);
+            process::exit(1);
+        } else {
+            println!("\nCREATED SPREADSHEET AND ADDED NEW LISTING.");
+        }
     };
 
-    Ok(String::from("Spreadsheet successfully written."))
+    Ok(())
 }
 
-///////////////////////////////////////// TODO: Finish overwrite(). Revisit add_job() as well
-pub fn overwrite(master: BTreeMap<u16, Job>) {
-    return;
+fn rewrite(file: File, master: BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
+    // Write jobs stored in master BTreeMap to spreadsheet.
+
+    let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
+    for i in 0u16..master.len() as u16 {
+        writer.serialize(Listing::serialize_ow(i, &master))?;
+    }
+
+    Ok(())
+}
+
+pub fn overwrite(master: BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
+    let file = OpenOptions::new().write(true).open(FILENAME)?;
+    if let Err(err) = rewrite(file, master) {
+        println!("An error has occured! {}", err);
+        process::exit(1);
+    } else {
+        println!("\nUPDATED LISTING.")
+    }
+
+    Ok(())
 }
 
 pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
