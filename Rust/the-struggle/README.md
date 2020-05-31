@@ -1,5 +1,7 @@
 # The Struggle
 
+***RUST VERSION OF THIS PROGRAM IS CURRENTLY UNDER DEVELOPMENT***
+
 A command-line tool for tracking your job applications. 
 
 Written in Rust. Tested with Rust 1.43.1.
