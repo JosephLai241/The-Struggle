@@ -150,14 +150,14 @@ pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
     Ok(master)
 }
 
-// pub fn get_jobs_handler(fname: &str) -> BTreeMap<u16, Job> {
-//     let master = match get_jobs(fname) {
-//         Ok(master) => {
-//             return master;
-//         },
-//         Err(e) => {
-//             println!("{:?}", e);
-//             process::exit(1);
-//         }
-//     };
-// }
+pub fn get_jobs_handler() -> BTreeMap<u16, Job> {
+    match get_jobs() {
+        Ok(master) => {
+            return master;
+        },
+        Err(e) => {
+            println!("{:?}", e);
+            process::exit(1);
+        }
+    };
+}
