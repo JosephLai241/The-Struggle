@@ -11,6 +11,8 @@ fn main() {
         add::confirm_new_job(new_job);
     } else if let Some(company) = flags.update {
         println!("UPDATE {}", company);
+        let master = mcsv::get_jobs_handler();
+
 
     } else if let Some(company) = flags.delete {
         println!("DELETE {}", company);
@@ -21,5 +23,7 @@ fn main() {
     } else if let Some(display) = flags.insights {
         println!("DISPLAY INSIGHTS BY {}", display);
 
+    } else {
+        println!("NO ARGUMENTS GIVEN.");
     }
 }
