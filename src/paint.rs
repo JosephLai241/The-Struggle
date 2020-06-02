@@ -1,3 +1,5 @@
+use crate::model::Job;
+
 use ansi_term::{Color::{Blue, Green, Purple, Red, Yellow}, Style};
 
 // Blue == PENDING
@@ -6,3 +8,6 @@ use ansi_term::{Color::{Blue, Green, Purple, Red, Yellow}, Style};
 // Green == HIRED
 // Red == REJECTED
 
+pub fn paint(line: String) {
+    return;
+}
