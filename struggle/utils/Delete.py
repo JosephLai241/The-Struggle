@@ -4,6 +4,7 @@
 from colorama import Fore, init, Style
 
 from .Csv import ModifyCSV
+from .Decorator import CleanExit
 from .Search import Find, PrintMatches
 
 ### Automate sending reset sequences to turn off color changes at the end of 
@@ -17,11 +18,12 @@ class Delete():
 
     ### Select a match from the spreadsheet.
     @staticmethod
+    @CleanExit.cleanup
     def select_job(matches, n):
         while True:
             try:
                 selected = str(input("Select a job to delete (number): "))
-                if int(selected) not in range(0, n):
+                if int(selected) not in range(0, n + 1):
                     raise ValueError
                 else:
                     return int(selected)
