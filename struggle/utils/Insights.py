@@ -82,12 +82,6 @@ class Calculate():
         all_counts = [self.n_pending, self.n_inprogress, self.n_offers, 
             self.n_hired, self.n_rejected]
 
-        print(all_counts)
-
-        # for index, count in zip([i for i in range(0,5)], all_counts):
-        #     row1, row2 = self._ratio_row(count, n_jobs)
-        #     table.add_column(headers[index], [row1, row2])
-
         for index, count in enumerate(all_counts):
             row1, row2 = self._ratio_row(count, n_jobs)
             insights_table.add_column(headers[index], [row1, row2])           
