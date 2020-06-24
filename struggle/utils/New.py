@@ -4,6 +4,7 @@
 from colorama import Fore, init, Style
 
 from .Csv import ModifyCSV
+from .Decorator import CleanExit
 from .Job import Job
 
 from .Global import date, job_categories, options, set_color, status_prompt
@@ -19,6 +20,7 @@ class GetDetails():
 
     ### Enter job title to track.
     @staticmethod
+    @CleanExit.cleanup
     def _new_title(args):
         while True:
             try:
@@ -34,9 +36,9 @@ class GetDetails():
 
     ### Enter job status.
     @staticmethod
+    @CleanExit.cleanup
     def _new_status():
         status_options = ["PENDING", "IN PROGRESS", "OFFER RECEIVED", "HIRED", "REJECTED"]
-        # status_prompt = status_prompt
 
         while True:
             try:
@@ -50,6 +52,7 @@ class GetDetails():
 
     ### Enter notes about the job.
     @staticmethod
+    @CleanExit.cleanup
     def _new_notes():
         notes = str(input("\nEnter notes regarding this position: ")).strip()
         return notes
@@ -88,6 +91,7 @@ class ConfirmWrite():
 
     ### Confirm job details.
     @staticmethod
+    @CleanExit.cleanup
     def confirm_new_job(job, parser):
         details = ConfirmWrite._print_details(job)
         master = dict(zip(job_categories, details))
