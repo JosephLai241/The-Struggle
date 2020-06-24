@@ -53,35 +53,19 @@ class Calculate():
         self.n_pending, self.n_inprogress, self.n_offers, self.n_hired, self.n_rejected = \
             0, 0, 0, 0, 0
 
-    ### Pythonic switch case for determine which status to increment.
-    def _count_switch(self, job):
-        status_n = status_options.index(job[3])
-        switch = {
-            0: self.n_pending,
-            1: self.n_inprogress,
-            2: self.n_offers,
-            3: self.n_hired,
-            4: self.n_rejected
-        }
-
-        return switch[status_n]
-
     ### Get the total count of jobs for each status.
     def count_all(self, master):
         for job in master:
-            status = self._count_switch(job)
-            status += 1
-
-            # if job[3] == status_options[0]:
-            #     self.n_pending += 1
-            # elif job[3] == status_options[1]:
-            #     self.n_inprogress += 1
-            # elif job[3] == status_options[2]:
-            #     self.n_offers += 1
-            # elif job[3] == status_options[3]:
-            #     self.n_hired += 1
-            # elif job[3] == status_options[4]:
-            #     self.n_rejected += 1
+            if job[3] == status_options[0]:
+                self.n_pending += 1
+            elif job[3] == status_options[1]:
+                self.n_inprogress += 1
+            elif job[3] == status_options[2]:
+                self.n_offers += 1
+            elif job[3] == status_options[3]:
+                self.n_hired += 1
+            elif job[3] == status_options[4]:
+                self.n_rejected += 1
 
         return len(master)
 
@@ -97,6 +81,8 @@ class Calculate():
         
         all_counts = [self.n_pending, self.n_inprogress, self.n_offers, 
             self.n_hired, self.n_rejected]
+
+        print(all_counts)
 
         # for index, count in zip([i for i in range(0,5)], all_counts):
         #     row1, row2 = self._ratio_row(count, n_jobs)
@@ -114,21 +100,6 @@ class Calculate():
         if sort_index == 0:
             print(table)
             return
-            
-        # sort_index = 0
-        # if option == insight_options[0]:
-        #     print(table)
-        #     return
-        # elif option == insight_options[1]:
-        #     sort_index = 1
-        # elif option == insight_options[2]:
-        #     sort_index = 2
-        # elif option == insight_options[3]:
-        #     sort_index = 3
-        # elif option == insight_options[4]:
-        #     sort_index = 4
-        # elif option == insight_options[5]:
-        #     sort_index = 5
 
         print(table.get_string(fields = [self.count_titles[sort_index].strip("\n")]))
 
