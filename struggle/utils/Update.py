@@ -88,8 +88,7 @@ class Update():
 
         return update
     
-    ### Pythonic switch to set the Job's attribute depending on which section is
-    ### updated.
+    ### Set the Job's attribute depending on which section is updated.
     @staticmethod
     @CleanExit.cleanup
     def update_section(section, matches, selected):
@@ -103,10 +102,10 @@ class Update():
             matches[selected][0].status = update
         elif section == 3:
             matches[selected][0].notes = update
-        
+
         return matches[selected]
 
-    ### Update spreadsheet
+    ### Update the spreadsheet.
     @staticmethod
     def write_changes(job_listing, master):
         index = job_listing[1]
