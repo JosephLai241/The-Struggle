@@ -16,7 +16,7 @@ init(autoreset = True)
 ### Table headers.
 titles = {
     0: "\nSorting by Date (DESCENDING)\n",
-    1: "\nSorting by Date (ASCENDING)\n",
+    1: "\nSorting by Newest\n",
     2: "\nSorting by Company Name\n",
     3: "\nSorting by Job Title\n",
     4: "\nSorting by Status\n",
@@ -59,35 +59,17 @@ class ModifyList():
         sort_by = str(args.list).strip().lower()
 
         sort_n = list_options.index(sort_by)
-        index = sort_n + 1 if sort_n != 0 else 0
+        index = sort_n + 1
 
-        if sort_n == 1:
+        if sort_n == 0:
+            index = 0
+        elif sort_n == 1:
             print(Style.BRIGHT + titles[1])
             print(table.get_string(sortby = job_categories[0], reversesort = True))
             return
-
-        # index = 0
-        # sort_n = 0
-        #
-        # if sort_by == list_options[0]:
-        #     index = sort_n = 0
-        # elif sort_by == list_options[1]:
-        #     print(Style.BRIGHT + titles[1])
-        #     print(table.get_string(sortby = job_categories[0], reversesort = True))
-        #     return
-        #
-        # elif sort_by == list_options[2]:
-        #     index = 2
-        #     sort_n = 1
-        # elif sort_by == list_options[3]:
-        #     index = 3
-        #     sort_n = 2
-        # elif sort_by == list_options[4]:
-        #     index = 4
-        #     sort_n = 3
-        # elif sort_by == list_options[5]:
-        #     index = 5
-        #     sort_n = 4
+        else:
+            sort_n -= 1
+            index -= 1
 
         print(Style.BRIGHT + titles[index])
         print(table.get_string(sortby = job_categories[sort_n]))
