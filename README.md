@@ -1,5 +1,11 @@
-# The Struggle
-
+     __             
+    /\ \__          
+    \ \ ,_\   ____  
+     \ \ \/  /',__\ 
+      \ \ \_/\__, `\
+       \ \__\/\____/
+        \/__/\/___/ 
+   
 A command-line tool for tracking your job applications. 
 
 Written in Python. Tested with Python 3.8.2.
