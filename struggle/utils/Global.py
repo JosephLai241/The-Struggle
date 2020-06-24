@@ -43,6 +43,6 @@ def set_color(description, details):
     elif details[3] == status_options[2]:
         print(Fore.MAGENTA + Style.BRIGHT + description)
     elif details[3] == status_options[3]:
-        print(Fore.GREEN + description)
+        print(Fore.GREEN + Style.BRIGHT + description)
     elif details[3] == status_options[4]:
-        print(Fore.RED + description)
+        print(Fore.RED + Style.BRIGHT + description)
