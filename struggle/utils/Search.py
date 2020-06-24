@@ -4,13 +4,16 @@
 import csv
 import re
 
-from colorama import Fore, Style
+from colorama import Fore, init, Style
 
+from .Decorator import CleanExit
 from .Global import f_name, job_categories, options, set_color
 from .Job import Job
+from .Titles import Titles
 
-# ### Global variable.
-# job_categories = job_categories
+### Automate sending reset sequences to turn off color changes at the end of 
+### every print.
+init(autoreset = True)
 
 class reSearch():
     """
@@ -96,10 +99,9 @@ class PrintMatches():
     def print_matches(matches):
         c_len, t_len, n_len = PrintMatches.set_print_format(matches)
 
-        found_header = f"\n{'='*61} EXISTING JOB LISTINGS {'='*62}"
+        Titles.existing_title()
         table_header = f"\nNumber {job_categories[0]:<{19}} {job_categories[1]:<{c_len}} {job_categories[2]:<{t_len}} {job_categories[3]:<{16}} {job_categories[4]:<{n_len}}"
 
-        print(found_header)
         print(table_header)
         print("-"*len(table_header))
 
@@ -144,6 +146,7 @@ class PrintMatches():
 
     ### Confirm changes made to the current listing.
     @staticmethod
+    @CleanExit.cleanup
     def confirm_changes(parser):
         while True:
             try:
@@ -153,7 +156,7 @@ class PrintMatches():
                 elif confirm == options[0]:
                     return
                 elif confirm == options[1]:
-                    print("\nEXITING.\n")
+                    print(Fore.RED + Style.BRIGHT + "\nEXITING.\n")
                     parser.exit()
             except ValueError:
                 print("\nNot an option! Try again.\n")
