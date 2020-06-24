@@ -4,6 +4,7 @@
 from colorama import Fore, init, Style
 
 from .Csv import ModifyCSV
+from .Decorator import CleanExit
 from .Global import job_categories, status_options, status_prompt
 from .Search import Find, PrintMatches
 
@@ -29,11 +30,12 @@ class Update():
 
     ### Select a match.
     @staticmethod
+    @CleanExit.cleanup
     def select_job(matches, n):
         while True:
             try:
                 selected = str(input("Select a job to update (number): "))
-                if int(selected) not in range(0, n):
+                if int(selected) not in range(0, n + 1):
                     raise ValueError
                 else:
                     print((Style.BRIGHT + "\nUpdating %s job listing at %s\n") % 
@@ -45,6 +47,7 @@ class Update():
 
     ### Display update prompt.
     @staticmethod
+    @CleanExit.cleanup
     def update_prompt():
         while True:
             try:
@@ -58,6 +61,7 @@ class Update():
 
     ### Update job status.
     @staticmethod
+    @CleanExit.cleanup
     def check_status():        
         while True:
             try:
@@ -75,29 +79,31 @@ class Update():
         options_switch = {
             0: "\nWhat is the new company name? ",
             1: "\nWhat is the new job title? ",
-            2: Update.check_status(),
+            2: Update.check_status() if int(section) == 2 else None,
             3: "\nWhat are the new notes? "
         }
 
-        return str(input(options_switch.get(section))).strip() if section != 2 \
-            else options_switch.get(section)
+        update = str(input(options_switch.get(int(section)))).strip() \
+            if int(section) != 2 else options_switch.get(int(section))
+
+        return update
     
     ### Pythonic switch to set the Job's attribute depending on which section is
     ### updated.
     @staticmethod
+    @CleanExit.cleanup
     def update_section(section, matches, selected):
         update = Update.get_update(section)
 
-        attr_switch = {
-            0: matches[selected][0].company,
-            1: matches[selected][0].title,
-            2: matches[selected][0].status,
-            3: matches[selected][0].notes
-        }
-
-        job_attribute = attr_switch.get(section)
-        job_attribute = update
-
+        if section == 0:
+            matches[selected][0].company = update
+        elif section == 1:
+            matches[selected][0].title = update
+        elif section == 2:
+            matches[selected][0].status = update
+        elif section == 3:
+            matches[selected][0].notes = update
+        
         return matches[selected]
 
     ### Update spreadsheet
