@@ -15,7 +15,7 @@ date = dt.datetime.now().strftime("%m-%d-%y %H:%M:%S")
 options = ["y", "n"]
 
 ### Spreadsheet file name.
-f_name = "../job_applications.csv" 
+f_name = "job_applications.csv" 
 
 ### Categories or options used throughout the program.
 job_categories = ["DATE ADDED", "COMPANY", "JOB TITLE", "STATUS", "NOTES"]
