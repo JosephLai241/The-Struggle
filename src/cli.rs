@@ -1,13 +1,14 @@
 use clap::arg_enum;
 use structopt::StructOpt;
 
+/// This struct contains all flags that are used in this program.
 #[derive(Debug, StructOpt)]
 #[structopt(
     name = "The Struggle", 
     about = "A Rust command line tool for tracking your job applications"
 )]
 pub struct Args {
-    // Add a job
+    /// Flag for adding a job to the spreadsheet.
     #[structopt(
         short = "a", 
         long = "add", 
@@ -15,7 +16,7 @@ pub struct Args {
     )]
     pub add: Option<String>,
 
-    // Update an existing job
+    /// Flag for updating an existing job.
     #[structopt(
         short = "u", 
         long = "update", 
@@ -23,7 +24,7 @@ pub struct Args {
     )]
     pub update: Option<String>,
 
-    // Delete an existing job
+    /// Flag for deleting an existing job.
     #[structopt(
         short = "d", 
         long = "delete", 
@@ -31,7 +32,7 @@ pub struct Args {
     )]
     pub delete: Option<String>,
 
-    // List all existing jobs
+    /// Flag for listing all existing jobs.
     #[structopt(
         short = "l", 
         long = "list", 
@@ -41,7 +42,7 @@ pub struct Args {
     )]
     pub list: Option<String>,
 
-    // Display job application insights
+    /// Flag for displaying job application insights.
     #[structopt(
         short = "i", 
         long = "insights", 
@@ -54,7 +55,7 @@ pub struct Args {
 }
 
 arg_enum! {
-    // List sort options
+    /// Enum for list sorting options.
     #[derive(Debug)]
     enum Sort {
         Date,
@@ -67,7 +68,7 @@ arg_enum! {
 }
 
 arg_enum! {
-    // Insights display options
+    /// Enum for insight display options.
     #[derive(Debug)]
     enum Display {
         All,
@@ -79,7 +80,7 @@ arg_enum! {
     }
 }
 
+/// Return Args struct.
 pub fn get_args() -> Args {
-    // Return Args struct.
     return Args::from_args();
 }
