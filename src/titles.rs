@@ -1,5 +1,6 @@
 use ansi_term::*;
 
+/// Print the main title of this program.
 pub fn main_title() {
     let main = r#"
  __             
