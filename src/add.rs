@@ -5,22 +5,28 @@ use ansi_term::*;
 use chrono::prelude::*;
 use prettytable::*;
 
-use std::error::Error;
 use std::io;
 use std::process;
 
 /// Get the job title at the company.
 fn get_title(company: &String) -> String {
-    let mut title = String::new();
-
     loop {
-        println!("What is the title of the position you are applying for at {}?", company);
+        let mut title = String::new();
+
+        let title_prompt = format!(
+            "What is the title of the position you are applying for at {}?", company
+        );
+        println!("{}", Style::new().bold().paint(title_prompt));
+
         match io::stdin().read_line(&mut title) {
             Ok(_) => {
                 let input = title.trim().to_string();
 
                 if input.is_empty() {
-                    println!("Please enter a job title.\n");
+                    println!(
+                        "{}\n",
+                        Colour::Red.bold().paint("Please enter a job title.")
+                    );
                 } else { 
                     return title.trim().to_string(); 
                 }
@@ -50,17 +56,23 @@ fn get_status() -> String {
     4: REJECTED
 -------------------------"#;
 
-    let mut status = String::new();
     loop {
-        println!("{}", status_prompt);
+        let mut status = String::new();
+
+        println!("{}", Style::new().bold().paint(status_prompt));
+
         match io::stdin().read_line(&mut status) {
             Ok(_) => {
                 if status.trim().is_empty() {
-                    println!("Please select a valid status option.");
-                    status.clear();
+                    println!(
+                        "\n{}",
+                        Colour::Red.bold().paint("Please select a valid status option.")
+                    );
                 } else if !status.trim().chars().all(char::is_numeric) {
-                    println!("Please select a valid status option.");
-                    status.clear();
+                    println!(
+                        "\n{}",
+                        Colour::Red.bold().paint("Please select a valid status option.")
+                    );
                 } else {
                     let status_int = status.trim().parse::<usize>().unwrap();
                     
@@ -68,8 +80,10 @@ fn get_status() -> String {
                         status_int <= status_options.len() - 1 as usize {
                             return status_options[status_int].to_string();
                     } else {
-                        println!("\nOut of range!");
-                        status.clear();
+                        println!(
+                            "\n{}",
+                            Colour::Red.bold().paint("Please select a valid status option.")
+                        );
                     }
                 }
             },
@@ -82,7 +96,10 @@ fn get_status() -> String {
 fn get_notes() -> String {
     let mut notes = String::new();
     loop {
-        println!("\nEnter any notes for this position:");
+        println!(
+            "\n{}",
+            Style::new().bold().paint("(Optional) Enter any notes for this position:")
+        );
         match io::stdin().read_line(&mut notes) {
             Ok(_) => { return notes.trim().to_string(); },
             Err(e) => { println!("Error! {:?}", e); }
@@ -112,14 +129,19 @@ fn print_job(job: &Job) {
 
 /// Print the job listing to add, then ask user to confirm. On confirm, the program
 /// will append the job to the spreadsheet.
-pub fn confirm_new_job(new_job: Job) -> Result<(), Box<dyn Error>> {
+pub fn confirm_add(new_job: Job) {
     print_job(&new_job);
 
     let options: Vec<String> = vec!["Y".to_string(), "N".to_string()];
 
-    let mut confirm_in = String::new();
     loop {
-        println!("\nConfirm? [Y/N]");
+        let mut confirm_in = String::new();
+
+        println!(
+            "\n{}",
+            Style::new().bold().paint("Confirm? [Y/N]")
+        );
+
         match io::stdin().read_line(&mut confirm_in) {
             Ok(_) => { 
                 let confirm = confirm_in.trim().to_uppercase();
@@ -127,16 +149,19 @@ pub fn confirm_new_job(new_job: Job) -> Result<(), Box<dyn Error>> {
                     // If input in options.
                     if confirm == options[0] {  
                         // If input is "Y".
-                        mcsv::write_new_job(&new_job)?;
+                        mcsv::write_new_job(&new_job).expect("Failed writing to spreadsheet");
+                        break;
                     } else {
                         // If input is "N".
-                        println!("\n{}", Colour::Red.bold().paint("CANCELLING."));
+                        println!("\n{}\n", Colour::Red.bold().paint("CANCELLING."));
                         process::exit(1);
                     }
                 } else { 
                     // If an invalid option is entered.
-                    println!("\nNot an option!");
-                    confirm_in.clear(); 
+                    println!(
+                        "\n{}",
+                        Colour::Red.bold().paint("Not an option!")
+                    );
                 }
             },
             Err(e) => { println!("Error! {:?}", e); }
