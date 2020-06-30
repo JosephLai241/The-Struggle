@@ -10,6 +10,8 @@ A command-line tool for tracking your job applications.
 
 Written in Python. Tested with Python 3.8.2.
 
+**The Rust version of this program is coming soon and will replace the current Python edition on the master branch!** The Python version will still be available on a separate branch.
+
 Run `pip install -r requirements.txt` to install all project dependencies.
 
 ## Table of Contents
