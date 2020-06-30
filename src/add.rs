@@ -1,13 +1,15 @@
 use crate::mcsv;
 use crate::model::Job;
 
+use ansi_term::*;
 use chrono::prelude::*;
+use prettytable::*;
 
 use std::error::Error;
 use std::io;
 use std::process;
 
-/// Get the title of the company.
+/// Get the job title at the company.
 fn get_title(company: &String) -> String {
     let mut title = String::new();
 
@@ -28,11 +30,15 @@ fn get_title(company: &String) -> String {
     }
 }
 
-/// Enter the job application status.
+/// Get the job application status.
 fn get_status() -> String {
-
-    let status_options: Vec<String> = vec!["PENDING".to_string(), "IN PROGRESS".to_string(), 
-        "OFFER RECEIVED".to_string(), "HIRED".to_string(), "REJECTED".to_string()];
+    let status_options: Vec<String> = vec![
+        "PENDING".to_string(), 
+        "IN PROGRESS".to_string(), 
+        "OFFER RECEIVED".to_string(), 
+        "HIRED".to_string(), 
+        "REJECTED".to_string()
+    ];
 
     let status_prompt = r#"
     SELECT JOB STATUS
@@ -72,7 +78,7 @@ fn get_status() -> String {
     }
 }
 
-/// Enter notes (or enter through to leave notes blank) about the job listing.
+/// Get notes (or enter through to leave notes blank) about the job listing.
 fn get_notes() -> String {
     let mut notes = String::new();
     loop {
@@ -84,7 +90,7 @@ fn get_notes() -> String {
     }
 }
 
-/// Return Job struct from date, job title, job status, and notes.
+/// Return the Job struct created from the date, job title, job status, and notes.
 pub fn add_job(company: String) -> Job {
     let date = Local::now().format("%m-%d-%Y %H:%M:%S").to_string();
     let title = get_title(&company);
@@ -94,39 +100,14 @@ pub fn add_job(company: String) -> Job {
     Job::new_job(date, company, title, status, notes)
 }
 
-/// Format how the table header and jobs are printed in the terminal
-fn format_print(c_len: &usize, t_len: usize, n_len: &usize, vector: &Vec<&String>) -> usize {
-    let line = format!(
-        "\n{:<21} {:<c_len$} {:<t_len$} {:<16} {:<n_len$}",
-        vector[0], vector[1], vector[2], vector[3], vector[4], 
-        c_len = c_len, t_len = t_len, n_len = n_len
-    );
-    println!("{}", line);
-
-    let max = line.len();
-    return max;
-}
-
-/// Print the new job listing to add to the spreadsheet.
+/// Print the PrettyTable containing new job listing information.
 fn print_job(job: &Job) {
-    let job_categories: Vec<String> = vec!["DATE ADDED".to_string(), "COMPANY".to_string(), 
-        "JOB TITLE".to_string(), "STATUS".to_string(), "NOTES".to_string()];
-    
-    let c_len = &job.company.len() + 4;
-    let t_len = if &job.title.len() > &10 { &job.title.len() + 2 } 
-        else { job_categories[2].len() };
-    let n_len = &job.notes.len() + 2;
+    println!("\n{}", Colour::Cyan.bold().paint("Current settings for the new job"));
 
-    // TODO: Find a way around borrow issue. Traits?
-    let jc_borrowed: Vec<&String> = vec![&job_categories[0], &job_categories[1], 
-        &job_categories[2], &job_categories[3], &job_categories[4]];
-    let max = format_print(&c_len, t_len, &n_len, &jc_borrowed);
-    println!("{:-<width$}", "", width = max - 2);
-    
-    let details: Vec<&String> = vec![&job.date, &job.company, &job.title, &job.status,
-        &job.notes];
-
-    format_print(&c_len, t_len, &n_len, &details);
+    ptable!(
+        [bF -> "DATE ADDED", bF -> "COMPANY", bF -> "JOB TITLE", bF -> "STATUS", bF -> "NOTES"],
+        [&job.date, &job.company, &job.title, &job.status, &job.notes]
+    );
 }
 
 /// Print the job listing to add, then ask user to confirm. On confirm, the program
@@ -135,6 +116,7 @@ pub fn confirm_new_job(new_job: Job) -> Result<(), Box<dyn Error>> {
     print_job(&new_job);
 
     let options: Vec<String> = vec!["Y".to_string(), "N".to_string()];
+
     let mut confirm_in = String::new();
     loop {
         println!("\nConfirm? [Y/N]");
@@ -142,17 +124,17 @@ pub fn confirm_new_job(new_job: Job) -> Result<(), Box<dyn Error>> {
             Ok(_) => { 
                 let confirm = confirm_in.trim().to_uppercase();
                 if options.iter().any(|ch| ch == &confirm) {
-                    // If input in options
+                    // If input in options.
                     if confirm == options[0] {  
-                        // If input is "Y"
+                        // If input is "Y".
                         mcsv::write_new_job(&new_job)?;
                     } else {
-                        // If input is "N"
-                        println!("\nEXITING.");
+                        // If input is "N".
+                        println!("\n{}", Colour::Red.bold().paint("CANCELLING."));
                         process::exit(1);
                     }
                 } else { 
-                    // If invalid option is entered
+                    // If an invalid option is entered.
                     println!("\nNot an option!");
                     confirm_in.clear(); 
                 }
