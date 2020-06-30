@@ -1,12 +1,15 @@
+mod add;
 mod cli;
 mod list;
 mod mcsv;
 mod model;
-mod add;
+mod titles;
 
 use std::error::Error;
 
 fn main() -> Result<(), Box<dyn Error>> {
+    titles::main_title();
+    
     let flags = cli::get_args();
 
     if let Some(company) = flags.add {
