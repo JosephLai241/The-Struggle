@@ -1,5 +1,6 @@
 use crate::model::Job;
 
+use ansi_term::*;
 use csv::{Reader, WriterBuilder};
 use serde::Serialize;
 
@@ -107,7 +108,10 @@ pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
         create(file, &job)?;
     };
 
-    Ok(println!("\nADDED NEW LISTING."))
+    Ok(println!(
+        "\n{}\n", 
+        Colour::Green.bold().paint("ADDED NEW LISTING.")
+    ))
 }
 
 /// Overwrite the spreadsheet after updating or deleting a job listing.
@@ -119,7 +123,10 @@ pub fn overwrite(master: BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
         writer.serialize(Listing::serialize_ow(i, &master))?;
     }
 
-    Ok(println!("\nUPDATED LISTING."))
+    Ok(println!(
+        "\n{}\n", 
+        Colour::Green.bold().paint("UPDATED SPREADSHEET.")
+    ))
 }
 
 /// Get jobs from the spreadsheet and return The BTreeMap of Job objects and its
