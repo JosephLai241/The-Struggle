@@ -120,8 +120,7 @@ pub fn overwrite(master: &mut BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> 
 }
 
 /// Get jobs from the spreadsheet and return The BTreeMap of Job objects and its
-/// index, which is its location in the spreadsheet. Throws an error if there are
-/// problems parsing the spreadsheet.
+/// index, which is its location in the spreadsheet.
 pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
     let mut master: BTreeMap<u16, Job> = BTreeMap::new();
 
@@ -142,6 +141,6 @@ pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
 
         master.insert(index, listing);
     }
-    
+
     Ok(master)
 }
