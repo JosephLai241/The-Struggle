@@ -112,7 +112,7 @@ pub fn overwrite(master: &mut BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> 
     for i in 0u16..master.len() as u16 {
         writer.serialize(Listing::serialize_ow(i, &master))?;
     }
-    
+
     Ok(println!(
         "\n{}\n", 
         Colour::Green.bold().paint("UPDATED SPREADSHEET.")
@@ -128,9 +128,10 @@ pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
     let file = File::open(FILENAME)?;
     let mut read = Reader::from_reader(file);
 
-    let mut n = 0;
-    for record in read.records() {
+    for (index, record) in read.records().enumerate() {
+        let index = index as u16;
         let job = record?;
+
         let listing = Job::new_job(
             job.get(0).unwrap().to_string(), 
             job.get(1).unwrap().to_string(), 
@@ -139,9 +140,8 @@ pub fn get_jobs() -> Result<BTreeMap<u16, Job>, Box<dyn Error>> {
             job.get(4).unwrap().to_string()
         );
 
-        master.insert(n, listing);
-        n += 1;
+        master.insert(index, listing);
     }
-
+    
     Ok(master)
 }
