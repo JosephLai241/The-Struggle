@@ -29,11 +29,12 @@ pub fn list_jobs(master: BTreeMap<u16, Job>) {
 
     job_table.add_row(
         row![
-            bFl -> "DATE ADDED", 
-            bFl -> "COMPANY", 
-            bFl -> "JOB TITLE", 
-            bFl -> "STATUS", 
-            bFl -> "NOTES"
+            bFl => 
+            "DATE ADDED", 
+            "COMPANY", 
+            "JOB TITLE", 
+            "STATUS", 
+            "NOTES"
         ]
     );
 
