@@ -1,30 +1,26 @@
+use crate::format::*;
 use crate::model::Job;
 
 use prettytable::*;
 
 use std::collections::BTreeMap;
 
-/// Set the color of the job within the PrettyTable depending on the job status.
-fn set_job_color(index: &u16, master: &BTreeMap<u16, Job>) -> String {
-    let job_status = &master.get_key_value(&index).unwrap().1.status;
-    match job_status.as_str() {
-        "PENDING" => return "Fbl".to_string(),
-        "IN PROGRESS" => return "Fyl".to_string(),
-        "OFFER RECEIVED" => return "Fml".to_string(),
-        "HIRED" => return "Fgl".to_string(),
-        "REJECTED" => return "Frl".to_string(),
-        _ => return "".to_string()
-    };
-}
+/// Add each stored job as a row in the PrettyTable.
+fn add_rows(job_table: &mut Table, master: BTreeMap<u16, Job>) {
+    for i in 0u16..master.len() as u16 {
+        let job_details = vec![
+            master.get_key_value(&i).unwrap().1.date.to_string(),
+            master.get_key_value(&i).unwrap().1.company.to_string(),
+            master.get_key_value(&i).unwrap().1.title.to_string(),
+            master.get_key_value(&i).unwrap().1.status.to_string(),
+            master.get_key_value(&i).unwrap().1.notes.to_string()
+        ];
 
-/// Return a new vector of styled PrettyTable cells to add to the master table.
-fn convert_job_details(job_details: Vec<String>, style: &str) -> Vec<Cell> {
-    let mut pt_row: Vec<Cell> = Vec::new();
-    for job in job_details {
-        pt_row.push(Cell::new(&job).style_spec(style));
+        let style = set_color(&job_details[3]);
+        let pt_row = convert_details(&job_details, &style);
+
+        job_table.add_row(Row::new(pt_row));
     }
-
-    pt_row
 }
 
 /// Print the stored jobs in a PrettyTable.
@@ -41,20 +37,7 @@ pub fn list_jobs(master: BTreeMap<u16, Job>) {
         ]
     );
 
-    for i in 0u16..master.len() as u16 {
-        let job_details = vec![
-            master.get_key_value(&i).unwrap().1.date.to_string(),
-            master.get_key_value(&i).unwrap().1.company.to_string(),
-            master.get_key_value(&i).unwrap().1.title.to_string(),
-            master.get_key_value(&i).unwrap().1.status.to_string(),
-            master.get_key_value(&i).unwrap().1.notes.to_string()
-        ];
-
-        let style = set_job_color(&i, &master);
-        let pt_row = convert_job_details(job_details, &style);
-
-        job_table.add_row(Row::new(pt_row));
-    }
+    add_rows(&mut job_table, master);
 
     job_table.printstd();
 }
