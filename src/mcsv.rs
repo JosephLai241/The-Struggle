@@ -65,9 +65,7 @@ fn existence() -> bool {
 
 /// Create new spreadsheet and add headers and job listing.
 fn create(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
-    let mut writer = WriterBuilder::new()
-        .has_headers(true)
-        .from_writer(file);
+    let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
     
     writer.serialize(Listing::serialize_a(&job))?;
 
@@ -92,19 +90,11 @@ fn append(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
 /// Write jobs to the spreadsheet. Add a header if the file does not already exist.
 /// If the file already exists, just append the job to the spreadsheet.
 pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
-    
     if existence() == true {
-        let file = OpenOptions::new()
-            .append(true)
-            .open(FILENAME)?;
-
+        let file = OpenOptions::new().append(true).open(FILENAME)?;
         append(file, &job)?;
     } else {
-        let file = OpenOptions::new()
-            .create(true)
-            .write(true)
-            .open(FILENAME)?;
-
+        let file = OpenOptions::new().create(true).write(true).open(FILENAME)?;
         create(file, &job)?;
     };
 
@@ -115,14 +105,14 @@ pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
 }
 
 /// Overwrite the spreadsheet after updating or deleting a job listing.
-pub fn overwrite(master: BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
-    let file = OpenOptions::new().write(true).open(FILENAME)?;
+pub fn overwrite(master: &mut BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> {
+    let file = OpenOptions::new().write(true).truncate(true).open(FILENAME)?;
 
     let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
     for i in 0u16..master.len() as u16 {
         writer.serialize(Listing::serialize_ow(i, &master))?;
     }
-
+    
     Ok(println!(
         "\n{}\n", 
         Colour::Green.bold().paint("UPDATED SPREADSHEET.")
