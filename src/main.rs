@@ -8,6 +8,7 @@ mod mcsv;
 mod model;
 mod search;
 mod titles;
+mod update;
 
 use ansi_term::*;
 
@@ -26,7 +27,10 @@ fn main() {
         let match_indexes = search::print_matches(&company, &master);
         let job_index = search::select_match(match_indexes);
 
-        
+        let section_int = update::select_attribute();
+        let update = update::update_attribute(section_int);
+
+        update::update_job(job_index, &mut master, update);
         
     } else if let Some(company) = flags.delete {
         let mut master = mcsv::get_jobs().unwrap();
@@ -46,6 +50,6 @@ fn main() {
         insights::display_insights(job_stats);
 
     } else {
-        println!("{}\n", Colour::Red.bold().paint("NO ARGUMENTS GIVEN.\n"));
+        println!("{}\n", Colour::Red.bold().paint("NO ARGUMENTS GIVEN 👎"));
     }
 }
