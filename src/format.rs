@@ -17,6 +17,7 @@ pub fn set_color(status: &str) -> String {
 /// converted to `&str` as an argument.
 pub fn convert_details<T: AsRef<str>>(job_details: &Vec<T>, style: &str) -> Vec<Cell> {
     let mut pt_row: Vec<Cell> = Vec::new();
+    
     for job in job_details {
         pt_row.push(Cell::new(&job.as_ref()).style_spec(style));
     }
