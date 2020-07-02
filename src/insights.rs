@@ -42,19 +42,53 @@ pub fn get_stats(master: BTreeMap<u16, Job>) -> JobStats {
 
         total: master.len() as f64
     };
-
+    
     for i in 0u16..master.len() as u16 {
         match master.get_key_value(&i).unwrap().1.status.as_str() {
-            "PENDING" => current_stats.pending += 1.0,
-            "IN PROGRESS" => current_stats.in_progress += 1.0,
-            "OFFER RECEIVED" => current_stats.offers += 1.0,
-            "HIRED" => current_stats.hired += 1.0,
-            "REJECTED" => current_stats.rejected += 1.0,
+            "PENDING" => { current_stats.pending += 1.0; },
+            "IN PROGRESS" => { current_stats.in_progress += 1.0; },
+            "OFFER RECEIVED" => { current_stats.offers += 1.0; },
+            "HIRED" => { current_stats.hired += 1.0; },
+            "REJECTED" => { current_stats.rejected += 1.0; },
             _ => ()
         }
     }
 
-    current_stats.calculate()
+    current_stats
+}
+
+/// Adding PrettyTable cells for the number of jobs and the ratio within each 
+/// job status in the PrettyTable.
+fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: bool) {
+    let stats: Vec<(f64, &str)> = vec![
+        (current_stats.pending, "Fbc"),
+        (current_stats.in_progress, "Fyc"),
+        (current_stats.offers, "Fmc"),
+        (current_stats.hired, "Fgc"),
+        (current_stats.rejected, "Frc")
+    ];
+
+    let mut table_values: Vec<Cell> = Vec::new();
+
+    for stat in stats {
+        match is_percent {
+            true => {
+                table_values.push(Cell::new(
+                    &format!("{:.2}% of all jobs", f64::from(stat.0) * 100.0))
+                        .style_spec(stat.1)
+                );
+            },
+            false => {
+                let plurality = if &stat.0 == &1.0f64 {"job"} else {"jobs"};
+                table_values.push(Cell::new(
+                    &format!("{} {}", stat.0, plurality))
+                        .style_spec(stat.1)
+                );
+            }
+        }
+    }
+
+    insights.add_row(Row::new(table_values));
 }
 
 /// Add job statistics calculations to a PrettyTable
@@ -74,21 +108,12 @@ pub fn display_insights(current_stats: JobStats) {
             "OFFERS RECEIVED", 
             "HIRES", 
             "REJECTIONS"
-        ]);
+    ]);
 
-    let pending = format!("{:.2}% of all jobs", current_stats.pending * 100.0);
-    let in_progress = format!("{:.2}% of all jobs", current_stats.in_progress * 100.0);
-    let offers = format!("{:.2}% of all jobs", current_stats.offers * 100.0);
-    let hired = format!("{:.2}% of all jobs", current_stats.hired * 100.0);
-    let rejected = format!("{:.2}% of all jobs", current_stats.rejected * 100.0);
-
-    insights.add_row(Row::new(vec![
-        Cell::new(&pending).style_spec("Fbc"),
-        Cell::new(&in_progress).style_spec("Fyc"),
-        Cell::new(&offers).style_spec("Fmc"),
-        Cell::new(&hired).style_spec("Fgc"),
-        Cell::new(&rejected).style_spec("Frc"),
-        ]));
+    get_job_count(&current_stats, &mut insights, false);
+    
+    let current_stats = current_stats.calculate();
+    get_job_count(&current_stats, &mut insights, true);
 
     insights.printstd();
 }
