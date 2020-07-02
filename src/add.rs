@@ -36,7 +36,7 @@ fn get_title(company: &String) -> String {
 }
 
 /// Get the job application status.
-fn get_status() -> String {
+pub fn get_status() -> String {
     let status_options: Vec<String> = vec![
         "PENDING".to_string(), 
         "IN PROGRESS".to_string(), 
