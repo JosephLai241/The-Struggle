@@ -13,10 +13,11 @@ fn get_title(company: &String) -> String {
     loop {
         let mut title = String::new();
 
-        let title_prompt = format!(
-            "What is the title of the position you are applying for at {}?", company
-        );
-        println!("{}", Style::new().bold().paint(title_prompt));
+        println!("{}", Style::new()
+            .bold()
+            .paint(format!(
+                "What is the title of the position you are applying for at {}?", company
+        )));
 
         match io::stdin().read_line(&mut title) {
             Ok(_) => {
@@ -114,7 +115,7 @@ pub fn add_job(company: String) -> Job {
 
 /// Print the PrettyTable containing new job listing information.
 fn print_job(job: &Job) {
-    println!("\n{}", Colour::Cyan.bold().paint("Current settings for the new job"));
+    println!("\n{}", Colour::Cyan.bold().paint("NEW JOB"));
 
     ptable!(
         [bF -> "DATE ADDED", bF -> "COMPANY", bF -> "JOB TITLE", bF -> "STATUS", bF -> "NOTES"],
