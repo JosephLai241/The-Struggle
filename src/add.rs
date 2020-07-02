@@ -22,12 +22,12 @@ fn get_title(company: &String) -> String {
             Ok(_) => {
                 let input = title.trim().to_string();
 
-                if input.is_empty() {
+                if !input.is_empty() {
+                    return title.trim().to_string(); 
+                } else { 
                     println!("{}\n",
                         Colour::Red.bold().paint("Please enter a job title.")
                     );
-                } else { 
-                    return title.trim().to_string(); 
                 }
             },
             Err(e) => { println!("Error! {:?}", e); }
@@ -62,21 +62,17 @@ fn get_status() -> String {
 
         match io::stdin().read_line(&mut status) {
             Ok(_) => {
-                if status.trim().is_empty() {
-                    println!("\n{}",
-                        Colour::Red.bold().paint("Please select a valid status option.")
-                    );
-                } else if !status.trim().chars().all(char::is_numeric) {
-                    println!("\n{}",
-                        Colour::Red.bold().paint("Please select a valid status option.")
-                    );
-                } else {
-                    let status_int = status.trim().parse::<usize>().unwrap();
-                    
-                    if std::usize::MIN <= status_int && 
-                        status_int <= status_options.len() - 1 as usize {
+                match status.trim().parse::<usize>() {
+                    Ok(status_int) => {
+                        if (0..5).contains(&status_int) {
                             return status_options[status_int].to_string();
-                    } else {
+                        } else {
+                            println!("\n{}",
+                                Colour::Red.bold().paint("Please select a valid status option.")
+                            );
+                        }
+                    },
+                    Err(_) => {
                         println!("\n{}",
                             Colour::Red.bold().paint("Please select a valid status option.")
                         );
@@ -131,36 +127,24 @@ fn print_job(job: &Job) {
 pub fn confirm_add(new_job: Job) {
     print_job(&new_job);
 
-    let options: Vec<String> = vec!["Y".to_string(), "N".to_string()];
-
     loop {
         let mut confirm_in = String::new();
 
-        println!(
-            "\n{}",
-            Style::new().bold().paint("Confirm? [Y/N]")
-        );
+        println!("\n{}", Style::new().bold().paint("Confirm? [Y/N]"));
 
         match io::stdin().read_line(&mut confirm_in) {
             Ok(_) => { 
-                let confirm = confirm_in.trim().to_uppercase();
-                if options.iter().any(|ch| ch == &confirm) {
-                    // If input in options.
-                    if confirm == options[0] {  
-                        // If input is "Y".
-                        mcsv::write_new_job(&new_job).expect("Failed writing to spreadsheet");
+                match confirm_in.trim().to_uppercase().as_str() {
+                    "Y" => {
+                        mcsv::write_new_job(&new_job)
+                            .expect("Failed writing to spreadsheet");
                         break;
-                    } else {
-                        // If input is "N".
+                    },
+                    "N" => {
                         println!("\n{}\n", Colour::Red.bold().paint("CANCELLING."));
                         process::exit(1);
-                    }
-                } else { 
-                    // If an invalid option is entered.
-                    println!(
-                        "\n{}",
-                        Colour::Red.bold().paint("Not an option!")
-                    );
+                    },
+                    _ => println!("\n{}", Colour::Red.bold().paint("Not an option!"))
                 }
             },
             Err(e) => { println!("Error! {:?}", e); }
