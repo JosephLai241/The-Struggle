@@ -42,31 +42,3 @@ pub fn list_jobs(master: BTreeMap<u16, Job>) {
 
     job_table.printstd();
 }
-
-////////////////////////////////////////////////////////////////////////////////
-
-// /// Enum containing all the ways you can sort the table of jobs. Currently Rust's 
-// /// PrettyTable does not support sorting so I am commenting this out for now.
-// enum Titles {
-//     Date,
-//     Reverse,
-//     Company,
-//     JobTitle,
-//     Status,
-//     Notes
-// }
-
-// /// Return the string indicating how the table is sorted. Currently Rust's 
-// /// PrettyTable does not support sorting so I am commenting this out for now.
-// impl Titles {
-//     fn return_title(sort: Titles) -> String {
-//         match sort {
-//             Titles::Date => "Sorting by Date (Descending)".to_string(),
-//             Titles::Reverse => "Sorting by Newest".to_string(),
-//             Titles::Company => "Sorting by Company Name".to_string(),
-//             Titles::JobTitle => "Sorting by Job Title".to_string(),
-//             Titles::Status => "Sorting by Status".to_string(),
-//             Titles::Notes => "Sorting by Notes".to_string()
-//         }
-//     }
-// }
