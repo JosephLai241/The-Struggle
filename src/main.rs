@@ -17,10 +17,12 @@ fn main() {
 
     let flags = cli::get_args();
 
+    // Add a new job to the spreadsheet.
     if let Some(company) = flags.add {
         let new_job = add::add_job(company);
         add::confirm_add(new_job);
 
+    // Update a job in the spreadsheet.
     } else if let Some(company) = flags.update {        
         let mut master = mcsv::get_jobs().unwrap();
 
@@ -32,6 +34,7 @@ fn main() {
 
         update::update_job(job_index, &mut master, update);
         
+    // Delete a job from the spreadsheet.
     } else if let Some(company) = flags.delete {
         let mut master = mcsv::get_jobs().unwrap();
 
@@ -40,15 +43,18 @@ fn main() {
 
         delete::delete_job(job_index, &mut master);
 
+    // List all stored jobs.
     } else if flags.list == true {
         let master = mcsv::get_jobs().unwrap();
         list::list_jobs(master);
 
+    // Display insights for each application status.
     } else if flags.insights == true {
         let master = mcsv::get_jobs().unwrap();
         let job_stats = insights::get_stats(master);
         insights::display_insights(job_stats);
 
+    // If no arguments were entered.
     } else {
         println!("{}\n", Colour::Red.bold().paint("NO ARGUMENTS GIVEN 👎"));
     }
