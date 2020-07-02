@@ -91,7 +91,8 @@ fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: boo
     insights.add_row(Row::new(table_values));
 }
 
-/// Add job statistics calculations to a PrettyTable
+/// Add job statistics calculations to the insights PrettyTable, then display
+/// the table.
 pub fn display_insights(current_stats: JobStats) {
     let mut insights = Table::new();
 
