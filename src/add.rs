@@ -23,8 +23,7 @@ fn get_title(company: &String) -> String {
                 let input = title.trim().to_string();
 
                 if input.is_empty() {
-                    println!(
-                        "{}\n",
+                    println!("{}\n",
                         Colour::Red.bold().paint("Please enter a job title.")
                     );
                 } else { 
@@ -64,13 +63,11 @@ fn get_status() -> String {
         match io::stdin().read_line(&mut status) {
             Ok(_) => {
                 if status.trim().is_empty() {
-                    println!(
-                        "\n{}",
+                    println!("\n{}",
                         Colour::Red.bold().paint("Please select a valid status option.")
                     );
                 } else if !status.trim().chars().all(char::is_numeric) {
-                    println!(
-                        "\n{}",
+                    println!("\n{}",
                         Colour::Red.bold().paint("Please select a valid status option.")
                     );
                 } else {
@@ -80,8 +77,7 @@ fn get_status() -> String {
                         status_int <= status_options.len() - 1 as usize {
                             return status_options[status_int].to_string();
                     } else {
-                        println!(
-                            "\n{}",
+                        println!("\n{}",
                             Colour::Red.bold().paint("Please select a valid status option.")
                         );
                     }
@@ -109,12 +105,15 @@ fn get_notes() -> String {
 
 /// Return the Job struct created from the date, job title, job status, and notes.
 pub fn add_job(company: String) -> Job {
-    let date = Local::now().format("%m-%d-%Y %H:%M:%S").to_string();
     let title = get_title(&company);
-    let status = get_status();
-    let notes = get_notes();
 
-    Job::new_job(date, company, title, status, notes)
+    Job::new_job(
+        Local::now().format("%m-%d-%Y %H:%M:%S").to_string(),
+        company,
+        title,
+        get_status(),
+        get_notes()
+    )
 }
 
 /// Print the PrettyTable containing new job listing information.
