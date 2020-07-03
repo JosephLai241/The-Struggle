@@ -82,7 +82,7 @@ pub fn update_attribute(section_int: u16) -> (u16, String) {
     }
 }
 
-/// Print the selected job for update
+/// Print the selected job to update.
 fn print_selection(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
     println!("\n{}", Colour::Cyan.bold().paint("UPDATED JOB"));
     let mut to_update = Table::new();
