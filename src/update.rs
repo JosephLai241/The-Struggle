@@ -80,9 +80,8 @@ pub fn update_attribute(section_int: u16) -> (u16, String) {
     }
 }
 
-/// Update the job attribute in the master BTreeMap that contains all existing
-/// job listings. Then rewrite the spreadsheet.
-pub fn update_job(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
+/// Print the selected job for update
+fn print_selection(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
     println!("\n{}", Colour::Cyan.bold().paint("UPDATED JOB"));
     let mut to_update = Table::new();
 
@@ -116,6 +115,12 @@ pub fn update_job(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16,
     ]);
 
     to_update.printstd();
+}
+
+/// Update the job attribute in the master BTreeMap that contains all existing
+/// job listings. Then rewrite the spreadsheet.
+pub fn update_job(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
+    print_selection(job_index, master, update);
 
     loop {
         let mut confirm_delete = String::new();
