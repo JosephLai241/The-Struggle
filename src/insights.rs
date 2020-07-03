@@ -30,8 +30,7 @@ impl JobStats {
     }
 }
 
-/// Populate JobStats struct with data from the spreadsheet, then return a new
-/// JobStruct containing the calculations for each job status.
+/// Return a JobStruct containing data for each job status.
 pub fn get_stats(master: BTreeMap<u16, Job>) -> JobStats {
     let mut current_stats = JobStats {
         pending: 0.0,
@@ -79,7 +78,7 @@ fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: boo
                 );
             },
             false => {
-                let plurality = if &stat.0 == &1.0f64 {"job"} else {"jobs"};
+                let plurality = if &stat.0 == &1.0f64 { "job" } else { "jobs" };
                 table_values.push(Cell::new(
                     &format!("{} {}", stat.0, plurality))
                         .style_spec(stat.1)
