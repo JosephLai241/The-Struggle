@@ -119,3 +119,55 @@ pub fn select_match(match_indexes: Vec<u16>) -> u16 {
         }
     }
 }
+
+#[cfg(test)]
+mod test_search {
+    use super::*;
+
+    #[test]
+    fn test_print_matches() {
+        let correct_indexes: Vec<u16> = vec![0, 1, 3];
+
+        let mut test_master: BTreeMap<u16, Job> = BTreeMap::new();
+
+        let test_job = Job {
+            date: "".to_string(),
+            company: "FIND THIS".to_string(),
+            title: "".to_string(),
+            status: "HIRED".to_string(),
+            notes: "".to_string()
+        };
+        test_master.insert(0, test_job);
+
+        let test_job = Job {
+            date: "".to_string(),
+            company: "FIND THIS".to_string(),
+            title: "".to_string(),
+            status: "REJECTED".to_string(),
+            notes: "".to_string()
+        };
+        test_master.insert(1, test_job);
+
+        let test_job = Job {
+            date: "".to_string(),
+            company: "NOT THIS".to_string(),
+            title: "".to_string(),
+            status: "REJECTED".to_string(),
+            notes: "".to_string()
+        };
+        test_master.insert(2, test_job);
+
+        let test_job = Job {
+            date: "".to_string(),
+            company: "FIND THIS".to_string(),
+            title: "".to_string(),
+            status: "REJECTED".to_string(),
+            notes: "".to_string()
+        };
+        test_master.insert(3, test_job);
+
+        let match_indexes = print_matches(&"find", &test_master);
+
+        assert_eq!(correct_indexes, match_indexes);
+    }
+}
