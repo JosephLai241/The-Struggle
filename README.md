@@ -7,7 +7,7 @@
         \/__/\/___/... The Struggle
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/the-struggle?logo=rust&style=for-the-badge)
-![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis&style=for-the-badge)
+[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis&style=for-the-badge)][Travis CI Build Status]
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle?style=for-the-badge)
 
 A command-line tool for tracking your job applications. 
