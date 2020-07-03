@@ -8,7 +8,7 @@ use structopt::StructOpt;
 #[derive(Debug, PartialEq, StructOpt)]
 #[structopt(
     name = "The Struggle", 
-    about = "A Rust command line tool for tracking your job applications"
+    about = "A command line tool for tracking your job applications"
 )]
 pub struct Args {
     /// Flag for adding a job to the spreadsheet.
