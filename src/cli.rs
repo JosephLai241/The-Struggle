@@ -64,24 +64,6 @@ mod test_cli {
     use assert_cmd::Command;
 
     #[test]
-    fn test_list_arg() {
-        Command::cargo_bin("ts")
-            .unwrap()
-            .arg("-l")
-            .assert()
-            .success();
-    }
-
-    #[test]
-    fn test_insight_arg() {
-        Command::cargo_bin("ts")
-            .unwrap()
-            .arg("-i")
-            .assert()
-            .success();
-    }
-
-    #[test]
     fn test_invalid_arg() {
         Command::cargo_bin("ts")
             .unwrap()
