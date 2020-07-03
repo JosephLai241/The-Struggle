@@ -85,30 +85,25 @@ pub fn select_match(match_indexes: Vec<u16>) -> u16 {
 
         match io::stdin().read_line(&mut select) {
             Ok(_) => {
-                if select.trim().is_empty() {
-                    println!(
-                        "\n{}", 
-                        Colour::Red.bold().paint("Please select a valid match.")
-                    );
-                } else if !select.trim().chars().all(char::is_numeric) {
-                    println!(
-                        "\n{}", 
-                        Colour::Red.bold().paint("Please select a valid match.")
-                    );
-                } else {
-                    let select_int = select.trim().parse::<u16>().unwrap();
-                    if !match_indexes.iter().any(|index| index == &select_int) {
-                        println!(
-                            "\n{}", 
+                match select.trim().parse::<u16>() {
+                    Ok(select_int) => {
+                        if match_indexes.iter().any(|index| index == &select_int) {
+                            return match_indexes[
+                                match_indexes
+                                    .iter()
+                                    .position(|index| index == &select_int)
+                                    .unwrap()
+                            ];
+                        } else {
+                            println!("\n{}", 
+                                Colour::Red.bold().paint("Please select a valid match.")
+                            );
+                        }
+                    },
+                    Err(_) => {
+                        println!("\n{}", 
                             Colour::Red.bold().paint("Please select a valid match.")
                         );
-                    } else {
-                        return match_indexes[
-                            match_indexes
-                                .iter()
-                                .position(|index| index == &select_int)
-                                .unwrap()
-                        ];
                     }
                 }
             },
