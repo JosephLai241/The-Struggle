@@ -49,7 +49,7 @@ To check if The Struggle built correctly:
 $ ./target/release/ts -V
 ```
 
-You can then move the `ts` binary to another directory so you do not have to type that path to run The Struggle. Then check if the binary was moved correctly:
+You can then move the `ts` binary to another directory so you do not have to type that path to run The Struggle. Check if the binary was moved correctly:
 
 ```bash
 $ mv target/release/ts /some/directory/
