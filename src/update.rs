@@ -44,7 +44,7 @@ pub fn select_attribute() -> u16 {
                     }
                 }
             },
-            Err(e) => {println!("Error! {:?}", e);}
+            Err(e) => { println!("Error! {:?}", e); }
         }
     }
 }
