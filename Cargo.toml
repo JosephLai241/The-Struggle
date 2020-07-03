@@ -4,8 +4,6 @@ version = "2.0.0"
 authors = ["Joseph Lai"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
 ansi_term = "0.12.1"
 chrono = "0.4.11"
