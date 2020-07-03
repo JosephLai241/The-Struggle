@@ -24,3 +24,40 @@ pub fn convert_details<T: AsRef<str>>(job_details: &Vec<T>, style: &str) -> Vec<
 
     pt_row
 }
+
+#[cfg(test)]
+mod test_format {
+    use super::*;
+
+    #[test]
+    fn test_set_color() {
+        assert_eq!(set_color("PENDING"), "Fbl");
+        assert_eq!(set_color("IN PROGRESS"), "Fyl");
+        assert_eq!(set_color("OFFER RECEIVED"), "Fml");
+        assert_eq!(set_color("HIRED"), "Fgl");
+        assert_eq!(set_color("REJECTED"), "Frl");
+        assert_eq!(set_color("should return empty string"), "");
+    }
+
+    #[test]
+    fn test_convert_details() {
+        let job_details = vec![
+            "07-02-2020 21:09:39",
+            "ECorp",
+            "Security Engineer",
+            "HIRED",
+            "My name is Elliot"
+        ];
+        let style = "Fbl";
+
+        let results = vec![
+            Cell::new(&job_details[0]).style_spec(style),
+            Cell::new(&job_details[1]).style_spec(style),
+            Cell::new(&job_details[2]).style_spec(style),
+            Cell::new(&job_details[3]).style_spec(style),
+            Cell::new(&job_details[4]).style_spec(style),
+        ];
+
+        assert_eq!(convert_details(&job_details, style), results);
+    }
+}
