@@ -2,8 +2,10 @@
 
 use structopt::StructOpt;
 
+// extern crate assert_cmd;
+
 /// This struct contains all flags that are used in this program.
-#[derive(StructOpt)]
+#[derive(Debug, PartialEq, StructOpt)]
 #[structopt(
     name = "The Struggle", 
     about = "A Rust command line tool for tracking your job applications"
@@ -53,4 +55,50 @@ pub struct Args {
 /// Return Args struct.
 pub fn get_args() -> Args {
     return Args::from_args();
+}
+
+#[cfg(test)]
+mod test_cli {
+    use super::*;
+
+    use assert_cmd::Command;
+
+    #[test]
+    fn test_list_arg() {
+        Command::cargo_bin("ts")
+            .unwrap()
+            .arg("-l")
+            .assert()
+            .success();
+    }
+
+    #[test]
+    fn test_insight_arg() {
+        Command::cargo_bin("ts")
+            .unwrap()
+            .arg("-i")
+            .assert()
+            .success();
+    }
+
+    #[test]
+    fn test_invalid_arg() {
+        Command::cargo_bin("ts")
+            .unwrap()
+            .arg("-q")
+            .assert()
+            .failure();
+    }
+
+    #[test]
+    fn test_get_args() {
+        let args = get_args();
+        assert_eq!(Args {
+            add: None,
+            update: None,
+            delete: None,
+            list: false,
+            insights: false
+        }, args);
+    }
 }
