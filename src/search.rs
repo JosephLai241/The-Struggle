@@ -1,4 +1,4 @@
-//! Functions for searching and printing matching job applications within a 
+//! Searching and printing matching job applications within a 
 //! PrettyTable.
 
 use crate::format::*;

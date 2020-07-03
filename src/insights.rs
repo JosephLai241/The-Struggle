@@ -1,4 +1,4 @@
-//! Functions for returning a PrettyTable of job application statistics.
+//! Returning a PrettyTable of job application statistics.
 
 use crate::format::format_table;
 use crate::model::Job;

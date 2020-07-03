@@ -1,4 +1,4 @@
-//! Functions for listing stored job applications in a PrettyTable.
+//! Listing stored job applications in a PrettyTable.
 
 use crate::format::*;
 use crate::model::Job;

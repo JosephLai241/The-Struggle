@@ -1,4 +1,4 @@
-//! Functions for formatting PrettyTable output.
+//! Formatting PrettyTable output.
 
 use prettytable::*;
 
