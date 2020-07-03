@@ -1,3 +1,6 @@
+//! Defining the Job schema that will be used for reading and writing jobs to the
+//! spreadsheet.
+
 /// Job schema.
 #[derive(Debug, PartialEq)]
 pub struct Job {
@@ -8,12 +11,21 @@ pub struct Job {
     pub notes: String
 }
 
-/// Create a new Job object using the Job struct.
 impl Job {
-    pub fn new_job(date: String, company: String, title: String, status: String,
+    /// Create a new Job object using the Job struct.
+    pub fn new_job(
+        date: String, 
+        company: String, 
+        title: String, 
+        status: String,
         notes: String) -> Job {
-            Job {date: date, company: company, title: title, status: status,
-                notes: notes}
+            Job {
+                date: date, 
+                company: company, 
+                title: title, 
+                status: status,
+                notes: notes
+            }
     }
 }
 
