@@ -1,3 +1,5 @@
+//! Functions for adding a new job application to the spreadsheet.
+
 use crate::mcsv;
 use crate::model::Job;
 

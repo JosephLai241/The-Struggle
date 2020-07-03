@@ -1,3 +1,5 @@
+//! Defining ASCII art used in this program.
+
 use ansi_term::*;
 
 /// Print the main title of this program.

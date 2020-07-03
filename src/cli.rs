@@ -1,4 +1,5 @@
-// use clap::arg_enum;
+//! Defining command-line interface flags.
+
 use structopt::StructOpt;
 
 /// This struct contains all flags that are used in this program.

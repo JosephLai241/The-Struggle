@@ -1,3 +1,5 @@
+//! Functions for modifying the `job_applications.csv` spreadsheet.
+
 use crate::model::Job;
 
 use ansi_term::*;

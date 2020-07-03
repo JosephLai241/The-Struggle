@@ -1,3 +1,5 @@
+//! Functions for deleting a job application from the spreadsheet.
+
 use crate::mcsv::overwrite;
 use crate::model::Job;
 

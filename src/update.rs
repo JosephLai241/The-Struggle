@@ -1,3 +1,5 @@
+//! Functions for updating a job application in the spreadsheet.
+
 use crate::add::get_status;
 use crate::mcsv::overwrite;
 use crate::model::Job;

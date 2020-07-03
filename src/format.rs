@@ -1,3 +1,5 @@
+//! Functions for formatting PrettyTable output.
+
 use prettytable::*;
 
 /// Set the color of the match within the PrettyTable depending on the job status.

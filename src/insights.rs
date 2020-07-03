@@ -1,3 +1,5 @@
+//! Functions for returning a PrettyTable of job application statistics.
+
 use crate::format::format_table;
 use crate::model::Job;
 
@@ -16,8 +18,8 @@ pub struct JobStats {
     total: f64
 }
 
-/// Implementation for calculating job stats using data from the JobStats struct.
 impl JobStats {
+    /// Calculate job stats using data from the JobStats struct.
     fn calculate(&self) -> JobStats {
         JobStats {
             pending: self.pending / self.total,
