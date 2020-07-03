@@ -71,7 +71,14 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
         process::exit(1);
     }
 
+    matches.set_titles(Row::new(vec![
+        Cell::new(&format!("FOUND {} MATCHES", matches.len() - 1))
+            .style_spec("bcH6")
+    ]));
+
+    matches.set_format(format_table());
     matches.printstd();
+    
     match_indexes
 }
 
