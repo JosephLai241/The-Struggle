@@ -1,3 +1,4 @@
+use crate::format::format_table;
 use crate::model::Job;
 
 use prettytable::*;
@@ -95,9 +96,9 @@ fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: boo
 pub fn display_insights(current_stats: JobStats) {
     let mut insights = Table::new();
 
-    let header = format!("{} TRACKED JOB APPLICATIONS", current_stats.total);
     insights.set_titles(Row::new(vec![
-        Cell::new(&header).style_spec("bcH5")
+        Cell::new(&format!("{} TRACKED JOB APPLICATIONS", current_stats.total))
+            .style_spec("bcH5")
     ]));
 
     insights.add_row(
@@ -115,5 +116,6 @@ pub fn display_insights(current_stats: JobStats) {
     let current_stats = current_stats.calculate();
     get_job_count(&current_stats, &mut insights, true);
 
+    insights.set_format(format_table());
     insights.printstd();
 }
