@@ -34,6 +34,23 @@ mod test_model {
     use super::*;
 
     #[test]
+    fn test_job_struct() {
+        let test_job = Job {
+            date: "07-02-2020 21:09:39".to_string(),
+            company: "ECorp".to_string(),
+            title: "Security Engineer".to_string(),
+            status: "HIRED".to_string(),
+            notes: "My name is Elliot".to_string()
+        };
+
+        assert_eq!(test_job.date, "07-02-2020 21:09:39".to_string());
+        assert_eq!(test_job.company, "ECorp".to_string());
+        assert_eq!(test_job.title, "Security Engineer".to_string());
+        assert_eq!(test_job.status, "HIRED".to_string());
+        assert_eq!(test_job.notes, "My name is Elliot".to_string());
+    }
+
+    #[test]
     fn test_new_job() {
         let test_job = Job {
             date: "07-02-2020 21:09:39".to_string(),
