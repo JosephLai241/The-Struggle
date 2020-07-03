@@ -10,5 +10,5 @@ cache: cargo
 
 ### Command to run tests.
 script:
-  - cargo build --verbose
+  - cargo build
   - cargo test --verbose
