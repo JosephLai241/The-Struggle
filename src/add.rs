@@ -80,7 +80,7 @@ pub fn get_status() -> String {
                     }
                 }
             },
-            Err(e) => {println!("Error! {:?}", e);}
+            Err(e) => { println!("Error! {:?}", e); }
         }
     }
 }
