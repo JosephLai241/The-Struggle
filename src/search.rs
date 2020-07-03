@@ -1,3 +1,6 @@
+//! Functions for searching and printing matching job applications within a 
+//! PrettyTable.
+
 use crate::format::*;
 use crate::model::Job;
 
@@ -14,34 +17,33 @@ fn add_matches(
     company: &str, 
     master: &BTreeMap<u16, Job>, 
     match_indexes: &mut Vec<u16>, 
-    matches: &mut Table
-) {
-    let search_string = format!(r"(?i){}", company);
-    let re = Regex::new(&search_string).unwrap();
+    matches: &mut Table) {
+        let search_string = format!(r"(?i){}", company);
+        let re = Regex::new(&search_string).unwrap();
 
-    for i in 0u16..master.len() as u16 {
-        let existing_company = &master.get_key_value(&i).unwrap().1.company.to_string();
-        match re.find(&existing_company) {
-            Some(_) => {
-                let index = &i.to_string();
-                let job_details = vec![
-                    index,
-                    &master.get_key_value(&i).unwrap().1.date,
-                    &master.get_key_value(&i).unwrap().1.company,
-                    &master.get_key_value(&i).unwrap().1.title,
-                    &master.get_key_value(&i).unwrap().1.status,
-                    &master.get_key_value(&i).unwrap().1.notes
-                ];
+        for i in 0u16..master.len() as u16 {
+            let existing_company = &master.get_key_value(&i).unwrap().1.company.to_string();
+            match re.find(&existing_company) {
+                Some(_) => {
+                    let index = &i.to_string();
+                    let job_details = vec![
+                        index,
+                        &master.get_key_value(&i).unwrap().1.date,
+                        &master.get_key_value(&i).unwrap().1.company,
+                        &master.get_key_value(&i).unwrap().1.title,
+                        &master.get_key_value(&i).unwrap().1.status,
+                        &master.get_key_value(&i).unwrap().1.notes
+                    ];
 
-                let style = set_color(&job_details[4]);
-                let pt_row = convert_details(&job_details, &style);
+                    let style = set_color(&job_details[4]);
+                    let pt_row = convert_details(&job_details, &style);
 
-                matches.add_row(Row::new(pt_row));
-                match_indexes.push(i);
-            },
-            None => ()
+                    matches.add_row(Row::new(pt_row));
+                    match_indexes.push(i);
+                },
+                None => ()
+            }
         }
-    }
 }
 
 /// Print job matches from the spreadsheet in a PrettyTable. Returns a 
