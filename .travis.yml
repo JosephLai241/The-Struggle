@@ -1,0 +1,14 @@
+### Specifying language.
+language: rust
+
+### Test Rust versions.
+rust:
+  - stable
+
+### Cacheing dependencies so they are only recompiled if they or the compiler were upgraded.
+cache: cargo
+
+### Command to run tests.
+script:
+  - cargo build --verbose
+  - cargo test --verbose
