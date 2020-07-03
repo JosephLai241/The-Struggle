@@ -12,6 +12,7 @@ mod update;
 
 use ansi_term::*;
 
+/// It really is a struggle out there.
 fn main() {
     titles::main_title();
 
