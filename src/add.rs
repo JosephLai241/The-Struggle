@@ -89,8 +89,7 @@ pub fn get_status() -> String {
 fn get_notes() -> String {
     let mut notes = String::new();
     loop {
-        println!(
-            "\n{}",
+        println!("\n{}",
             Style::new().bold().paint("(Optional) Enter any notes for this position:")
         );
         match io::stdin().read_line(&mut notes) {
