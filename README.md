@@ -35,7 +35,9 @@ I have been applying to *tons* of companies in attempt to secure a job before I 
 
 # Installation
 
-Run these commands to build The Struggle:
+First, you will need a [Rust installation][Rust Official Site] in order to compile The Struggle.
+
+Then run these commands to build The Struggle:
 
 ```bash
 $ git clone https://www.github.com/JosephLai241/The-Struggle
@@ -61,13 +63,13 @@ The complimentary spreadsheet `job_applications.csv` will be created in whicheve
 
 # Why Rust?
 
-I chose Rust because one of my best friends [Luke Schenk](https://github.com/LukeDSchenk) told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio, so Rust, a low-level programming language, was the way to go.
+I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio, so Rust, a low-level programming language, was the way to go.
 
 # How It Works and Use Cases
 
 This program essentially makes it easier and faster to maintain a locally-stored spreadsheet of all the jobs applications you record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
 
-This program utilizes [ANSI Terminal](https://docs.rs/ansi_term/0.12.1/ansi_term/) and [PrettyTable](https://docs.rs/prettytable-rs/0.8.0/prettytable/) to add color and neatly print job listings in a table within the terminal.
+This program utilizes [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to add color and neatly print job listings in a table within the terminal.
 
 ## Adding a Job 
 
@@ -91,21 +93,19 @@ The program will parse the spreadsheet, count how many jobs are under each job s
 
 # Stored Attributes
 
-`Date` is automatically calculated based on Rust's [chrono](https://docs.rs/chrono/0.4.11/chrono/).
+`DATE ADDED` is automatically calculated based on Rust's [chrono][chrono]
 
-`Company Name`, `Job Title`, and `Notes` are all based on user input.
+`COMPANY`, `JOB TITLE`, and `NOTES` are all based on user input.
 
-`Application Status` has a few options you can choose from:
+`STATUS` has a few options you can choose from. Each status is mapped to a color and will colorize your job listing within the terminal:
 
-|Application Status|
-|------------------|
-|PENDING           |
-|IN PROGRESS       |
-|OFFER RECEIVED    |
-|HIRED             |
-|REJECTED          |
-
-Each status is mapped to a color and will colorize your job listing within a terminal.
+| Application Status | Color   |
+|--------------------|---------|
+| PENDING            | Blue    |
+| IN PROGRESS        | Yellow  |
+| OFFER RECEIVED     | Magenta |
+| HIRED              | Green   |
+| REJECTED           | Red     |
 
 # Read This Before You Run the Program
 
@@ -188,3 +188,16 @@ Each cell is also colorized based on the table described in the section above.
     - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable does not currently have a sort() method.
     - Insights will now only display all job status insights, rather than including options to only display a specific status.
     - Deploying 2.0 with Travis CI and Codecov
+
+<!-- BADGES -->
+[Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
+
+<!-- A BROTHER -->
+[Luke]: https://github.com/LukeDSchenk
+
+<!-- RUST LINKS -->
+[Rust Official Site]: https://www.rust-lang.org/
+
+[ANSI Terminal]: https://docs.rs/ansi_term/0.12.1/ansi_term/
+[chrono]: https://docs.rs/chrono/0.4.11/chrono/
+[PrettyTable]: https://docs.rs/prettytable-rs/0.8.0/prettytable/
