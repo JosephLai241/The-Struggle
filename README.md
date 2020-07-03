@@ -93,7 +93,7 @@ The program will parse the spreadsheet, count how many jobs are under each job s
 
 # Stored Attributes
 
-`DATE ADDED` is automatically calculated based on Rust's [chrono][chrono]
+`DATE ADDED` is automatically calculated based on Rust's [chrono][chrono].
 
 `COMPANY`, `JOB TITLE`, and `NOTES` are all based on user input.
 
@@ -185,9 +185,9 @@ Each cell is also colorized based on the table described in the section above.
     - Print job application insights
 
 - **TBD:** The Struggle v2.0 (Rust).
-    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable does not currently have a sort() method.
-    - Insights will now only display all job status insights, rather than including options to only display a specific status.
-    - Deploying 2.0 with Travis CI and Codecov
+    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable does not currently have some kind of `sort()` method.
+    - Insights will now only display all job status insights rather than including options to only display a specific status.
+    - Deploying 2.0 with Travis CI.
 
 <!-- BADGES -->
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
