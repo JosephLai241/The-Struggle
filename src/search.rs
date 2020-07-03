@@ -65,8 +65,7 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
     add_matches(company, &master, &mut match_indexes, &mut matches);
 
     if match_indexes.is_empty() {
-        println!(
-            "\n{}\n", 
+        println!("\n{}\n", 
             Colour::Red.bold().paint("No matches found!")
         );
         process::exit(1);
