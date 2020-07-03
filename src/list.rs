@@ -40,5 +40,11 @@ pub fn list_jobs(master: BTreeMap<u16, Job>) {
 
     add_rows(&mut job_table, master);
 
+    job_table.set_titles(Row::new(vec![
+        Cell::new(&format!("{} TRACKED JOB APPLICATIONS", job_table.len() - 1))
+            .style_spec("bcH5")
+    ]));
+    
+    job_table.set_format(format_table());
     job_table.printstd();
 }
