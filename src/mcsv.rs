@@ -66,7 +66,6 @@ fn existence() -> bool {
 /// Create new spreadsheet and add headers and job listing.
 fn create(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
     let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
-    
     writer.serialize(Listing::serialize_a(&job))?;
 
     Ok(())
@@ -98,10 +97,7 @@ pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
         create(file, &job)?;
     };
 
-    Ok(println!(
-        "\n{}\n", 
-        Colour::Green.bold().paint("ADDED NEW LISTING.")
-    ))
+    Ok(println!("\n{}\n", Colour::Green.bold().paint("ADDED NEW LISTING.")))
 }
 
 /// Overwrite the spreadsheet after updating or deleting a job listing.
@@ -113,10 +109,7 @@ pub fn overwrite(master: &mut BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> 
         writer.serialize(Listing::serialize_ow(i, &master))?;
     }
 
-    Ok(println!(
-        "\n{}\n", 
-        Colour::Green.bold().paint("UPDATED SPREADSHEET.")
-    ))
+    Ok(println!("\n{}\n", Colour::Green.bold().paint("UPDATED SPREADSHEET.")))
 }
 
 /// Get jobs from the spreadsheet and return The BTreeMap of Job objects and its
