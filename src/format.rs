@@ -25,6 +25,21 @@ pub fn convert_details<T: AsRef<str>>(job_details: &Vec<T>, style: &str) -> Vec<
     pt_row
 }
 
+/// Return the PrettyTable format for all information tables.
+pub fn format_table() -> format::TableFormat {
+    format::FormatBuilder::new()
+        .borders('|')
+        .column_separator('|')
+        .padding(1, 1)
+        .separators(
+            &[format::LinePosition::Bottom, format::LinePosition::Intern], 
+            format::LineSeparator::new('-', '+', '+', '+'))
+        .separators(
+            &[format::LinePosition::Top, format::LinePosition::Title], 
+            format::LineSeparator::new('=', '=', '+', '+'))
+        .build()
+}
+
 #[cfg(test)]
 mod test_format {
     use super::*;
