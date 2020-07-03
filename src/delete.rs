@@ -27,8 +27,8 @@ fn update_keys(master: &mut BTreeMap<u16, Job>) -> BTreeMap<u16, Job> {
     update
 }
 
-/// Delete the selected job from the master BTreeMap. Then rewrite the spreadsheet.
-pub fn delete_job(job_index: u16, master: &mut BTreeMap<u16, Job>) {
+/// Print the selected job for deletion.
+fn print_selection(job_index: u16, master: &mut BTreeMap<u16, Job>) {
     println!("\n{}", Colour::Cyan.bold().paint("SELECTED JOB"));
     let mut to_delete = Table::new();
 
@@ -52,6 +52,11 @@ pub fn delete_job(job_index: u16, master: &mut BTreeMap<u16, Job>) {
     ]);
 
     to_delete.printstd();
+}
+
+/// Delete the selected job from the master BTreeMap. Then rewrite the spreadsheet.
+pub fn delete_job(job_index: u16, master: &mut BTreeMap<u16, Job>) {
+    print_selection(job_index, master);
 
     loop {
         let mut confirm_delete = String::new();
