@@ -2,8 +2,6 @@
 
 use structopt::StructOpt;
 
-// extern crate assert_cmd;
-
 /// This struct contains all flags that are used in this program.
 #[derive(Debug, PartialEq, StructOpt)]
 #[structopt(
@@ -11,7 +9,7 @@ use structopt::StructOpt;
     about = "A command line tool for tracking your job applications"
 )]
 pub struct Args {
-    /// Flag for adding a job to the spreadsheet.
+    /// Flag for adding a job listing to the spreadsheet.
     #[structopt(
         short = "a", 
         long = "add", 
@@ -19,7 +17,7 @@ pub struct Args {
     )]
     pub add: Option<String>,
 
-    /// Flag for updating an existing job.
+    /// Flag for updating an existing job listing.
     #[structopt(
         short = "u", 
         long = "update", 
@@ -27,7 +25,7 @@ pub struct Args {
     )]
     pub update: Option<String>,
 
-    /// Flag for deleting an existing job.
+    /// Flag for deleting an existing job listing.
     #[structopt(
         short = "d", 
         long = "delete", 
@@ -35,7 +33,7 @@ pub struct Args {
     )]
     pub delete: Option<String>,
 
-    /// Flag for listing all existing jobs.
+    /// Flag for listing all existing job listings.
     #[structopt(
         short = "l", 
         long = "list", 
