@@ -5,7 +5,6 @@ use crate::mcsv::overwrite;
 use crate::model::Job;
 
 use ansi_term::*;
-use prettytable::*;
 
 use std::collections::BTreeMap;
 use std::io;
@@ -23,9 +22,9 @@ pub fn select_attribute() -> u16 {
 -----------------------------"#;
 
     loop {
-        let mut section = String::new();
-
         println!("{}", Style::new().bold().paint(update_prompt));
+        
+        let mut section = String::new();
 
         match io::stdin().read_line(&mut section) {
             Ok(_) => {
@@ -52,10 +51,9 @@ pub fn select_attribute() -> u16 {
 }
 
 /// Input a new value for the selected job attribute.
-pub fn update_attribute(section_int: u16) -> (u16, String) {
+pub fn get_update(section_int: u16) -> (u16, String) {
     loop {
         let mut update = String::new();
-
         let mut update_index = 0;
 
         match section_int {
@@ -82,52 +80,29 @@ pub fn update_attribute(section_int: u16) -> (u16, String) {
     }
 }
 
-/// Print the selected job to update.
-fn print_selection(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
-    println!("\n{}", Colour::Cyan.bold().paint("UPDATED JOB"));
-    let mut to_update = Table::new();
-
-    to_update.add_row(
-        row![
-            bFl => 
-            "DATE ADDED", 
-            "COMPANY", 
-            "JOB TITLE", 
-            "STATUS", 
-            "NOTES"
-        ]
-    );
-
-    if let Some(job) = master.get_mut(&job_index) {
-        match update.0 {
-            0 => { job.company = update.1 },
-            1 => { job.title = update.1 },
-            2 => { job.status = update.1 },
-            3 => { job.notes = update.1 },
-            _ => ()
+/// Change the attribute of the selected job listing.
+pub fn change_attribute(
+    job_index: u16, 
+    master: &mut BTreeMap<u16, Job>, 
+    update: (u16, String)) {
+        if let Some(job) = master.get_mut(&job_index) {
+            match update.0 {
+                0 => { job.company = update.1 },
+                1 => { job.title = update.1 },
+                2 => { job.status = update.1 },
+                3 => { job.notes = update.1 },
+                _ => ()
+            }
         }
-    }
-
-    to_update.add_row(row![
-        master.get(&job_index).unwrap().date.to_string(),
-        master.get(&job_index).unwrap().company.to_string(),
-        master.get(&job_index).unwrap().title.to_string(),
-        master.get(&job_index).unwrap().status.to_string(),
-        master.get(&job_index).unwrap().notes.to_string(),
-    ]);
-
-    to_update.printstd();
 }
 
 /// Update the job attribute in the master BTreeMap that contains all existing
 /// job listings. Then rewrite the spreadsheet.
-pub fn update_job(job_index: u16, master: &mut BTreeMap<u16, Job>, update: (u16, String)) {
-    print_selection(job_index, master, update);
-
+pub fn update_job(master: &mut BTreeMap<u16, Job>) {
     loop {
-        let mut confirm_delete = String::new();
-
         println!("\n{}", Style::new().bold().paint("Confirm update? [Y/N]"));
+        
+        let mut confirm_delete = String::new();
 
         match io::stdin().read_line(&mut confirm_delete) {
             Ok(_) => { 
