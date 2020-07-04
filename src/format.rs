@@ -2,21 +2,22 @@
 
 use prettytable::*;
 
-/// Set the color of the match within the PrettyTable depending on the job status.
+/// Set the color of the match within the PrettyTable depending on the job
+/// application status.
 pub fn set_color(status: &str) -> String {
     match status {
-        "PENDING" => return "Fbl".to_string(),
-        "IN PROGRESS" => return "Fyl".to_string(),
-        "OFFER RECEIVED" => return "Fml".to_string(),
-        "HIRED" => return "Fgl".to_string(),
-        "REJECTED" => return "Frl".to_string(),
+        "PENDING" => return "bFbl".to_string(),
+        "IN PROGRESS" => return "bFyl".to_string(),
+        "OFFER RECEIVED" => return "bFml".to_string(),
+        "HIRED" => return "bFgl".to_string(),
+        "REJECTED" => return "bFrl".to_string(),
         _ => return "".to_string()
     };
 }
 
 /// Return a new vector of styled PrettyTable cells to add to the master table.
-/// Using `AsRef` trait here so that we can accept all references that can be 
-/// converted to `&str` as an argument.
+/// Using `AsRef` trait as an argument here so that we can accept all references 
+/// that can be converted to `&str`.
 pub fn convert_details<T: AsRef<str>>(job_details: &Vec<T>, style: &str) -> Vec<Cell> {
     let mut pt_row: Vec<Cell> = Vec::new();
     
@@ -27,12 +28,11 @@ pub fn convert_details<T: AsRef<str>>(job_details: &Vec<T>, style: &str) -> Vec<
     pt_row
 }
 
-/// Return the PrettyTable format for all information tables.
+/// Set the PrettyTable format for all information tables.
 pub fn format_table() -> format::TableFormat {
     format::FormatBuilder::new()
         .borders('|')
-        .column_separator('|')
-        .padding(1, 1)
+        .padding(1, 3)
         .separators(
             &[format::LinePosition::Bottom, format::LinePosition::Intern], 
             format::LineSeparator::new('-', '+', '+', '+'))
@@ -48,11 +48,11 @@ mod test_format {
 
     #[test]
     fn test_set_color() {
-        assert_eq!(set_color("PENDING"), "Fbl");
-        assert_eq!(set_color("IN PROGRESS"), "Fyl");
-        assert_eq!(set_color("OFFER RECEIVED"), "Fml");
-        assert_eq!(set_color("HIRED"), "Fgl");
-        assert_eq!(set_color("REJECTED"), "Frl");
+        assert_eq!(set_color("PENDING"), "bFbl");
+        assert_eq!(set_color("IN PROGRESS"), "bFyl");
+        assert_eq!(set_color("OFFER RECEIVED"), "bFml");
+        assert_eq!(set_color("HIRED"), "bFgl");
+        assert_eq!(set_color("REJECTED"), "bFrl");
         assert_eq!(set_color("should return empty string"), "");
     }
 
