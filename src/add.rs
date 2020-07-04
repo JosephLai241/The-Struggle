@@ -5,7 +5,6 @@ use crate::model::Job;
 
 use ansi_term::*;
 use chrono::prelude::*;
-use prettytable::*;
 
 use std::io;
 use std::process;
@@ -13,13 +12,14 @@ use std::process;
 /// Get the job title at the company.
 fn get_title(company: &String) -> String {
     loop {
-        let mut title = String::new();
-
         println!("{}", Style::new()
             .bold()
             .paint(format!(
-                "What is the title of the position you are applying for at {}?", company
+                "What is the title of the position you are applying for at {}?", 
+                company
         )));
+
+        let mut title = String::new();
 
         match io::stdin().read_line(&mut title) {
             Ok(_) => {
@@ -59,9 +59,9 @@ pub fn get_status() -> String {
 -------------------------"#;
 
     loop {
-        let mut status = String::new();
-
         println!("{}", Style::new().bold().paint(status_prompt));
+        
+        let mut status = String::new();
 
         match io::stdin().read_line(&mut status) {
             Ok(_) => {
@@ -89,19 +89,23 @@ pub fn get_status() -> String {
 
 /// Get notes (or enter through to leave notes blank) about the job listing.
 fn get_notes() -> String {
+    println!("\n{}",
+        Style::new().bold().paint("(Optional) Enter any notes for this position:")
+    );
+
     let mut notes = String::new();
-    loop {
-        println!("\n{}",
-            Style::new().bold().paint("(Optional) Enter any notes for this position:")
-        );
-        match io::stdin().read_line(&mut notes) {
-            Ok(_) => { return notes.trim().to_string(); },
-            Err(e) => { println!("Error! {:?}", e); }
+    
+    match io::stdin().read_line(&mut notes) {
+        Ok(_) => { return notes.trim().to_string(); },
+        Err(e) => { 
+            println!("Error! {:?}", e);
+            return "".to_string(); 
         }
     }
 }
 
-/// Return the Job struct created from the date, job title, job status, and notes.
+/// Return the Job struct created from the date, job title, job application 
+/// status, and notes.
 pub fn add_job(company: String) -> Job {
     let title = get_title(&company);
 
@@ -114,25 +118,12 @@ pub fn add_job(company: String) -> Job {
     )
 }
 
-/// Print the PrettyTable containing new job listing information.
-fn print_job(job: &Job) {
-    println!("\n{}", Colour::Cyan.bold().paint("NEW JOB"));
-
-    ptable!(
-        [bF -> "DATE ADDED", bF -> "COMPANY", bF -> "JOB TITLE", bF -> "STATUS", bF -> "NOTES"],
-        [&job.date, &job.company, &job.title, &job.status, &job.notes]
-    );
-}
-
-/// Print the job listing to add, then ask user to confirm. On confirm, the program
-/// will append the job to the spreadsheet.
+/// Confirm addition of the new job listing to the spreadsheet.
 pub fn confirm_add(new_job: Job) {
-    print_job(&new_job);
-
     loop {
-        let mut confirm_in = String::new();
-
         println!("\n{}", Style::new().bold().paint("Confirm? [Y/N]"));
+        
+        let mut confirm_in = String::new();
 
         match io::stdin().read_line(&mut confirm_in) {
             Ok(_) => { 
