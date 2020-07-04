@@ -18,11 +18,11 @@ fn add_matches(
     master: &BTreeMap<u16, Job>, 
     match_indexes: &mut Vec<u16>, 
     matches: &mut Table) {
-        let search_string = format!(r"(?i){}", company);
-        let re = Regex::new(&search_string).unwrap();
+        let re = Regex::new(&format!(r"(?i){}", company)).unwrap();
 
         for i in 0u16..master.len() as u16 {
             let existing_company = &master.get_key_value(&i).unwrap().1.company.to_string();
+
             match re.find(&existing_company) {
                 Some(_) => {
                     let index = &i.to_string();
@@ -55,27 +55,25 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
 
     matches.add_row(
         row![
-            bFl -> "NUMBER",
-            bFl -> "DATE ADDED", 
-            bFl -> "COMPANY", 
-            bFl -> "JOB TITLE", 
-            bFl -> "STATUS", 
-            bFl -> "NOTES"
-        ]
-    );
+            bil =>
+            "NUMBER",
+            "DATE ADDED", 
+            "COMPANY", 
+            "JOB TITLE", 
+            "STATUS", 
+            "NOTES"
+    ]);
 
     add_matches(company, &master, &mut match_indexes, &mut matches);
 
     if match_indexes.is_empty() {
-        println!("\n{}\n", 
-            Colour::Red.bold().paint("No matches found!")
-        );
+        println!("\n{}\n", Colour::Red.bold().paint("No matches found!"));
         process::exit(1);
     }
 
     matches.set_titles(Row::new(vec![
         Cell::new(&format!("FOUND {} MATCHES", matches.len() - 1))
-            .style_spec("bcH6")
+            .style_spec("bicH6")
     ]));
 
     matches.set_format(format_table());
@@ -87,9 +85,9 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
 /// Select a match returned from searching.
 pub fn select_match(match_indexes: Vec<u16>) -> u16 {
     loop {
-        let mut select = String::new();
-
         println!("\n{}", Style::new().bold().paint("Select a job to modify (number):"));
+        
+        let mut select = String::new();
 
         match io::stdin().read_line(&mut select) {
             Ok(_) => {
@@ -118,6 +116,64 @@ pub fn select_match(match_indexes: Vec<u16>) -> u16 {
             Err(_) => ()
         }
     }
+}
+
+/// Defining the types of data that can be passed through `print_selection()`.
+pub enum DataType<'a> {
+    Btm(u16, &'a BTreeMap<u16, Job>),
+    Singular(&'a Job)
+}
+
+/// Match the data type that is passed into `print_selection()` and return the
+/// vector of string type `job_details`.
+fn match_data_type(data: DataType) -> Vec<String> {
+    match data {
+        DataType::Btm(job_index, master) => {
+            vec![
+                master.get(&job_index).unwrap().date.to_string(),
+                master.get(&job_index).unwrap().company.to_string(),
+                master.get(&job_index).unwrap().title.to_string(),
+                master.get(&job_index).unwrap().status.to_string(),
+                master.get(&job_index).unwrap().notes.to_string()
+            ]
+        },
+        DataType::Singular(job) => {
+            vec![
+                job.date.clone(),
+                job.company.clone(),
+                job.title.clone(),
+                job.status.clone(),
+                job.notes.clone()
+            ]
+        }
+    }
+}
+
+/// Print the selected job for updating or deletion.
+pub fn print_selection(data: DataType, title: String) {
+    println!("\n{}", Colour::Cyan.bold().paint(title));
+
+    let mut selection = Table::new();
+
+    selection.set_titles(
+        row![
+            bil => 
+            "DATE ADDED", 
+            "COMPANY", 
+            "JOB TITLE", 
+            "STATUS", 
+            "NOTES"
+    ]);
+
+    let job_details = match_data_type(data);
+
+    let style = set_color(&job_details[3]);
+    let pt_row = convert_details(&job_details, &style);
+
+    selection.add_row(Row::new(pt_row));
+    selection.set_format(format_table());
+
+    selection.printstd();
 }
 
 #[cfg(test)]
