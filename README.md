@@ -177,17 +177,18 @@ Each cell is also colorized based on the table described in the section above.
 
 # Releases
 
-- **May 18, 2020:** The Struggle v1.0 (Python). Features include:
+- **May 18, 2020:** The Struggle v1.0.0 (Python Edition). Features include:
     - Add a new job
     - Update an existing job
     - Delete an existing job
     - List all stored jobs
     - Print job application insights
 
-- **July 4, 2020** The Struggle v2.0 (Rust).
+- **July 4, 2020:** The Struggle v2.0.0 (Rust Edition).
     - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
     - Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
-    - Deploying 2.0 with Travis CI.
+    - Deploying with Travis CI.
+    - *Scary fast*.
 
 <!-- BADGES -->
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
