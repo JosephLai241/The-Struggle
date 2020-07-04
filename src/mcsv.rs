@@ -11,13 +11,12 @@ use std::error::Error;
 use std::fs::File;
 use std::fs::OpenOptions;
 use std::path::Path;
-use std::string::String;
 
-/// This is the set filename of the spreadsheet in which tracked job applications 
-/// will be stored.
+/// This is the set filename of the spreadsheet in which job applications will be 
+/// stored.
 const FILENAME: &str = "job_applications.csv";
 
-/// This struct uses the crate Serde for easier CSV writing. 
+/// This struct uses Serde for easier CSV writing. 
 #[derive(Serialize)]
 struct Listing {
     #[serde(rename = "DATE ADDED")]
@@ -32,11 +31,9 @@ struct Listing {
     notes: String
 }
 
-/// Implementations for the Listing struct. These implementations make writing to
-/// the spreadsheet easier.
 impl Listing {
-    /// Serialize job with the Listing struct for spreadsheet overwriting. This 
-    /// is used when updating or deleting a job from the spreadsheet.
+    /// Serialize a job listing with the Listing struct for spreadsheet overwriting. 
+    /// This is used when updating or deleting a job listing from the spreadsheet.
     fn serialize_ow(i: u16, master: &BTreeMap<u16, Job>) -> Listing {
         Listing {
             date: master.get(&i).unwrap().date.to_string(),
@@ -47,8 +44,8 @@ impl Listing {
         }
     }
 
-    /// Serialize job with the Listing struct for spreadsheet writing. This is
-    /// used when adding a job to the spreadsheet.
+    /// Serialize a job listing with the Listing struct for spreadsheet writing. 
+    /// This is used when adding a job to the spreadsheet.
     fn serialize_a(job: &Job) -> Listing {
         Listing {
             date: job.date.to_string(),
@@ -65,40 +62,20 @@ fn existence() -> bool {
     Path::new(FILENAME).exists()
 }
 
-/// Create new spreadsheet and add headers and job listing.
-fn create(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
-    let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
-    writer.serialize(Listing::serialize_a(&job))?;
-
-    Ok(())
-}
-
-/// Append the new job listing to the spreadsheet.
-fn append(file: File, job: &Job) -> Result<(), Box<dyn Error>> {
-    let mut writer = WriterBuilder::new().from_writer(file);
-
-    writer.serialize((
-        job.date.to_string(), 
-        job.company.to_string(), 
-        job.title.to_string(), 
-        job.status.to_string(), 
-        job.notes.to_string()
-    ))?;
-
-    Ok(())
-}
-
-/// Write jobs to the spreadsheet. Add a header if the file does not already exist.
-/// If the file already exists, just append the job to the spreadsheet.
+/// Write a job listing to the spreadsheet. Add a header if the file does not 
+/// already exist. If the file already exists, just append the job to the 
+/// spreadsheet.
 pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
-    if existence() == true {
+    let mut writer = if existence() == true { 
         let file = OpenOptions::new().append(true).open(FILENAME)?;
-        append(file, &job)?;
+        WriterBuilder::new().has_headers(false).from_writer(file)
     } else {
         let file = OpenOptions::new().create(true).write(true).open(FILENAME)?;
-        create(file, &job)?;
+        WriterBuilder::new().has_headers(true).from_writer(file)
     };
 
+    writer.serialize(Listing::serialize_a(&job))?;
+    
     Ok(println!("\n{}\n", Colour::Green.bold().paint("ADDED NEW LISTING.")))
 }
 
