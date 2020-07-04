@@ -34,7 +34,7 @@ impl JobStats {
     }
 }
 
-/// Return a JobStruct containing data for each job status.
+/// Populate the JobStats struct with data for each job status.
 pub fn get_stats(master: BTreeMap<u16, Job>) -> JobStats {
     let mut current_stats = JobStats {
         pending: 0.0,
@@ -60,15 +60,15 @@ pub fn get_stats(master: BTreeMap<u16, Job>) -> JobStats {
     current_stats
 }
 
-/// Adding PrettyTable cells for the number of jobs and the ratio within each 
-/// job status in the PrettyTable.
+/// Apply PrettyTable cell formatting for the number of jobs or the ratio within 
+/// each job status to the PrettyTable.
 fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: bool) {
     let stats: Vec<(f64, &str)> = vec![
-        (current_stats.pending, "Fbc"),
-        (current_stats.in_progress, "Fyc"),
-        (current_stats.offers, "Fmc"),
-        (current_stats.hired, "Fgc"),
-        (current_stats.rejected, "Frc")
+        (current_stats.pending, "bFbl"),
+        (current_stats.in_progress, "bFyl"),
+        (current_stats.offers, "bFml"),
+        (current_stats.hired, "bFgl"),
+        (current_stats.rejected, "bFrl")
     ];
 
     let mut table_values: Vec<Cell> = Vec::new();
@@ -101,12 +101,12 @@ pub fn display_insights(current_stats: JobStats) {
 
     insights.set_titles(Row::new(vec![
         Cell::new(&format!("{} TRACKED JOB APPLICATIONS", current_stats.total))
-            .style_spec("bcH5")
+            .style_spec("bicH5")
     ]));
 
     insights.add_row(
         row![
-            bc => 
+            bil => 
             "PENDING JOBS", 
             "IN PROGRESS", 
             "OFFERS RECEIVED", 
