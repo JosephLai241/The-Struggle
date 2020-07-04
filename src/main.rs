@@ -19,6 +19,10 @@ fn main() {
     match cli::get_args() {
         cli::Args { add: Some(company), .. } => {
             let new_job = add::add_job(company);
+            search::print_selection(
+                search::DataType::Singular(&new_job), 
+                "NEW JOB".to_string());
+            
             add::confirm_add(new_job);
         },
         cli::Args { update: Some(company), .. } => {
@@ -28,15 +32,22 @@ fn main() {
             let job_index = search::select_match(match_indexes);
 
             let section_int = update::select_attribute();
-            let update = update::update_attribute(section_int);
+            let update = update::get_update(section_int);
+            update::change_attribute(job_index, &mut master, update);
+            search::print_selection(
+                search::DataType::Btm(job_index, &master), 
+                "UPDATED JOB".to_string());
 
-            update::update_job(job_index, &mut master, update);
+            update::update_job(&mut master);
         },
         cli::Args { delete: Some(company), .. } => {
             let mut master = mcsv::get_jobs().unwrap();
 
             let match_indexes = search::print_matches(&company, &master);
             let job_index = search::select_match(match_indexes);
+            search::print_selection(
+                search::DataType::Btm(job_index, &master), 
+                "SELECTED JOB".to_string());
 
             delete::delete_job(job_index, &mut master);
         },
