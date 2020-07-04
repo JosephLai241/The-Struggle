@@ -4,13 +4,12 @@ use crate::mcsv::overwrite;
 use crate::model::Job;
 
 use ansi_term::*;
-use prettytable::*;
 
 use std::collections::BTreeMap;
 use std::io;
 use std::process;
 
-/// Update the keys within the BTreeMap after deleting a job.
+/// Update the keys within the BTreeMap after deleting a job listing.
 fn update_keys(master: &mut BTreeMap<u16, Job>) -> BTreeMap<u16, Job> {
     let mut update: BTreeMap<u16, Job> = BTreeMap::new();
 
@@ -29,37 +28,9 @@ fn update_keys(master: &mut BTreeMap<u16, Job>) -> BTreeMap<u16, Job> {
     update
 }
 
-/// Print the selected job for deletion.
-fn print_selection(job_index: u16, master: &mut BTreeMap<u16, Job>) {
-    println!("\n{}", Colour::Cyan.bold().paint("SELECTED JOB"));
-    let mut to_delete = Table::new();
-
-    to_delete.add_row(
-        row![
-            bFl => 
-            "DATE ADDED", 
-            "COMPANY", 
-            "JOB TITLE", 
-            "STATUS", 
-            "NOTES"
-        ]
-    );
-
-    to_delete.add_row(row![
-        master.get(&job_index).unwrap().date.to_string(),
-        master.get(&job_index).unwrap().company.to_string(),
-        master.get(&job_index).unwrap().title.to_string(),
-        master.get(&job_index).unwrap().status.to_string(),
-        master.get(&job_index).unwrap().notes.to_string(),
-    ]);
-
-    to_delete.printstd();
-}
-
-/// Delete the selected job from the master BTreeMap. Then rewrite the spreadsheet.
+/// Confirm deletion of the selected job listing from the master BTreeMap. Then 
+/// rewrite the spreadsheet.
 pub fn delete_job(job_index: u16, master: &mut BTreeMap<u16, Job>) {
-    print_selection(job_index, master);
-
     loop {
         let mut confirm_delete = String::new();
 
