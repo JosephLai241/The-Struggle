@@ -39,7 +39,7 @@ First, you will need a [Rust installation][Rust Official Site] in order to compi
 
 Then run these commands to build The Struggle:
 
-```bash
+```
 $ git clone https://www.github.com/JosephLai241/The-Struggle
 $ cd The-Struggle
 $ cargo build --release
@@ -47,13 +47,13 @@ $ cargo build --release
 
 To check if The Struggle built correctly:
 
-```bash
+```
 $ ./target/release/ts -V
 ```
 
 You can then move the `ts` binary to another directory so you do not have to type that path to run The Struggle. Check if the binary was moved correctly:
 
-```bash
+```
 $ mv target/release/ts /some/directory/
 $ cd /some/directory
 $ ./ts -V
@@ -63,7 +63,7 @@ The complimentary spreadsheet `job_applications.csv` will be created in whicheve
 
 # Why Rust?
 
-I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio, so Rust, a low-level programming language, was the way to go.
+I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
 
 # How It Works and Use Cases
 
@@ -184,9 +184,9 @@ Each cell is also colorized based on the table described in the section above.
     - List all stored jobs
     - Print job application insights
 
-- **TBD:** The Struggle v2.0 (Rust).
-    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable does not currently have some kind of `sort()` method.
-    - Insights will now only display all job status insights rather than including options to only display a specific status.
+- **July 4, 2020** The Struggle v2.0 (Rust).
+    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
+    - Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
     - Deploying 2.0 with Travis CI.
 
 <!-- BADGES -->
