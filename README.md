@@ -15,6 +15,8 @@ A command-line tool for tracking your job applications.
 
 Written in Rust. Tested with Rust 1.43.1.
 
+This program is also available in Python, located on the [Python branch][Python branch].
+
 # Table of Contents
 
 - [Introduction](#introduction)
@@ -194,6 +196,9 @@ Each cell is also colorized based on the table described in the section above.
 <!-- BADGES -->
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
 [Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
+
+<!-- BRANCHES -->
+[Python branch]: https://github.com/JosephLai241/The-Struggle/tree/python
 
 <!-- A BROTHER -->
 [Luke]: https://github.com/LukeDSchenk
