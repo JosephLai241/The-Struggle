@@ -6,10 +6,10 @@
        \ \__\/\____/
         \/__/\/___/... The Struggle
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=rust&style=for-the-badge)
-[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis&style=for-the-badge)][Travis CI Build Status]
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github&style=for-the-badge)][Github Actions]
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=Rust)
+[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis)][Travis CI Build Status]
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github)][Github Actions]
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle)
 
 A command-line tool for tracking your job applications. 
 
