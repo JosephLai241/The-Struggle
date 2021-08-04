@@ -21,7 +21,7 @@ pub struct Args {
     #[structopt(
         short = "u", 
         long = "update", 
-        help = "Update an existing job in the spreadsheet"
+        help = "Update an existing job"
     )]
     pub update: Option<String>,
 
@@ -29,7 +29,7 @@ pub struct Args {
     #[structopt(
         short = "d", 
         long = "delete", 
-        help = "Delete an existing job in the spreadsheet"
+        help = "Delete an existing job"
     )]
     pub delete: Option<String>,
 
@@ -37,7 +37,7 @@ pub struct Args {
     #[structopt(
         short = "s",
         long = "search",
-        help = "Search for an existing job in the spreadsheet"
+        help = "Search for an existing job"
     )]
     pub search: Option<String>,
 
