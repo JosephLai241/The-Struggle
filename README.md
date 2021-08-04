@@ -20,6 +20,8 @@ This program is also available in Python, located on the [Python branch][Python 
 
 * [Introduction](#introduction)
 * [Installation](#installation)
+    + [Compile From Source](#compile-from-source)
+    + [Or Download a Binary](#or-download-a-binary)
 * [How it works / Use Cases](#how-it-works-and-use-cases)
 * [Stored Attributes](#stored-attributes)
 * [Read This Before You Run the Program](#read-this-before-you-run-the-program)
@@ -38,6 +40,12 @@ I have been applying to *tons* of companies in attempt to secure a job before I 
 Thank you for trying this program and I hope it will help you keep track of your applications as well. It is tough out there, man.
 
 # Installation
+
+> ***NOTE:*** This program initializes and reads from files in your current working directory. Run `The-Struggle` in a directory in which you would like all your records to be stored.
+> 
+> The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+
+## Compile From Source
 
 First, you will need a [Rust installation][Rust Official Site] in order to compile The Struggle.
 
@@ -63,9 +71,9 @@ $ cd /some/directory
 $ ./ts -V
 ```
 
-> ***NOTE:*** This program initializes and reads from files in your current working directory. Run `The-Struggle` in a directory in which you would like all your records to be stored.
-> 
-> The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+## Or Download a Binary
+
+If you do not want to compile `The-Struggle`, you can also download a binary attached to a release in the [Releases][Releases] section.
 
 # How It Works and Use Cases
 
@@ -201,8 +209,9 @@ I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is 
 <!-- BADGES -->
 [Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
 
-<!-- BRANCHES -->
+<!-- REPO LINKS -->
 [Python branch]: https://github.com/JosephLai241/The-Struggle/tree/python
+[Releases]: https://github.com/JosephLai241/The-Struggle/releases
 
 <!-- A BROTHER -->
 [Luke]: https://github.com/LukeDSchenk
