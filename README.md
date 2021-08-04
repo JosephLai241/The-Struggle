@@ -7,34 +7,35 @@
         \/__/\/___/... The Struggle
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=Rust)
-[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis)][Travis CI Build Status]
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github)][Github Actions]
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle)
 
-A command-line tool for tracking your job applications. 
+A command-line tool that helps you track your job applications. 
 
-Written in Rust. Tested with Rust 1.43.1.
+Written in Rust. Tested with Rust 1.54.0.
 
 This program is also available in Python, located on the [Python branch][Python branch].
 
 # Table of Contents
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Why Rust?](#why-rust)
-- [How it works / Use Cases](#how-it-works-and-use-cases)
-- [Stored Attributes](#stored-attributes)
-- [Read This Before You Run the Program](#read-this-before-you-run-the-program)
-- [Walkthrough](#walkthrough)
-    - [Adding a Job](#adding-a-job)
-    - [Updating or Deleting a Job](#updating-or-deleting-a-job)
-    - [Listing Stored Jobs](#listing-stored-jobs)
-    - [Showing Job Insights](#showing-job-insights)
-- [Releases](#releases)
+* [Introduction](#introduction)
+* [Installation](#installation)
+* [How it works / Use Cases](#how-it-works-and-use-cases)
+* [Stored Attributes](#stored-attributes)
+* [Read This Before You Run the Program](#read-this-before-you-run-the-program)
+* [Walkthrough](#walkthrough)
+    + [Adding a Job](#adding-a-job)
+    + [Updating or Deleting a Job](#updating-or-deleting-a-job)
+    + [Listing Stored Jobs](#listing-stored-jobs)
+    + [Showing Job Insights](#showing-job-insights)
+* [Releases](#releases)
+* [Why Rust?](#why-rust)
  
 # Introduction
  
-I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
+I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. 
+
+Thank you for trying this program and I hope it will help you keep track of your applications as well. It is tough out there, man.
 
 # Installation
 
@@ -63,10 +64,6 @@ $ ./ts -V
 ```
 
 The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
-
-# Why Rust?
-
-I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
 
 # How It Works and Use Cases
 
@@ -180,21 +177,26 @@ Each cell is also colorized based on the table described in the section above.
 
 # Releases
 
-- **May 18, 2020:** The Struggle v1.0.0 (Python Edition). Features include:
-    - Add a new job
-    - Update an existing job
-    - Delete an existing job
-    - List all stored jobs
-    - Print job application insights
+* **May 18, 2020:** v1.0.0 (Python Edition). Features include:
+    + Add a new job
+    + Update an existing job
+    + Delete an existing job
+    + List all stored jobs
+    + Print job application insights
 
-- **July 4, 2020:** The Struggle v2.0.0 (Rust Edition).
-    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
-    - Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
-    - Deploying with Travis CI.
-    - *Scary fast*.
+* **July 4, 2020:** v2.0.0 (Rust Edition).
+    + Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
+    + Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
+    + Deploying with Travis CI.
+    + *Scary fast*.
+* **TBD:** v2.0.1.
+    + Prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. This release modifies the prompts so that they are inline with user-entered data.
+
+# Why Rust?
+
+I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
 
 <!-- BADGES -->
-[Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
 [Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
 
 <!-- BRANCHES -->
