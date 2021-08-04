@@ -19,23 +19,48 @@ This program is also available in Python, located on the [Python branch][Python 
 # Table of Contents
 
 * [Introduction](#introduction)
+    + [What Does It Do?](#what-does-it-do)
+    + [Why?](#why)
 * [Installation](#installation)
     + [Compile From Source](#compile-from-source)
     + [Or Download a Binary](#or-download-a-binary)
-* [How it works / Use Cases](#how-it-works-and-use-cases)
 * [Stored Attributes](#stored-attributes)
 * [Read This Before You Run the Program](#read-this-before-you-run-the-program)
 * [Walkthrough](#walkthrough)
     + [Adding a Job](#adding-a-job)
     + [Updating or Deleting a Job](#updating-or-deleting-a-job)
     + [Listing Stored Jobs](#listing-stored-jobs)
-    + [Showing Job Insights](#showing-job-insights)
+    + [Display Job Insights](#showing-job-insights)
 * [Releases](#releases)
 * [Why Rust?](#why-rust)
  
 # Introduction
- 
-I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. 
+
+## What Does It Do?
+
+`The-Struggle` performs CRUD operations on a local spreadsheet and simplifies the process of tracking your applications. It is very fast because:
+
+1) It is written in Rust - it is so fast it feels as if the output was hardcoded.
+2) Doing these operations from the terminal is much faster than opening up a spreadsheet and manually editing it.
+
+Its features include:
+
+* Add, update, or delete job applications from the spreadsheet
+* Display tracked job applications, using [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to color-code and neatly display applications in a table within your terminal.
+* Display insights for tracked applications, such as:
+    + The total number of tracked applications
+    + The total number and percentage of applications:
+        * That are pending a response
+        * That are currently in progress
+        * Where you have received an offer
+        * Where you have been rejected from
+        * Where you have been hired at
+
+## Why?
+
+I graduated from college in June 2020 and have been applying to ***tons*** of companies in attempt to kick off my developer career. It has been very difficult for me to break into the industry because I am a self-taught developer (no CS degree) and I graduated in the midst of the COVID-19 pandemic.
+
+The number of applications that I have sent out is so high, it has become hard to keep track of every company as well as where my application stands in the interview process (if I even pass the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. 
 
 Thank you for trying this program and I hope it will help you keep track of your applications as well. It is tough out there, man.
 
@@ -75,33 +100,15 @@ $ ./ts -V
 
 If you do not want to compile `The-Struggle`, you can also download a binary attached to a release in the [Releases][Releases] section.
 
-# How It Works and Use Cases
-
-This program essentially makes it easier and faster to maintain a locally-stored spreadsheet of all the jobs applications you record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
-
-This program utilizes [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to add color and neatly print job listings in a table within the terminal.
-
-## Adding a Job 
-
-The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record. If it does exist, the program will append the job to the spreadsheet.
-
-## Updating a Job
-
-The program will parse the existing spreadsheet, find the job you want to change, edit the stored details, then rewrite the spreadsheet to reflect the new changes. 
-
-## Deleting a Job 
-
-The program will parse the existing spreadsheet, remove the job, then rewrite the spreadsheet. 
-
-## Listing All Saved Jobs 
-
-The program will parse the spreadsheet and then print all the jobs you have stored into a readable format within a terminal.
-
-## Job Application Insights 
-
-The program will parse the spreadsheet, count how many jobs are under each job status, and calculate the percentage of each job status.
-
 # Stored Attributes
+
+Each application will store the following information:
+
+* `DATE ADDED`
+* `COMPANY`
+* `JOB TITLE`
+* `STATUS`
+* `NOTES`
 
 `DATE ADDED` is automatically calculated based on Rust's [chrono][chrono].
 
@@ -119,7 +126,7 @@ The program will parse the spreadsheet, count how many jobs are under each job s
 
 # Read This Before You Run the Program
 
-You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
+You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within your current working directory. All other functionality of the program will not work prior to adding the first job because there is no valid spreadsheet to read from. 
 
 **DO NOT** create `job_applications.csv` manually. The program will create the file for you. Creating an empty `job_applications.csv` before running the `-a` flag will cause issues for you later on. 
 
@@ -131,7 +138,9 @@ Use `-h` or `--help` if you forget the arguments or do not want to read this wal
 
 As stated before, **this has to be the first command you run.** Doing so will create `job_applications.csv` in your current working directory.
 
-`$ ./ts -a COMPANY_NAME`
+```
+$ ./ts -a COMPANY_NAME
+```
 
 > ***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
@@ -147,7 +156,9 @@ The job listing will be written to `job_applications.csv` after you confirm.
 
 **Updating an existing job**
 
-`$ ./ts -u COMPANY_NAME`
+```
+$ ./ts -u COMPANY_NAME
+```
 
 Use the `NUMBER` in the far left column to pick the job you want to delete:
 
@@ -157,7 +168,9 @@ The job listing will be updated in `job_applications.csv` after you confirm.
 
 **Deleting an existing job**
 
-`$ ./ts -d COMPANY_NAME`
+```
+$ ./ts -d COMPANY_NAME
+```
 
 Identical to updating, you can just enter a letter or pattern in the company name and use the `NUMBER` in the far left column to choose the job you want to delete.
 
@@ -165,25 +178,21 @@ The job listing will then be deleted from `job_applications.csv` after you confi
 
 ## Listing Stored Jobs
 
-`$ ./ts -l`
+```
+$ ./ts -l
+```
 
-Job applications are sorted by date (descending) and are colorized based on the application status. Here is a table of how each is colorized:
+Job applications are sorted by date (descending) and are colorized based on the application status. See the application status and color table in the [Stored Attributes](#stored-attributes) section for details.
 
-| Job Status     | Color   |
-|----------------|---------|
-| PENDING        | Blue    |
-| IN PROGRESS    | Yellow  |
-| OFFER RECEIVED | Magenta |
-| HIRED          | Green   |
-| REJECTED       | Red     |
+## Display Job Insights
 
-## Showing Job Insights
-
-`$ ./ts -i`
+```
+$ ./ts -i
+```
 
 You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are listed under each job status as well as its percentage within the spreadsheet.
 
-Each cell is also colorized based on the table described in the section above.
+Each cell is also colorized based on the table described in the [Stored Attributes](#stored-attributes) section.
 
 # Releases
 
