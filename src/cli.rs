@@ -33,6 +33,14 @@ pub struct Args {
     )]
     pub delete: Option<String>,
 
+    /// Flag for searching for an existing job listing.
+    #[structopt(
+        short = "s",
+        long = "search",
+        help = "Search for an existing job in the spreadsheet"
+    )]
+    pub search: Option<String>,
+
     /// Flag for listing all existing job listings.
     #[structopt(
         short = "l", 
@@ -77,6 +85,7 @@ mod test_cli {
             add: None,
             update: None,
             delete: None,
+            search: None,
             list: false,
             insights: false
         }, args);
