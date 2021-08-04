@@ -29,6 +29,7 @@ This program is also available in Python, located on the [Python branch][Python 
 * [Walkthrough](#walkthrough)
     + [Adding a Job](#adding-a-job)
     + [Updating or Deleting a Job](#updating-or-deleting-a-job)
+    + [Search for an Existing Job](#search-for-an-existing-job)
     + [Listing Stored Jobs](#listing-stored-jobs)
     + [Display Job Insights](#showing-job-insights)
 * [Releases](#releases)
@@ -46,7 +47,7 @@ This program is also available in Python, located on the [Python branch][Python 
 Its features include:
 
 * Add, update, or delete job applications from the spreadsheet
-* Display tracked job applications, using [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to color-code and neatly display applications in a table within your terminal.
+* Display/search for tracked job applications, using [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to color-code and neatly display applications in a table within your terminal.
 * Display insights for tracked applications, such as:
     + The total number of tracked applications
     + The total number and percentage of applications:
@@ -175,6 +176,14 @@ $ ./ts -d COMPANY_NAME
 Identical to updating, you can just enter a letter or pattern in the company name and use the `NUMBER` in the far left column to choose the job you want to delete.
 
 The job listing will then be deleted from `job_applications.csv` after you confirm.
+
+## Search for an Existing Job
+
+```
+$ ./ts -s COMPANY_NAME
+```
+
+Use this command to quickly search for an existing job. Matches are displayed in a PrettyTable. Like the update and delete commands, you can simply search for letters that are present in the company name to return a match.
 
 ## Listing Stored Jobs
 
