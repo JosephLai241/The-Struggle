@@ -1,6 +1,7 @@
 //! Updating a job application in the spreadsheet.
 
 use crate::add::get_status;
+use crate::display::display_prompt;
 use crate::mcsv::overwrite;
 use crate::model::Job;
 
@@ -57,9 +58,9 @@ pub fn get_update(section_int: u16) -> (u16, String) {
         let mut update_index = 0;
 
         match section_int {
-            0 => println!("\nWhat is the new company name?"),
+            0 => display_prompt("\nEnter the new company name: ".to_string()),
             1 => {
-                println!("\nWhat is the new job title?");
+                display_prompt("\nEnter the new job title: ".to_string());
                 update_index = 1;
             },
             2 => {
@@ -67,7 +68,7 @@ pub fn get_update(section_int: u16) -> (u16, String) {
                 return (2, new_status);
             },
             3 => {
-                println!("\nWhat are the new notes?");
+                display_prompt("\nEnter the new note: ".to_string());
                 update_index = 3;
             },
             _ => ()
@@ -100,7 +101,7 @@ pub fn change_attribute(
 /// job listings. Then rewrite the spreadsheet.
 pub fn update_job(master: &mut BTreeMap<u16, Job>) {
     loop {
-        println!("\n{}", Style::new().bold().paint("Confirm update? [Y/N]"));
+        display_prompt(format!("\n{}", Style::new().bold().paint("Confirm update? [Y/N] ")));
         
         let mut confirm_delete = String::new();
 

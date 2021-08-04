@@ -1,5 +1,6 @@
 //! Deleting a job application from the spreadsheet.
 
+use crate::display::display_prompt;
 use crate::mcsv::overwrite;
 use crate::model::Job;
 
@@ -34,7 +35,7 @@ pub fn delete_job(job_index: u16, master: &mut BTreeMap<u16, Job>) {
     loop {
         let mut confirm_delete = String::new();
 
-        println!("\n{}", Style::new().bold().paint("Confirm deletion? [Y/N]"));
+        display_prompt(format!("\n{}", Style::new().bold().paint("Confirm deletion? [Y/N] ")));
 
         match io::stdin().read_line(&mut confirm_delete) {
             Ok(_) => { 

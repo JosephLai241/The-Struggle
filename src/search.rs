@@ -1,6 +1,7 @@
 //! Searching and printing matching job applications within a 
 //! PrettyTable.
 
+use crate::display::display_prompt;
 use crate::format::*;
 use crate::model::Job;
 
@@ -85,7 +86,7 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
 /// Select a match returned from searching.
 pub fn select_match(match_indexes: Vec<u16>) -> u16 {
     loop {
-        println!("\n{}", Style::new().bold().paint("Select a job to modify (number):"));
+        display_prompt(format!("\n{}", Style::new().bold().paint("Select a job to modify (number): ")));
         
         let mut select = String::new();
 

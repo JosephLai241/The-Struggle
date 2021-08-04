@@ -1,5 +1,6 @@
 //! Adding a new job application to the spreadsheet.
 
+use crate::display::display_prompt;
 use crate::mcsv;
 use crate::model::Job;
 
@@ -12,12 +13,14 @@ use std::process;
 /// Get the job title at the company.
 fn get_title(company: &String) -> String {
     loop {
-        println!("{}", Style::new()
-            .bold()
-            .paint(format!(
-                "What is the title of the position you are applying for at {}?", 
-                company
-        )));
+        display_prompt(
+            format!("{}", Style::new()
+                .bold()
+                .paint(format!(
+                    "What is the title of the position you are applying for at {}? ", 
+                    company
+            )))
+        );
 
         let mut title = String::new();
 
@@ -59,7 +62,7 @@ pub fn get_status() -> String {
 -------------------------"#;
 
     loop {
-        println!("{}", Style::new().bold().paint(status_prompt));
+        display_prompt(format!("{}\n", Style::new().bold().paint(status_prompt)));
         
         let mut status = String::new();
 
@@ -89,9 +92,9 @@ pub fn get_status() -> String {
 
 /// Get notes (or enter through to leave notes blank) about the job listing.
 fn get_notes() -> String {
-    println!("\n{}",
-        Style::new().bold().paint("(Optional) Enter any notes for this position:")
-    );
+    display_prompt(format!("\n{}",
+        Style::new().bold().paint("(Optional) Enter any notes for this position: ")
+    ));
 
     let mut notes = String::new();
     
@@ -121,8 +124,8 @@ pub fn add_job(company: String) -> Job {
 /// Confirm addition of the new job listing to the spreadsheet.
 pub fn confirm_add(new_job: Job) {
     loop {
-        println!("\n{}", Style::new().bold().paint("Confirm? [Y/N]"));
-        
+        display_prompt(format!("\n{}", Style::new().bold().paint("Confirm? [Y/N] ")));
+
         let mut confirm_in = String::new();
 
         match io::stdin().read_line(&mut confirm_in) {
