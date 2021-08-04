@@ -6,13 +6,16 @@
        \ \__\/\____/
         \/__/\/___/... The Struggle
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=rust&style=for-the-badge)
-[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis&style=for-the-badge)][Travis CI Build Status]
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle?style=for-the-badge)
+![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=Rust)
+[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis)][Travis CI Build Status]
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github)][Github Actions]
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle)
 
 A command-line tool for tracking your job applications. 
 
 Written in Rust. Tested with Rust 1.43.1.
+
+This program is also available in Python, located on the [Python branch][Python branch].
 
 # Table of Contents
 
@@ -192,6 +195,10 @@ Each cell is also colorized based on the table described in the section above.
 
 <!-- BADGES -->
 [Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
+[Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
+
+<!-- BRANCHES -->
+[Python branch]: https://github.com/JosephLai241/The-Struggle/tree/python
 
 <!-- A BROTHER -->
 [Luke]: https://github.com/LukeDSchenk
