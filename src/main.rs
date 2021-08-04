@@ -1,6 +1,7 @@
 mod add;
 mod cli;
 mod delete;
+mod display;
 mod format;
 mod insights;
 mod list;
