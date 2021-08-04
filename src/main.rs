@@ -52,6 +52,10 @@ fn main() {
 
             delete::delete_job(job_index, &mut master);
         },
+        cli::Args { search: Some(company), .. } => {
+            let master = mcsv::get_jobs().unwrap();
+            search::print_matches(&company, &master);
+        },
         cli::Args { list: true, .. } => {
             let master = mcsv::get_jobs().unwrap();
             list::list_jobs(master);
