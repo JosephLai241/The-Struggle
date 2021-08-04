@@ -38,7 +38,7 @@ This program is also available in Python, located on the [Python branch][Python 
 
 ## What Does It Do?
 
-`The-Struggle` performs CRUD operations on a local spreadsheet and simplifies the process of tracking your applications. It is very fast because:
+`The-Struggle` performs CRUD operations on a local spreadsheet (which is automatically generated for you) and simplifies the process of tracking your applications. It is very fast because:
 
 1) It is written in Rust - it is so fast it feels as if the output was hardcoded.
 2) Doing these operations from the terminal is much faster than opening up a spreadsheet and manually editing it.
