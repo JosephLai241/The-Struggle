@@ -191,7 +191,7 @@ Each cell is also colorized based on the table described in the section above.
     + Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
     + Deploying with Travis CI.
     + *Scary fast*.
-* **TBD:** v2.0.1.
+* **August 4, 2021:** v2.0.1.
     + Prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. This release modifies the prompts so that they are inline with user-entered data.
 
 # Why Rust?
