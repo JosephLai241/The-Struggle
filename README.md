@@ -63,7 +63,9 @@ $ cd /some/directory
 $ ./ts -V
 ```
 
-The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+> ***NOTE:*** This program initializes and reads from files in your current working directory. Run `The-Struggle` in a directory in which you would like all your records to be stored.
+> 
+> The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
 
 # How It Works and Use Cases
 
@@ -123,7 +125,7 @@ As stated before, **this has to be the first command you run.** Doing so will cr
 
 `$ ./ts -a COMPANY_NAME`
 
-***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
+> ***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
 You will then enter the job title at the company, select the status of the job listing, then enter any notes on the job listing. You can just enter through the notes prompt to leave it blank.
 
@@ -131,9 +133,9 @@ The job listing will be written to `job_applications.csv` after you confirm.
 
 ## Updating or Deleting a Job
 
-***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
-
-For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
+> ***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
+>
+> For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
 
 **Updating an existing job**
 
