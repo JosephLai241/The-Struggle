@@ -1,9 +1,9 @@
 //! Updating a job application in the spreadsheet.
 
 use crate::add::get_status;
-use crate::display::display_prompt;
 use crate::mcsv::overwrite;
 use crate::model::Job;
+use crate::prompt::display_prompt;
 
 use ansi_term::*;
 
@@ -34,19 +34,17 @@ pub fn select_attribute() -> u16 {
                         if (0..4).contains(&section_int) {
                             return section_int;
                         } else {
-                            println!("\n{}",
-                                Colour::Red.bold().paint("Please select a valid section.")
-                            );
+                            println!("\n{}", Colour::Red.bold().paint("Please select a valid section."));
                         }
                     },
                     Err(_) => {
-                        println!("\n{}",
-                            Colour::Red.bold().paint("Please select a valid section.")
-                        );
+                        println!("\n{}", Colour::Red.bold().paint("Please select a valid section."));
                     }
                 }
             },
-            Err(e) => { println!("Error! {:?}", e); }
+            Err(e) => { 
+                println!("Error! {:?}", e); 
+            }
         }
     }
 }
@@ -58,9 +56,9 @@ pub fn get_update(section_int: u16) -> (u16, String) {
         let mut update_index = 0;
 
         match section_int {
-            0 => display_prompt("\nEnter the new company name: ".to_string()),
+            0 => display_prompt(format!("{}", Colour::Green.bold().paint("\nEnter the new company name: "))),
             1 => {
-                display_prompt("\nEnter the new job title: ".to_string());
+                display_prompt(format!("{}", Colour::Green.bold().paint("\nEnter the new job title: ")));
                 update_index = 1;
             },
             2 => {
@@ -68,15 +66,19 @@ pub fn get_update(section_int: u16) -> (u16, String) {
                 return (2, new_status);
             },
             3 => {
-                display_prompt("\nEnter the new note: ".to_string());
+                display_prompt(format!("{}", Colour::Green.bold().paint("\nEnter the new note: ")));
                 update_index = 3;
             },
             _ => ()
         }
 
         match io::stdin().read_line(&mut update) {
-            Ok(_) => { return (update_index, update.trim().to_string()); },
-            Err(e) => { println!("Error! {:?}", e); }
+            Ok(_) => {
+                return (update_index, update.trim().to_string());
+            },
+            Err(e) => {
+                println!("Error! {:?}", e);
+            }
         }
     }
 }
@@ -85,13 +87,22 @@ pub fn get_update(section_int: u16) -> (u16, String) {
 pub fn change_attribute(
     job_index: u16, 
     master: &mut BTreeMap<u16, Job>, 
-    update: (u16, String)) {
+    update: (u16, String)
+) {
         if let Some(job) = master.get_mut(&job_index) {
             match update.0 {
-                0 => { job.company = update.1 },
-                1 => { job.title = update.1 },
-                2 => { job.status = update.1 },
-                3 => { job.notes = update.1 },
+                0 => {
+                    job.company = update.1
+                },
+                1 => {
+                    job.title = update.1
+                },
+                2 => {
+                    job.status = update.1
+                },
+                3 => {
+                    job.notes = update.1
+                },
                 _ => ()
             }
         }

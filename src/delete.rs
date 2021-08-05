@@ -1,8 +1,8 @@
 //! Deleting a job application from the spreadsheet.
 
-use crate::display::display_prompt;
 use crate::mcsv::overwrite;
 use crate::model::Job;
+use crate::prompt::display_prompt;
 
 use ansi_term::*;
 

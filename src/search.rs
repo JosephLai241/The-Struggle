@@ -1,9 +1,9 @@
 //! Searching and printing matching job applications within a 
 //! PrettyTable.
 
-use crate::display::display_prompt;
-use crate::format::*;
 use crate::model::Job;
+use crate::prompt::display_prompt;
+use crate::table::*;
 
 use ansi_term::*;
 use prettytable::*;
@@ -18,25 +18,26 @@ fn add_matches(
     company: &str, 
     master: &BTreeMap<u16, Job>, 
     match_indexes: &mut Vec<u16>, 
-    matches: &mut Table) {
+    matches: &mut Table
+) {
         let re = Regex::new(&format!(r"(?i){}", company)).unwrap();
 
         for i in 0u16..master.len() as u16 {
-            let existing_company = &master.get_key_value(&i).unwrap().1.company.to_string();
+            let job = master.get_key_value(&i).unwrap().1;
 
-            match re.find(&existing_company) {
+            match re.find(&job.company) {
                 Some(_) => {
                     let index = &i.to_string();
                     let job_details = vec![
                         index,
-                        &master.get_key_value(&i).unwrap().1.date,
-                        &master.get_key_value(&i).unwrap().1.company,
-                        &master.get_key_value(&i).unwrap().1.title,
-                        &master.get_key_value(&i).unwrap().1.status,
-                        &master.get_key_value(&i).unwrap().1.notes
+                        &job.date,
+                        &job.company,
+                        &job.title,
+                        &job.status,
+                        &job.notes
                     ];
 
-                    let style = set_color(&job_details[4]);
+                    let style = set_color(&job.status);
                     let pt_row = convert_details(&job_details, &style);
 
                     matches.add_row(Row::new(pt_row));
@@ -63,7 +64,8 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
             "JOB TITLE", 
             "STATUS", 
             "NOTES"
-    ]);
+        ]
+    );
 
     add_matches(company, &master, &mut match_indexes, &mut matches);
 
@@ -72,10 +74,12 @@ pub fn print_matches(company: &str, master: &BTreeMap<u16, Job>) -> Vec<u16> {
         process::exit(1);
     }
 
-    matches.set_titles(Row::new(vec![
-        Cell::new(&format!("FOUND {} MATCHES", matches.len() - 1))
-            .style_spec("bicH6")
-    ]));
+    matches.set_titles(Row::new(
+        vec![
+            Cell::new(&format!("FOUND {} MATCHES", matches.len() - 1))
+                .style_spec("bicH6")
+        ]
+    ));
 
     matches.set_format(format_table());
     matches.printstd();
@@ -128,29 +132,21 @@ pub enum DataType<'a> {
 /// Match the data type that is passed into `print_selection()` and return the
 /// vector of string type `job_details`.
 fn match_data_type(data: DataType) -> Vec<String> {
-    match data {
-        DataType::Btm(job_index, master) => {
-            vec![
-                master.get(&job_index).unwrap().date.to_string(),
-                master.get(&job_index).unwrap().company.to_string(),
-                master.get(&job_index).unwrap().title.to_string(),
-                master.get(&job_index).unwrap().status.to_string(),
-                master.get(&job_index).unwrap().notes.to_string()
-            ]
-        },
-        DataType::Singular(job) => {
-            vec![
-                job.date.clone(),
-                job.company.clone(),
-                job.title.clone(),
-                job.status.clone(),
-                job.notes.clone()
-            ]
-        }
-    }
+    let job = match data {
+        DataType::Btm(job_index, master) => master.get(&job_index).unwrap(),
+        DataType::Singular(job) => job
+    };
+
+    vec![
+        job.date.to_string(),
+        job.company.to_string(),
+        job.title.to_string(),
+        job.status.to_string(),
+        job.notes.to_string()
+    ]
 }
 
-/// Print the selected job for updating or deletion.
+/// Print the selected job for addition, updating or deletion.
 pub fn print_selection(data: DataType, title: String) {
     println!("\n{}", Colour::Cyan.bold().paint(title));
 
@@ -164,7 +160,8 @@ pub fn print_selection(data: DataType, title: String) {
             "JOB TITLE", 
             "STATUS", 
             "NOTES"
-    ]);
+        ]
+    );
 
     let job_details = match_data_type(data);
 

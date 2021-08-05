@@ -6,13 +6,13 @@ use prettytable::*;
 /// application status.
 pub fn set_color(status: &str) -> String {
     match status {
-        "PENDING" => return "bFbl".to_string(),
-        "IN PROGRESS" => return "bFyl".to_string(),
-        "OFFER RECEIVED" => return "bFml".to_string(),
-        "HIRED" => return "bFgl".to_string(),
-        "REJECTED" => return "bFrl".to_string(),
-        _ => return "".to_string()
-    };
+        "PENDING" => "bFbl".to_string(),
+        "IN PROGRESS" => "bFyl".to_string(),
+        "OFFER RECEIVED" => "bFml".to_string(),
+        "HIRED" => "bFgl".to_string(),
+        "REJECTED" => "bFrl".to_string(),
+        _ => "".to_string()
+    }
 }
 
 /// Return a new vector of styled PrettyTable cells to add to the master table.
@@ -35,10 +35,12 @@ pub fn format_table() -> format::TableFormat {
         .padding(1, 3)
         .separators(
             &[format::LinePosition::Bottom, format::LinePosition::Intern], 
-            format::LineSeparator::new('-', '+', '+', '+'))
+            format::LineSeparator::new('-', '+', '+', '+')
+        )
         .separators(
             &[format::LinePosition::Top, format::LinePosition::Title], 
-            format::LineSeparator::new('=', '=', '+', '+'))
+            format::LineSeparator::new('=', '=', '+', '+')
+        )
         .build()
 }
 

@@ -1,19 +1,20 @@
+//! It really is a struggle out there.
+
 mod add;
 mod cli;
 mod delete;
-mod display;
-mod format;
 mod insights;
 mod list;
 mod mcsv;
 mod model;
+mod prompt;
 mod search;
+mod table;
 mod titles;
 mod update;
 
 use ansi_term::*;
 
-/// It really is a struggle out there.
 fn main() {
     titles::main_title();
 
