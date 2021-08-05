@@ -1,6 +1,6 @@
 [package]
 name = "ts"
-version = "2.0.0"
+version = "2.0.1"
 authors = ["Joseph Lai <jlai24142@gmail.com>"]
 edition = "2018"
 description = "A command-line tool for tracking your job applications"
@@ -9,7 +9,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/JosephLai241/The-Struggle"
 categories = ["command-line-utilities"]
-keywords = ["cli", "csv", "job application", "tracking"]
+keywords = ["cli", "command-line tool", "csv", "job application", "tracking"]
 
 [[bin]]
 name = "ts"

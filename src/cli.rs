@@ -21,7 +21,7 @@ pub struct Args {
     #[structopt(
         short = "u", 
         long = "update", 
-        help = "Update an existing job in the spreadsheet"
+        help = "Update an existing job"
     )]
     pub update: Option<String>,
 
@@ -29,9 +29,17 @@ pub struct Args {
     #[structopt(
         short = "d", 
         long = "delete", 
-        help = "Delete an existing job in the spreadsheet"
+        help = "Delete an existing job"
     )]
     pub delete: Option<String>,
+
+    /// Flag for searching for an existing job listing.
+    #[structopt(
+        short = "s",
+        long = "search",
+        help = "Search for an existing job"
+    )]
+    pub search: Option<String>,
 
     /// Flag for listing all existing job listings.
     #[structopt(
@@ -77,6 +85,7 @@ mod test_cli {
             add: None,
             update: None,
             delete: None,
+            search: None,
             list: false,
             insights: false
         }, args);

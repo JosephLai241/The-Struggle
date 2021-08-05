@@ -3,7 +3,10 @@
 use crate::model::Job;
 
 use ansi_term::*;
-use csv::{Reader, WriterBuilder};
+use csv::{
+    Reader,
+    WriterBuilder
+};
 use serde::Serialize;
 
 use std::collections::BTreeMap;
@@ -32,21 +35,8 @@ struct Listing {
 }
 
 impl Listing {
-    /// Serialize a job listing with the Listing struct for spreadsheet overwriting. 
-    /// This is used when updating or deleting a job listing from the spreadsheet.
-    fn serialize_ow(i: u16, master: &BTreeMap<u16, Job>) -> Listing {
-        Listing {
-            date: master.get(&i).unwrap().date.to_string(),
-            company: master.get(&i).unwrap().company.to_string(),
-            title: master.get(&i).unwrap().title.to_string(),
-            status: master.get(&i).unwrap().status.to_string(),
-            notes: master.get(&i).unwrap().notes.to_string()
-        }
-    }
-
-    /// Serialize a job listing with the Listing struct for spreadsheet writing. 
-    /// This is used when adding a job to the spreadsheet.
-    fn serialize_a(job: &Job) -> Listing {
+    /// Serialize a job listing with the Listing struct.
+    fn serialize(job: &Job) -> Listing {
         Listing {
             date: job.date.to_string(),
             company: job.company.to_string(),
@@ -74,8 +64,8 @@ pub fn write_new_job(job: &Job) -> Result<(), Box<dyn Error>> {
         WriterBuilder::new().has_headers(true).from_writer(file)
     };
 
-    writer.serialize(Listing::serialize_a(&job))?;
-    
+    writer.serialize(Listing::serialize(&job))?;
+
     Ok(println!("\n{}\n", Colour::Green.bold().paint("ADDED NEW LISTING.")))
 }
 
@@ -85,7 +75,8 @@ pub fn overwrite(master: &mut BTreeMap<u16, Job>) -> Result<(), Box<dyn Error>> 
 
     let mut writer = WriterBuilder::new().has_headers(true).from_writer(file);
     for i in 0u16..master.len() as u16 {
-        writer.serialize(Listing::serialize_ow(i, &master))?;
+        let job = master.get(&i).unwrap();
+        writer.serialize(Listing::serialize(job))?;
     }
 
     Ok(println!("\n{}\n", Colour::Green.bold().paint("UPDATED SPREADSHEET.")))

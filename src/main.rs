@@ -1,18 +1,20 @@
+//! It really is a struggle out there.
+
 mod add;
 mod cli;
 mod delete;
-mod format;
 mod insights;
 mod list;
 mod mcsv;
 mod model;
+mod prompt;
 mod search;
+mod table;
 mod titles;
 mod update;
 
 use ansi_term::*;
 
-/// It really is a struggle out there.
 fn main() {
     titles::main_title();
 
@@ -50,6 +52,10 @@ fn main() {
                 "SELECTED JOB".to_string());
 
             delete::delete_job(job_index, &mut master);
+        },
+        cli::Args { search: Some(company), .. } => {
+            let master = mcsv::get_jobs().unwrap();
+            search::print_matches(&company, &master);
         },
         cli::Args { list: true, .. } => {
             let master = mcsv::get_jobs().unwrap();

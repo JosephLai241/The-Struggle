@@ -7,36 +7,71 @@
         \/__/\/___/... The Struggle
 
 ![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=Rust)
-[![Travis (.org)](https://img.shields.io/travis/JosephLai241/The-Struggle?logo=travis)][Travis CI Build Status]
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github)][Github Actions]
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle)
 
-A command-line tool for tracking your job applications. 
+A command-line tool that helps you track your job applications. 
 
-Written in Rust. Tested with Rust 1.43.1.
+Written in Rust. Tested with Rust 1.54.0.
 
 This program is also available in Python, located on the [Python branch][Python branch].
 
 # Table of Contents
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [Why Rust?](#why-rust)
-- [How it works / Use Cases](#how-it-works-and-use-cases)
-- [Stored Attributes](#stored-attributes)
-- [Read This Before You Run the Program](#read-this-before-you-run-the-program)
-- [Walkthrough](#walkthrough)
-    - [Adding a Job](#adding-a-job)
-    - [Updating or Deleting a Job](#updating-or-deleting-a-job)
-    - [Listing Stored Jobs](#listing-stored-jobs)
-    - [Showing Job Insights](#showing-job-insights)
-- [Releases](#releases)
+* [Introduction](#introduction)
+    + [What Does It Do?](#what-does-it-do)
+    + [Why?](#why)
+* [Installation](#installation)
+    + [Compile From Source](#compile-from-source)
+    + [Or Download a Binary](#or-download-a-binary)
+* [Stored Attributes](#stored-attributes)
+* [Read This Before You Run the Program](#read-this-before-you-run-the-program)
+* [Walkthrough](#walkthrough)
+    + [Adding a Job](#adding-a-job)
+    + [Updating or Deleting a Job](#updating-or-deleting-a-job)
+    + [Search for an Existing Job](#search-for-an-existing-job)
+    + [Listing Stored Jobs](#listing-stored-jobs)
+    + [Display Job Insights](#showing-job-insights)
+* [Releases](#releases)
+* [Why Rust?](#why-rust)
  
 # Introduction
- 
-I have been applying to *tons* of companies in attempt to secure a job before I graduate from college. The number is so high, it has become hard to keep track of every single place as well as where my application stands in the interview process (if I even get past the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. Thank you for trying this program and I hope it will help you keep track of your applications as well.
+
+## What Does It Do?
+
+`The-Struggle` performs CRUD operations on a local spreadsheet (which is automatically generated for you) and simplifies the process of tracking your applications. It is very fast because:
+
+1) It is written in Rust - it is so fast it feels as if the output was hardcoded.
+2) Doing these operations from the terminal is much faster than opening up a spreadsheet and manually editing it.
+
+Its features include:
+
+* Add, update, or delete job applications from the spreadsheet
+* Display/search for tracked job applications, using [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to color-code and neatly display applications in a table within your terminal.
+* Display insights for tracked applications, such as:
+    + The total number of tracked applications
+    + The total number and percentage of applications:
+        * That are pending a response
+        * That are currently in progress
+        * Where you have received an offer
+        * Where you have been rejected from
+        * Where you have been hired at
+
+## Why?
+
+I graduated from college in June 2020 and have been applying to ***tons*** of companies in attempt to kick off my developer career. It has been very difficult for me to break into the industry because I am a self-taught developer (no CS degree) and I graduated in the midst of the COVID-19 pandemic.
+
+The number of applications that I have sent out is so high, it has become hard to keep track of every company as well as where my application stands in the interview process (if I even pass the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. 
+
+Thank you for trying this program and I hope it will help you keep track of your applications as well. It is tough out there, man.
 
 # Installation
+
+> ***NOTE:*** This program initializes and reads from files in your current working directory. Run `The-Struggle` in a directory in which you would like all your records to be stored.
+> 
+> The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+
+## Compile From Source
 
 First, you will need a [Rust installation][Rust Official Site] in order to compile The Struggle.
 
@@ -62,39 +97,19 @@ $ cd /some/directory
 $ ./ts -V
 ```
 
-The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+## Or Download a Binary
 
-# Why Rust?
-
-I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
-
-# How It Works and Use Cases
-
-This program essentially makes it easier and faster to maintain a locally-stored spreadsheet of all the jobs applications you record. A spreadsheet will be created for you on the first run. See [Read This Before You Run the Program](#read-this-before-you-run-the-program) for more information.
-
-This program utilizes [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to add color and neatly print job listings in a table within the terminal.
-
-## Adding a Job 
-
-The program will check if there is an existing CSV file of your job applications in the current working directory. If it does not exist, the program will create the file for you and add the first job you record. If it does exist, the program will append the job to the spreadsheet.
-
-## Updating a Job
-
-The program will parse the existing spreadsheet, find the job you want to change, edit the stored details, then rewrite the spreadsheet to reflect the new changes. 
-
-## Deleting a Job 
-
-The program will parse the existing spreadsheet, remove the job, then rewrite the spreadsheet. 
-
-## Listing All Saved Jobs 
-
-The program will parse the spreadsheet and then print all the jobs you have stored into a readable format within a terminal.
-
-## Job Application Insights 
-
-The program will parse the spreadsheet, count how many jobs are under each job status, and calculate the percentage of each job status.
+If you do not want to compile `The-Struggle`, you can also download a binary attached to a release in the [Releases][Releases] section.
 
 # Stored Attributes
+
+Each application will store the following information:
+
+* `DATE ADDED`
+* `COMPANY`
+* `JOB TITLE`
+* `STATUS`
+* `NOTES`
 
 `DATE ADDED` is automatically calculated based on Rust's [chrono][chrono].
 
@@ -112,7 +127,7 @@ The program will parse the spreadsheet, count how many jobs are under each job s
 
 # Read This Before You Run the Program
 
-You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within the current working directory. All other functionality of the program will not work prior to adding the first job because there is no file to read from. 
+You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within your current working directory. All other functionality of the program will not work prior to adding the first job because there is no valid spreadsheet to read from. 
 
 **DO NOT** create `job_applications.csv` manually. The program will create the file for you. Creating an empty `job_applications.csv` before running the `-a` flag will cause issues for you later on. 
 
@@ -122,11 +137,15 @@ Use `-h` or `--help` if you forget the arguments or do not want to read this wal
 
 ## Adding a Job
 
+![Add Job][Add Job]
+
 As stated before, **this has to be the first command you run.** Doing so will create `job_applications.csv` in your current working directory.
 
-`$ ./ts -a COMPANY_NAME`
+```
+$ ./ts -a COMPANY_NAME
+```
 
-***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
+> ***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
 You will then enter the job title at the company, select the status of the job listing, then enter any notes on the job listing. You can just enter through the notes prompt to leave it blank.
 
@@ -134,13 +153,17 @@ The job listing will be written to `job_applications.csv` after you confirm.
 
 ## Updating or Deleting a Job
 
-***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
-
-For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
+> ***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
+>
+> For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
 
 **Updating an existing job**
 
-`$ ./ts -u COMPANY_NAME`
+![Update Job][Update Job]
+
+```
+$ ./ts -u COMPANY_NAME
+```
 
 Use the `NUMBER` in the far left column to pick the job you want to delete:
 
@@ -150,55 +173,77 @@ The job listing will be updated in `job_applications.csv` after you confirm.
 
 **Deleting an existing job**
 
-`$ ./ts -d COMPANY_NAME`
+![Delete Job][Delete Job]
+
+```
+$ ./ts -d COMPANY_NAME
+```
 
 Identical to updating, you can just enter a letter or pattern in the company name and use the `NUMBER` in the far left column to choose the job you want to delete.
 
 The job listing will then be deleted from `job_applications.csv` after you confirm.
 
+## Search for an Existing Job
+
+![Search Jobs][Search Jobs]
+
+```
+$ ./ts -s COMPANY_NAME
+```
+
+Use this command to quickly search for an existing job. Matches are displayed in a PrettyTable. Like the update and delete commands, you can simply search for letters that are present in the company name to return a match.
+
 ## Listing Stored Jobs
 
-`$ ./ts -l`
+![List Jobs][List Jobs]
 
-Job applications are sorted by date (descending) and are colorized based on the application status. Here is a table of how each is colorized:
+```
+$ ./ts -l
+```
 
-| Job Status     | Color   |
-|----------------|---------|
-| PENDING        | Blue    |
-| IN PROGRESS    | Yellow  |
-| OFFER RECEIVED | Magenta |
-| HIRED          | Green   |
-| REJECTED       | Red     |
+Job applications are sorted by date (descending) and are colorized based on the application status. See the application status and color table in the [Stored Attributes](#stored-attributes) section for details.
 
-## Showing Job Insights
+## Display Job Insights
 
-`$ ./ts -i`
+![Insights][Insights]
+
+```
+$ ./ts -i
+```
 
 You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are listed under each job status as well as its percentage within the spreadsheet.
 
-Each cell is also colorized based on the table described in the section above.
+Each cell is also colorized based on the table described in the [Stored Attributes](#stored-attributes) section.
 
 # Releases
 
-- **May 18, 2020:** The Struggle v1.0.0 (Python Edition). Features include:
-    - Add a new job
-    - Update an existing job
-    - Delete an existing job
-    - List all stored jobs
-    - Print job application insights
+* **May 18, 2020:** v1.0.0 (Python Edition). Features include:
+    + Add a new job
+    + Update an existing job
+    + Delete an existing job
+    + List all stored jobs
+    + Print job application insights
 
-- **July 4, 2020:** The Struggle v2.0.0 (Rust Edition).
-    - Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
-    - Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
-    - Deploying with Travis CI.
-    - *Scary fast*.
+* **July 4, 2020:** v2.0.0 (Rust Edition).
+    + Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
+    + Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
+    + Deploying with Travis CI.
+    + *Scary fast*.
+* **August 4, 2021:** v2.0.1.
+    + Previously, prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. They are now inline with user-entered data.
+    + Added a new flag, `-s`/`--search`, to search for an existing job.
+    + Formatting and refactoring throughout the source code.
+
+# Why Rust?
+
+I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
 
 <!-- BADGES -->
-[Travis CI Build Status]: https://travis-ci.org/github/JosephLai241/The-Struggle
 [Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
 
-<!-- BRANCHES -->
+<!-- REPO LINKS -->
 [Python branch]: https://github.com/JosephLai241/The-Struggle/tree/python
+[Releases]: https://github.com/JosephLai241/The-Struggle/releases
 
 <!-- A BROTHER -->
 [Luke]: https://github.com/LukeDSchenk
@@ -209,3 +254,11 @@ Each cell is also colorized based on the table described in the section above.
 [ANSI Terminal]: https://docs.rs/ansi_term/0.12.1/ansi_term/
 [chrono]: https://docs.rs/chrono/0.4.11/chrono/
 [PrettyTable]: https://docs.rs/prettytable-rs/0.8.0/prettytable/
+
+<!-- SCREENSHOTS -->
+[Add Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/add_job.png
+[Delete Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/delete_job.png
+[Insights]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/insights.png
+[List Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/list_jobs.png
+[Search Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/search_job.png
+[Update Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/update_job.png

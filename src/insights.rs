@@ -1,7 +1,7 @@
 //! Returning a PrettyTable of job application statistics.
 
-use crate::format::format_table;
 use crate::model::Job;
+use crate::table::format_table;
 
 use prettytable::*;
 
@@ -48,11 +48,21 @@ pub fn get_stats(master: BTreeMap<u16, Job>) -> JobStats {
     
     for i in 0u16..master.len() as u16 {
         match master.get_key_value(&i).unwrap().1.status.as_str() {
-            "PENDING" => { current_stats.pending += 1.0; },
-            "IN PROGRESS" => { current_stats.in_progress += 1.0; },
-            "OFFER RECEIVED" => { current_stats.offers += 1.0; },
-            "HIRED" => { current_stats.hired += 1.0; },
-            "REJECTED" => { current_stats.rejected += 1.0; },
+            "PENDING" => {
+                current_stats.pending += 1.0;
+            },
+            "IN PROGRESS" => {
+                current_stats.in_progress += 1.0;
+            },
+            "OFFER RECEIVED" => {
+                current_stats.offers += 1.0;
+            },
+            "HIRED" => {
+                current_stats.hired += 1.0;
+            },
+            "REJECTED" => {
+                current_stats.rejected += 1.0;
+            },
             _ => ()
         }
     }
@@ -76,16 +86,14 @@ fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: boo
     for stat in stats {
         match is_percent {
             true => {
-                table_values.push(Cell::new(
-                    &format!("{:.2}% of all jobs", stat.0 * 100.0))
-                        .style_spec(stat.1)
+                table_values.push(Cell::new(&format!("{:.2}% of all jobs", stat.0 * 100.0))
+                    .style_spec(stat.1)
                 );
             },
             false => {
                 let plurality = if &stat.0 == &1.0 { "job" } else { "jobs" };
-                table_values.push(Cell::new(
-                    &format!("{} {}", stat.0, plurality))
-                        .style_spec(stat.1)
+                table_values.push(Cell::new(&format!("{} {}", stat.0, plurality))
+                    .style_spec(stat.1)
                 );
             }
         }
@@ -99,10 +107,12 @@ fn get_job_count(current_stats: &JobStats, insights: &mut Table, is_percent: boo
 pub fn display_insights(current_stats: JobStats) {
     let mut insights = Table::new();
 
-    insights.set_titles(Row::new(vec![
-        Cell::new(&format!("{} TRACKED JOB APPLICATIONS", current_stats.total))
-            .style_spec("bicH5")
-    ]));
+    insights.set_titles(Row::new(
+        vec![
+            Cell::new(&format!("{} TRACKED JOB APPLICATIONS", current_stats.total))
+                .style_spec("bicH5")
+        ]
+    ));
 
     insights.add_row(
         row![
@@ -112,7 +122,8 @@ pub fn display_insights(current_stats: JobStats) {
             "OFFERS RECEIVED", 
             "HIRES", 
             "REJECTIONS"
-    ]);
+        ]
+    );
 
     get_job_count(&current_stats, &mut insights, false);
     
