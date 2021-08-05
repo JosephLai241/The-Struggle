@@ -14,13 +14,13 @@ use std::process;
 /// Select a job attribute to update.
 pub fn select_attribute() -> u16 {
     let update_prompt = r#"
-        UPDATE SECTION
------------------------------
-    0: COMPANY NAME
-    1: JOB TITLE
-    2: APPLICATION STATUS
-    3: NOTES
------------------------------"#;
+UPDATE SECTION
+--------------
+[0] COMPANY NAME
+[1] JOB TITLE
+[2] APPLICATION STATUS
+[3] NOTES
+"#;
 
     loop {
         println!("{}", Style::new().bold().paint(update_prompt));

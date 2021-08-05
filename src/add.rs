@@ -50,14 +50,14 @@ pub fn get_status() -> String {
     ];
 
     let status_prompt = r#"
-    SELECT JOB STATUS
--------------------------
-    0: PENDING
-    1: IN PROGRESS
-    2: OFFER RECEIVED
-    3: HIRED
-    4: REJECTED
--------------------------"#;
+SELECT JOB STATUS
+-----------------
+[0] PENDING
+[1] IN PROGRESS
+[2] OFFER RECEIVED
+[3] HIRED
+[4] REJECTED
+"#;
 
     loop {
         display_prompt(format!("{}\n", Style::new().bold().paint(status_prompt)));
