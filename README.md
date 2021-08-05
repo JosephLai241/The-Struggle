@@ -230,7 +230,9 @@ Each cell is also colorized based on the table described in the [Stored Attribut
     + Deploying with Travis CI.
     + *Scary fast*.
 * **August 4, 2021:** v2.0.1.
-    + Prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. This release modifies the prompts so that they are inline with user-entered data.
+    + Previously, prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. They are now inline with user-entered data.
+    + Added a new flag, `-s`/`--search`, to search for an existing job.
+    + Formatting and refactoring throughout the source code.
 
 # Why Rust?
 
