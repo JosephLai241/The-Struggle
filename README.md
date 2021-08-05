@@ -137,6 +137,8 @@ Use `-h` or `--help` if you forget the arguments or do not want to read this wal
 
 ## Adding a Job
 
+![Add Job][Add Job]
+
 As stated before, **this has to be the first command you run.** Doing so will create `job_applications.csv` in your current working directory.
 
 ```
@@ -157,6 +159,8 @@ The job listing will be written to `job_applications.csv` after you confirm.
 
 **Updating an existing job**
 
+![Update Job][Update Job]
+
 ```
 $ ./ts -u COMPANY_NAME
 ```
@@ -169,6 +173,8 @@ The job listing will be updated in `job_applications.csv` after you confirm.
 
 **Deleting an existing job**
 
+![Delete Job][Delete Job]
+
 ```
 $ ./ts -d COMPANY_NAME
 ```
@@ -179,6 +185,8 @@ The job listing will then be deleted from `job_applications.csv` after you confi
 
 ## Search for an Existing Job
 
+![Search Jobs][Search Jobs]
+
 ```
 $ ./ts -s COMPANY_NAME
 ```
@@ -187,6 +195,8 @@ Use this command to quickly search for an existing job. Matches are displayed in
 
 ## Listing Stored Jobs
 
+![List Jobs][List Jobs]
+
 ```
 $ ./ts -l
 ```
@@ -194,6 +204,8 @@ $ ./ts -l
 Job applications are sorted by date (descending) and are colorized based on the application status. See the application status and color table in the [Stored Attributes](#stored-attributes) section for details.
 
 ## Display Job Insights
+
+![Insights][Insights]
 
 ```
 $ ./ts -i
@@ -240,3 +252,11 @@ I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is 
 [ANSI Terminal]: https://docs.rs/ansi_term/0.12.1/ansi_term/
 [chrono]: https://docs.rs/chrono/0.4.11/chrono/
 [PrettyTable]: https://docs.rs/prettytable-rs/0.8.0/prettytable/
+
+<!-- SCREENSHOTS -->
+[Add Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/add_job.png
+[Delete Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/delete_job.png
+[Insights]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/insights.png
+[List Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/list_jobs.png
+[Search Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/search_job.png
+[Update Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/update_job.png
