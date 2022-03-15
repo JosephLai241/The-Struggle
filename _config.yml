@@ -1,1 +1,2 @@
-theme: jekyll-theme-midnight
+remote-theme: mmistakes/jekyll-theme-basically-basic
+skin: night
