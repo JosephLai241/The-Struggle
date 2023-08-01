@@ -8,10 +8,6 @@ pub enum FettersError {
     #[error("Failed to access application-dependent directories!")]
     ApplicationError,
 
-    /// Something fucked up while interacting with the application configuration.
-    #[error("Configuration error: {0}")]
-    ConfigError(#[from] config::ConfigError),
-
     /// Something fucked up while performing I/O operations.
     #[error("IO error: {0}")]
     IOError(#[from] std::io::Error),
@@ -32,7 +28,11 @@ pub enum FettersError {
     #[error("SQLite error: {0}")]
     SQLiteError(#[from] rusqlite::Error),
 
-    /// Something fucked up while interacting with TOML.
+    /// Something fucked up while deserializing TOML.
     #[error("TOML error: {0}")]
-    TOMLError(#[from] toml::ser::Error),
+    TOMLDeError(#[from] toml::de::Error),
+
+    /// Something fucked up while serializing TOML.
+    #[error("TOML error: {0}")]
+    TOMLSerError(#[from] toml::ser::Error),
 }
