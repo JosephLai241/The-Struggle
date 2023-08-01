@@ -46,18 +46,26 @@ pub fn add_job_status(fetters_settings: &FettersSettings) -> Result<String, Fett
     .with_vim_mode(true)
     .prompt()?;
 
-    if action == "Select from preset status" && !fetters_settings.presets.status.is_empty() {
-        Ok(
-            Select::new("Select a status:", fetters_settings.presets.status.clone())
-                .with_vim_mode(true)
-                .prompt()?,
+    if action == "Select from preset status" && !fetters_settings.presets.status_mappings.is_empty()
+    {
+        Ok(Select::new(
+            "Select a status:",
+            fetters_settings
+                .presets
+                .status_mappings
+                .clone()
+                .into_keys()
+                .collect(),
         )
+        .with_vim_mode(true)
+        .prompt()?)
     } else {
         let new_status = Text::new("Enter a new job status:")
             .with_help_message("This status will be saved to your configuration")
             .prompt()?;
+        let new_color = Text::new("Enter a color for this job status:").with_help_message("Refer to https://docs.rs/ansi_term/latest/ansi_term/enum.Color.html#variants for all options").prompt()?;
 
-        utils::config::add_new_job_status(&new_status)?;
+        utils::config::add_new_job_status(&new_status, &new_color)?;
 
         Ok(new_status)
     }
