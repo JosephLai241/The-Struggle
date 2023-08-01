@@ -9,7 +9,7 @@ use crate::{errors::FettersError, models::config::FettersSettings};
 
 lazy_static! {
     /// The default TOML configuration file.
-    static ref TOML_CONFIG: &'static [u8; 286] = include_bytes!("../../fetters.toml");
+    static ref TOML_CONFIG: &'static [u8; 218] = include_bytes!("../../fetters.toml");
 }
 
 /// Check if the project directories and configuration file are set up on the user's machine.
@@ -42,13 +42,20 @@ pub fn configure_fetters() -> Result<FettersSettings, FettersError> {
 }
 
 /// Add a new job status to the TOML configuration file.
-pub fn add_new_job_status(new_status: &str) -> Result<(), FettersError> {
+pub fn add_new_job_status(new_status: &str, new_color: &str) -> Result<(), FettersError> {
     match ProjectDirs::from("", "", "fetters") {
         Some(project_directory) => {
             let config_path = project_directory.config_dir().join("fetters.toml");
 
             let mut config = FettersSettings::read_from(config_path.to_string_lossy().to_string())?;
-            config.presets.status.push(new_status.to_string());
+
+            let fixed_status = new_status.replace(" ", "-").to_lowercase();
+            let fixed_color = new_color.to_lowercase();
+
+            config
+                .presets
+                .status_mappings
+                .insert(fixed_status, fixed_color);
 
             let toml_string = toml::to_string_pretty(&config)?;
             fs::write(&config_path, toml_string)?;

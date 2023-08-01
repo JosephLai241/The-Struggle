@@ -118,8 +118,9 @@ fn check_status_options(status: &str) -> Result<String, String> {
         Ok(fetters_settings) => {
             let lowercase_status_options = fetters_settings
                 .presets
-                .status
+                .status_mappings
                 .clone()
+                .into_keys()
                 .into_iter()
                 .map(|status| status.to_lowercase())
                 .collect::<Vec<String>>();
@@ -129,7 +130,7 @@ fn check_status_options(status: &str) -> Result<String, String> {
             } else {
                 Err(format!(
                     "Invalid status! Add a new status with a new job listing or choose from one of the following: {:?}",
-                    fetters_settings.presets.status
+                    fetters_settings.presets.status_mappings.into_keys().collect::<Vec<String>>()
                 ))
             }
         }
