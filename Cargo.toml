@@ -19,7 +19,6 @@ path = "src/main.rs"
 ansi_term = "0.12.1"
 chrono = "0.4.26"
 clap = { version = "4.3.19", features = ["derive"] }
-config = "0.13.3"
 directories = "5.0.1"
 inquire = { version = "0.6.2", features = ["date"] }
 lazy_static = "1.4.0"
