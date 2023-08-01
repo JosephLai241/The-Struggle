@@ -31,7 +31,7 @@ pub fn add_job_title(fetters_settings: &FettersSettings) -> Result<String, Fette
             .with_help_message("This job title will be saved to your configuration")
             .prompt()?;
 
-        utils::setup::add_new_job_title(&new_title)?;
+        utils::config::add_new_job_title(&new_title)?;
 
         Ok(new_title)
     }
@@ -57,7 +57,7 @@ pub fn add_job_status(fetters_settings: &FettersSettings) -> Result<String, Fett
             .with_help_message("This status will be saved to your configuration")
             .prompt()?;
 
-        utils::setup::add_new_job_status(&new_status)?;
+        utils::config::add_new_job_status(&new_status)?;
 
         Ok(new_status)
     }

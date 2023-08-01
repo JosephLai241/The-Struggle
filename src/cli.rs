@@ -2,7 +2,7 @@
 
 use clap::{Parser, Subcommand};
 
-use crate::utils::setup;
+use crate::utils::config;
 
 /// The command-line interface for `fetters`.
 #[derive(Debug, Parser)]
@@ -114,7 +114,7 @@ pub enum Subcommands {
 
 /// Check the provided status option against the status options defined in the configuration file.
 fn check_status_options(status: &str) -> Result<String, String> {
-    match setup::configure_fetters() {
+    match config::configure_fetters() {
         Ok(fetters_settings) => {
             let lowercase_status_options = fetters_settings
                 .presets
