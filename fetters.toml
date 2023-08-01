@@ -1,0 +1,9 @@
+[display]
+# The maximum column width of tables.
+max_column_width = 45
+
+[presets]
+# A list of status indicators for job listings.
+status = ["Hired", "In Progress", "Offer Received", "Pending", "Rejected"]
+# A list of pre-defined job titles to select from.
+titles = ["Software Engineer"]
