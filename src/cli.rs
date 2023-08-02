@@ -62,31 +62,26 @@ pub enum Subcommands {
         titles: bool,
     },
     /// Display job application insights.
-    Insights,
+    Insights {
+        /// Display insights for a given date range delimited by a comma.
+        ///
+        /// Sets the upper range to the current date if no upper date range is provided
+        ///
+        /// Accepts ISO8601 date formats delimited by a forward slash, ie. '2023/08/01'
+        ///
+        /// Example acceptable date ranges: '2023/06/01,2023/08/01', '2023/06/01'
+        #[arg(short, long)]
+        date_range: Option<String>,
+        /// Display insights for a given stint.
+        #[arg(long)]
+        stint: Option<String>,
+    },
     /// List all or search for a particular job application.
     List {
-        /// Search for text in company names.
-        #[arg(short, long)]
-        company: bool,
-        /// Search for text in links.
-        #[arg(short, long)]
-        links: bool,
-        /// Search for text in notes.
-        #[arg(short, long)]
-        notes: bool,
         /// The query (regex) string for the particular job application. If this is provided
         /// without any other flags, all flags are enabled and the query will be applied to all
         /// fields.
         query: Option<String>,
-        /// Search for text in status.
-        #[arg(long)]
-        status: bool,
-        /// Search for text in the stint.
-        #[arg(long)]
-        stint: bool,
-        /// Search for text in job titles.
-        #[arg(short, long)]
-        titles: bool,
     },
     /// Open a job application in the browser if a link was also provided.
     Open {
