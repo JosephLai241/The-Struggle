@@ -2,6 +2,7 @@
 
 use std::{collections::BTreeMap, fs::File, io::Read};
 
+use ansi_term::{Color, Style};
 use serde::{Deserialize, Serialize};
 
 use crate::errors::FettersError;
@@ -41,6 +42,48 @@ impl FettersSettings {
         toml_file.read_to_string(&mut contents)?;
 
         Ok(toml::from_str(&contents).unwrap_or(Self::default()))
+    }
+
+    /// Get the `ansi_term` `Style` for the `match_color` attribute. If the provided color value is
+    /// unknown, tries to parse into `u8`. Returns `Style::default()` if all else fails.
+    pub fn get_match_color_style(&self) -> Style {
+        self.raw_color_to_style(&self.display.match_color)
+    }
+
+    /// Get all status mappings and the `ansi_term` `style` associated with each status. If the
+    /// provided color value is unknown, tries to parse into `u8`. Returns `Style::default()` if
+    /// all else fails.
+    pub fn get_status_mappings_and_colors(&self) -> BTreeMap<String, Style> {
+        let mut mappings_and_colors = BTreeMap::new();
+
+        for (status, color) in self.presets.status_mappings.iter() {
+            let style = self.raw_color_to_style(color);
+
+            mappings_and_colors.insert(status.clone(), style);
+        }
+
+        mappings_and_colors
+    }
+
+    /// Convert the provided color to an `ansi_term` `Style`. If the provided color value is
+    /// unknown, tries to parse into `u8`. Returns `Style::default()` if all else fails.
+    fn raw_color_to_style(&self, value: &str) -> Style {
+        match value {
+            "black" => Color::Black.bold(),
+            "blue" => Color::Blue.bold(),
+            "cyan" => Color::Cyan.bold(),
+            "green" => Color::Green.bold(),
+            "purple" => Color::Purple.bold(),
+            "red" => Color::Red.bold(),
+            "white" => Color::White.bold(),
+            "yellow" => Color::Yellow.bold(),
+            _ => self
+                .display
+                .match_color
+                .parse::<u8>()
+                .map(|fixed_value| Color::Fixed(fixed_value).bold())
+                .unwrap_or(Style::default()),
+        }
     }
 }
 
