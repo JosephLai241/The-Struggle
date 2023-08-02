@@ -2,7 +2,7 @@
 
 use std::collections::{BTreeMap, HashMap};
 
-use ansi_term::{Color, Style};
+use ansi_term::Style;
 use regex::{Match, Regex};
 use term_table::{row::Row, table_cell::TableCell, Table, TableStyle};
 
@@ -10,7 +10,13 @@ use crate::models::{config::FettersSettings, job::Job, search::SearchResult, sti
 
 /// Colorize the matched portions of a given string of text. Returns the original string if no
 /// matches are found.
-pub fn colorize_matching_substrings(original_string: String, regex: &Regex) -> String {
+pub fn colorize_matching_substrings(
+    fetters_settings: &FettersSettings,
+    original_string: String,
+    regex: &Regex,
+) -> String {
+    let highlight_style = fetters_settings.get_match_color_style();
+
     let mut cloned_string = original_string.clone();
     let matches: Vec<Match<'_>> = regex.find_iter(&original_string).collect();
 
@@ -18,7 +24,7 @@ pub fn colorize_matching_substrings(original_string: String, regex: &Regex) -> S
         let matched_substring =
             &original_string.clone()[matched.range().start..matched.range().end];
         let colorized_substring =
-            format!("{}", Color::Red.bold().paint(matched_substring.to_string()));
+            format!("{}", highlight_style.paint(matched_substring.to_string()));
 
         cloned_string = cloned_string.replace(matched_substring, &colorized_substring);
     }
@@ -56,10 +62,10 @@ pub fn display_all_jobs(
     for job in all_jobs {
         let stint_name = mapped_stints
             .get(&job.stint)
-            .and_then(|stint| Some(stint.stint.clone()));
+            .map(|stint| stint.stint.clone());
 
         table.add_row(Row::new(vec![
-            TableCell::new(job.id.clone().unwrap_or(666)),
+            TableCell::new(job.id.unwrap_or(666)),
             TableCell::new(job.date_added.clone()),
             TableCell::new(job.company.clone()),
             TableCell::new(job.title.clone()),
@@ -77,7 +83,7 @@ pub fn display_all_jobs(
 pub fn display_queried_jobs(matched_jobs: BTreeMap<Option<i32>, SearchResult>, table: &mut Table) {
     for search_result in matched_jobs.values() {
         table.add_row(Row::new(vec![
-            TableCell::new(search_result.job.id.clone().unwrap_or(666)),
+            TableCell::new(search_result.job.id.unwrap_or(666)),
             TableCell::new(search_result.job.date_added.clone()),
             TableCell::new(search_result.job.company.clone()),
             TableCell::new(search_result.job.title.clone()),
