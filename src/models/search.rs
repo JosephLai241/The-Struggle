@@ -28,7 +28,7 @@ impl SearchResult {
     /// Create a new `SearchResult` from a `Job` and the given stint name.
     pub fn new_with_job_and_stint(job: Job, stint_name: String) -> Self {
         Self {
-            job: job.clone(),
+            job,
             matched_link: false,
             matched_notes: false,
             matched_status: false,

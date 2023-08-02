@@ -121,11 +121,10 @@ fn check_status_options(status: &str) -> Result<String, String> {
                 .status_mappings
                 .clone()
                 .into_keys()
-                .into_iter()
                 .map(|status| status.to_lowercase())
                 .collect::<Vec<String>>();
 
-            if lowercase_status_options.contains(&status.to_lowercase().to_string()) {
+            if lowercase_status_options.contains(&status.to_lowercase()) {
                 Ok(status.to_string())
             } else {
                 Err(format!(

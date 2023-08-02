@@ -49,7 +49,7 @@ pub fn add_new_job_status(new_status: &str, new_color: &str) -> Result<(), Fette
 
             let mut config = FettersSettings::read_from(config_path.to_string_lossy().to_string())?;
 
-            let fixed_status = new_status.replace(" ", "-").to_lowercase();
+            let fixed_status = new_status.replace(' ', "-").to_lowercase();
             let fixed_color = new_color.to_lowercase();
 
             config
