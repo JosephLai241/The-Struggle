@@ -1,10 +1,10 @@
 [package]
 authors = ["Joseph Lai <jlai24142@gmail.com>"]
 categories = ["command-line-utilities"]
-description = "A command-line tool for tracking your job applications"
+description = "A ChatGPT-powered command-line tool for tracking your job applications"
 edition = "2021"
 homepage = "https://github.com/JosephLai241/fetters"
-keywords = ["cli", "command-line tool", "job application", "sqlite", "tracking"]
+keywords = ["chatgpt", "command-line-tool", "job-applications", "resume", "tracking"]
 license = "MIT"
 name = "fetters"
 readme = "README.md"
@@ -17,15 +17,23 @@ path = "src/main.rs"
 
 [dependencies]
 ansi_term = "0.12.1"
+chatgpt_rs = "1.1.13"
 chrono = "0.4.26"
 clap = { version = "4.3.19", features = ["derive"] }
 directories = "5.0.1"
 inquire = { version = "0.6.2", features = ["date"] }
 lazy_static = "1.4.0"
 open = "5.0.0"
+piechart = "1.0.0"
+ptree = "0.4.0"
+rand = "0.8.5"
 regex = "1.9.1"
 rusqlite = { version = "0.29.0", features = ["bundled"] }
 serde = { version = "1.0.180", features = ["derive"] }
 term-table = "1.3.2"
+termimad = "0.23.2"
 thiserror = "1.0.44"
+tokio = { version = "1.29.1", features = ["full"] }
 toml = "0.7.6"
+toml-query = "0.10.0"
+whoami = "1.4.1"
