@@ -10,13 +10,11 @@ use crate::errors::FettersError;
 /// - `job_data` - Contains all job listings.
 /// - `stints` - Contains all stints (application phases).
 pub fn open_sqlite() -> Result<SqliteConnection, FettersError> {
-    match ProjectDirs::from("", "", "fetters") {
-        Some(project_directory) => {
-            let sqlite_path = project_directory.data_dir().join("fetters.db3");
-            let connection = SqliteConnection::establish(&sqlite_path.to_string_lossy())?;
+    let project_directory =
+        ProjectDirs::from("", "", "fetters").ok_or(FettersError::ApplicationError)?;
 
-            Ok(connection)
-        }
-        None => Err(FettersError::ApplicationError),
-    }
+    let sqlite_path = project_directory.data_dir().join("fetters.db3");
+    let connection = SqliteConnection::establish(&sqlite_path.to_string_lossy())?;
+
+    Ok(connection)
 }
