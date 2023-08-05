@@ -8,6 +8,18 @@ pub enum FettersError {
     #[error("Failed to access application-dependent directories!")]
     ApplicationError,
 
+    /// Something fucked up while interacting with ChatGPT.
+    #[error("ChatGPT error: {0}")]
+    ChatGPTError(#[from] chatgpt::err::Error),
+
+    /// Something fucked up while parsing a string to DateTime.
+    #[error("Parse error: {0}")]
+    ChronoParseError(#[from] chrono::ParseError),
+
+    /// Generic error variant to display whatever string is provided.
+    #[error("{0}")]
+    GenericError(String),
+
     /// Something fucked up while performing I/O operations.
     #[error("IO error: {0}")]
     IOError(#[from] std::io::Error),
