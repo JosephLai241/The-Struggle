@@ -109,9 +109,9 @@ pub async fn generate_resume(
                 "⚠️  Did not find any shell history at the following locations on your machine:"
             )
         );
-        println!("Bash history | {}", BASH_HISTORY_PATH.to_string());
-        println!("Fish history | {}", FISH_HISTORY_PATH.to_string());
-        println!("Zsh history  | {}", ZSH_HISTORY_PATH.to_string());
+        println!("Bash history | {}", *BASH_HISTORY_PATH);
+        println!("Fish history | {}", *FISH_HISTORY_PATH);
+        println!("Zsh history  | {}", *ZSH_HISTORY_PATH);
     }
 
     Ok(())
@@ -147,9 +147,16 @@ async fn get_chatgpt_resume(
 ) -> Result<String, FettersError> {
     let chatgpt_client = ChatGPT::new(api_key)?;
 
-    let markdown_resume = &chatgpt_client.send_message(format!(
+    let message = format!(
         "Generate a resume in Markdown from the given UNIX command-line history that includes Bash, Zsh, and Fish history: {consolidated_history}"
-    )).await?.message().content.clone();
+    );
+
+    let markdown_resume = &chatgpt_client
+        .send_message(message)
+        .await?
+        .message()
+        .content
+        .clone();
 
     Ok(markdown_resume.to_string())
 }
