@@ -16,6 +16,14 @@ pub enum FettersError {
     #[error("Parse error: {0}")]
     ChronoParseError(#[from] chrono::ParseError),
 
+    /// Something fucked up while connecting to SQLite via `diesel`.
+    #[error("Diesel connection error: {0}")]
+    DieselConnectionError(#[from] diesel::ConnectionError),
+
+    /// Something fucked up while executing a SQL query via `diesel`.
+    #[error("Diesel error: {0}")]
+    DieselError(#[from] diesel::result::Error),
+
     /// Generic error variant to display whatever string is provided.
     #[error("{0}")]
     GenericError(String),
@@ -35,10 +43,6 @@ pub enum FettersError {
     /// Something fucked up while performing Regex operations.
     #[error("Regex error: {0}")]
     RegexError(#[from] regex::Error),
-
-    /// Something fucked up while interacting with SQLite.
-    #[error("SQLite error: {0}")]
-    SQLiteError(#[from] rusqlite::Error),
 
     /// Something fucked up while deserializing TOML.
     #[error("TOML error: {0}")]
