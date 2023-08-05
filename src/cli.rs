@@ -20,6 +20,27 @@ pub struct Args {
 /// Contains all subcommands that may be run with `fetters`.
 #[derive(Debug, Subcommand)]
 pub enum Subcommands {
+    /// Use ChatGPT to generate a resume based on your command-line history (Bash, Zsh, and Fish
+    /// history) (requires API key).
+    ///
+    /// Consolidates the history written at the following locations depending on your operating
+    /// system.
+    ///
+    /// These are the history locations fetters will target if you are using Linux or Windows
+    /// (Windows Subsystem for Linux):
+    /// `/home/<USERNAME>/bash_history`,
+    /// `/home/<USERNAME>/.zsh_history`,
+    /// `/home/<USERNAME>/.local/share/fish/fish_history`
+    ///
+    /// These are the history locations fetters will target if you are using MacOS:
+    /// `/users/<USERNAME>/.bash_history`,
+    /// `/users/<USERNAME>/.zsh_history`,
+    /// `/users/<USERNAME>/.local/share/fish/fish_history`
+    AutoResume {
+        /// Save the generated resume to a directory path.
+        #[arg(short, long)]
+        save_to: Option<String>,
+    },
     /// Add a new job.
     Add {
         /// The name of the company.
@@ -61,7 +82,8 @@ pub enum Subcommands {
         #[arg(long)]
         titles: bool,
     },
-    /// Display job application insights.
+    /// Display job application insights. Set a ChatGPT API key to receive a more in-depth summary
+    /// of your job applications.
     Insights {
         /// Display insights for a given date range delimited by a comma.
         ///
