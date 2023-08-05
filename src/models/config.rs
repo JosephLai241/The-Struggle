@@ -7,9 +7,27 @@ use serde::{Deserialize, Serialize};
 
 use crate::errors::FettersError;
 
+/// Terminal chart settings for job application insights.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Chart {
+    /// The aspect ratio to use.
+    pub aspect_ratio: u16,
+    /// The radius of the chart.
+    pub radius: u16,
+}
+
+/// ChatGPT settings for automatic resume generation.
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Chatgpt {
+    /// The API key used to access the ChatGPT API.
+    pub api_key: Option<String>,
+}
+
 /// Terminal display settings for better visual appeal.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Display {
+    /// Terminal chart settings for job application insights.
+    pub chart: Chart,
     /// The color to use for pattern matches.
     pub match_color: String,
     /// The max column width of tables.
@@ -28,6 +46,8 @@ pub struct Presets {
 /// Contains all settings for `fetters`.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct FettersSettings {
+    /// ChatGPT settings for automatic resume generation.
+    pub chatgpt: Chatgpt,
     /// Terminal display settings for better visual appeal.
     pub display: Display,
     /// Preset settings for faster job application logging.
@@ -90,7 +110,12 @@ impl FettersSettings {
 impl Default for FettersSettings {
     fn default() -> Self {
         Self {
+            chatgpt: Chatgpt { api_key: None },
             display: Display {
+                chart: Chart {
+                    aspect_ratio: 3,
+                    radius: 12,
+                },
                 match_color: "red".to_string(),
                 max_column_width: 45,
             },

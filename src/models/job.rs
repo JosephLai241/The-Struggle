@@ -4,7 +4,7 @@ use chrono::Local;
 use serde::{Deserialize, Serialize};
 
 /// Contains all attributes associated with a job application.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
 pub struct Job {
     /// The ID of this record in SQLite.
     pub id: Option<i32>,
