@@ -3,12 +3,12 @@
 use std::collections::HashMap;
 
 use ansi_term::Color;
-use rusqlite::Connection;
+use diesel::SqliteConnection;
 
 use crate::{errors::FettersError, sqlite};
 
 /// Open a link associated with the given job, if applicable.
-pub fn open_job_link(connection: &Connection, id: i32) -> Result<(), FettersError> {
+pub fn open_job_link(connection: &mut SqliteConnection, id: i32) -> Result<(), FettersError> {
     let all_jobs = sqlite::queries::get_all_jobs(connection)?;
     let mapped_jobs = all_jobs
         .into_iter()

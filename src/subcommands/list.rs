@@ -3,8 +3,8 @@
 use std::collections::{BTreeMap, HashMap};
 
 use ansi_term::Style;
+use diesel::SqliteConnection;
 use regex::Regex;
-use rusqlite::Connection;
 
 use crate::{
     errors::FettersError,
@@ -14,7 +14,7 @@ use crate::{
 
 /// List all jobs or query for jobs that are stored in the SQLite instance.
 pub fn list_jobs(
-    connection: &Connection,
+    connection: &mut SqliteConnection,
     fetters_settings: &FettersSettings,
     query: Option<String>,
 ) -> Result<(), FettersError> {

@@ -1,7 +1,7 @@
 //! Contains all functionality pertaining to the `add` subcommand.
 
 use ansi_term::Color;
-use rusqlite::Connection;
+use diesel::SqliteConnection;
 
 use crate::{
     errors::FettersError,
@@ -12,7 +12,7 @@ use crate::{
 /// Add a new job to the SQLite instance.
 pub fn add_job(
     company: String,
-    connection: &Connection,
+    connection: &mut SqliteConnection,
     fetters_settings: &FettersSettings,
     link: Option<String>,
     notes: Option<String>,

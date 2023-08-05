@@ -17,6 +17,7 @@ mod cli;
 mod errors;
 mod models;
 mod prompts;
+mod schema;
 mod sqlite;
 mod subcommands;
 mod utils;
@@ -27,7 +28,8 @@ lazy_static! {
 }
 
 /// Run `fetters`.
-fn main() -> Result<(), FettersError> {
+#[tokio::main]
+async fn main() -> Result<(), FettersError> {
     let fetters_settings = utils::config::configure_fetters()?;
 
     let args = Args::parse();
@@ -40,7 +42,7 @@ fn main() -> Result<(), FettersError> {
                 .paint(String::from_utf8_lossy(&ASCII_ART[..]))
         );
     } else if let Some(subcommand) = args.subcommand {
-        let connection = sqlite::setup::open_sqlite()?;
+        let mut connection = sqlite::setup::open_sqlite()?;
 
         match subcommand {
             Subcommands::Add {
@@ -52,9 +54,9 @@ fn main() -> Result<(), FettersError> {
                 stint,
                 title,
             } => {
-                add_job(
+                add::add_job(
                     company,
-                    &connection,
+                    &mut connection,
                     &fetters_settings,
                     link,
                     notes,
@@ -71,12 +73,14 @@ fn main() -> Result<(), FettersError> {
                 stint,
                 titles,
             } => {}
-            Subcommands::Insights { date_range, stint } => {}
+            Subcommands::Insights { date_range, stint } => {
+                insights::display_insights(&mut connection, date_range, &fetters_settings, stint)?;
+            }
             Subcommands::List { query } => {
-                list_jobs(&connection, &fetters_settings, query)?;
+                list::list_jobs(&mut connection, &fetters_settings, query)?;
             }
             Subcommands::Open { id } => {
-                open_job_link(&connection, id)?;
+                open::open_job_link(&mut connection, id)?;
             }
             Subcommands::Update {
                 query,

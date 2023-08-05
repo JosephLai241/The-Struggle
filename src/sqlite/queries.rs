@@ -1,85 +1,46 @@
 //! Contains functions pertaining to querying the SQLite instance.
 
-use rusqlite::{params, Connection, Error};
+use diesel::{query_dsl::RunQueryDsl, SqliteConnection};
 
 use crate::{
     errors::FettersError,
     models::{job::Job, stint::Stint},
+    schema::{job_data::dsl::*, stints::dsl::*},
 };
 
 /// Retrieve all stored jobs from SQLite.
-pub fn get_all_jobs(connection: &Connection) -> Result<Vec<Job>, FettersError> {
-    let mut statement = connection.prepare("SELECT * FROM job_data")?;
-
-    let jobs = statement
-        .query_map(params![], |row| {
-            Ok(Job {
-                id: Some(row.get(0)?),
-                company: row.get(1)?,
-                date_added: row.get(2)?,
-                link: row.get(3)?,
-                notes: row.get(4)?,
-                status: row.get(5)?,
-                stint: row.get(6)?,
-                title: row.get(7)?,
-            })
-        })?
-        .collect::<Result<Vec<Job>, Error>>()?;
+pub fn get_all_jobs(connection: &mut SqliteConnection) -> Result<Vec<Job>, FettersError> {
+    let jobs = job_data.load(connection)?;
 
     Ok(jobs)
 }
 
 /// Retrieve all stored stints from SQLite.
-pub fn get_all_stints(connection: &Connection) -> Result<Vec<Stint>, FettersError> {
-    let mut statement = connection.prepare("SELECT * FROM stints")?;
+pub fn get_all_stints(connection: &mut SqliteConnection) -> Result<Vec<Stint>, FettersError> {
+    let all_stints = stints.load(connection)?;
 
-    let stints = statement
-        .query_map(params![], |row| {
-            Ok(Stint {
-                id: Some(row.get(0)?),
-                date_added: row.get(1)?,
-                stint: row.get(2)?,
-            })
-        })?
-        .collect::<Result<Vec<Stint>, Error>>()?;
-
-    Ok(stints)
+    Ok(all_stints)
 }
 
 /// Write a new job to the SQLite instance.
-pub fn write_job(connection: &Connection, job: Job) -> Result<(), FettersError> {
-    let attributes = "(company, date_added, link, notes, status, stint, title)";
-    let value_parameters = "(?1, ?2, ?3, ?4, ?5, ?6, ?7)";
-    let values = (
-        &job.company,
-        &job.date_added,
-        &job.link,
-        &job.notes,
-        &job.status,
-        &job.stint,
-        &job.title,
-    );
-
-    connection.execute(
-        &format!("INSERT INTO job_data {attributes} VALUES {value_parameters}"),
-        values,
-    )?;
+pub fn write_job(connection: &mut SqliteConnection, job: Job) -> Result<(), FettersError> {
+    diesel::insert_into(job_data)
+        .values(&job)
+        .execute(connection)?;
 
     Ok(())
 }
 
 /// Write a new stint to the SQLite instance.
-pub fn write_stint(connection: &Connection, stint: String) -> Result<(), FettersError> {
-    let stint = Stint::new(stint);
+pub fn write_stint(
+    connection: &mut SqliteConnection,
+    stint_name: String,
+) -> Result<(), FettersError> {
+    let new_stint = Stint::new(stint_name);
 
-    let attributes = "(date_added, stint)";
-    let value_parameters = "(?1, ?2)";
-    let values = (&stint.date_added, &stint.stint);
-
-    connection.execute(
-        &format!("INSERT INTO stints {attributes} VALUES {value_parameters}"),
-        values,
-    )?;
+    diesel::insert_into(stints)
+        .values(&new_stint)
+        .execute(connection)?;
 
     Ok(())
 }

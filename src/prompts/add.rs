@@ -1,7 +1,7 @@
 //! Contains functions pertaining to adding a new job application.
 
+use diesel::SqliteConnection;
 use inquire::{Select, Text};
-use rusqlite::Connection;
 
 use crate::{
     errors::FettersError,
@@ -72,7 +72,7 @@ pub fn add_job_status(fetters_settings: &FettersSettings) -> Result<String, Fett
 }
 
 /// Run the interactive prompt to add a stint to the job application.
-pub fn add_job_stint(connection: &Connection) -> Result<Option<i32>, FettersError> {
+pub fn add_job_stint(connection: &mut SqliteConnection) -> Result<Option<i32>, FettersError> {
     let stints = queries::get_all_stints(connection)?;
 
     let stint_id = if stints.is_empty() {
@@ -120,7 +120,7 @@ pub fn add_job_stint(connection: &Connection) -> Result<Option<i32>, FettersErro
 }
 
 /// Create a new job stint.
-fn create_new_job_stint(connection: &Connection) -> Result<Option<i32>, FettersError> {
+fn create_new_job_stint(connection: &mut SqliteConnection) -> Result<Option<i32>, FettersError> {
     let stint_input = Text::new("Enter a name for the new stint:")
         .with_help_message("OPTIONAL. Press <ESC> to skip.")
         .prompt_skippable()?;
