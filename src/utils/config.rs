@@ -9,7 +9,7 @@ use crate::{errors::FettersError, models::config::FettersSettings};
 
 lazy_static! {
     /// The default TOML configuration file.
-    static ref TOML_CONFIG: &'static [u8; 339] = include_bytes!("../../fetters.toml");
+    static ref TOML_CONFIG: &'static [u8; 309] = include_bytes!("../../fetters.toml");
 }
 
 /// Check if the project directories and configuration file are set up on the user's machine.
