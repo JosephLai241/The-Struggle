@@ -88,7 +88,7 @@ pub enum Subcommands {
     /// The piechart is comprised of two characters: 'o' and '?'. 'o' is used for application
     /// status that have a known/mapped style in the configuration. '?' is used for application
     /// status that do not have a known/mapped style. The colors used for slices that use the '?'
-    /// character are randomly selected and is different each time you render the insights.
+    /// character are randomly selected and are different each time you render the insights.
     Insights {
         /// Display insights for a given date range delimited by a comma.
         ///
