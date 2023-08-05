@@ -1,2 +1,6 @@
 /target/
 Cargo.lock
+
+# Directories and files related to `diesel`.
+migrations/
+diesel.toml
