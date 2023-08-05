@@ -82,8 +82,8 @@ pub enum Subcommands {
         #[arg(long)]
         titles: bool,
     },
-    /// Display job application insights. Set a ChatGPT API key to receive a more in-depth summary
-    /// of your job applications.
+    /// Display job application insights in a piechart. Set a ChatGPT API key to receive a more
+    /// in-depth summary of your job applications.
     Insights {
         /// Display insights for a given date range delimited by a comma.
         ///
