@@ -1,6 +1,13 @@
+[chatgpt]
+api-key = "<CHATGPT_API_KEY_HERE>"
+
 [display]
-match_color = "red"
-max_column_width = 45
+match-color = "red"
+max-column-width = 45
+
+[display.chart]
+aspect-ratio = 3
+radius = 9
 
 [presets]
 titles = ["Software Engineer"]
