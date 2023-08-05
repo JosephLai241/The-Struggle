@@ -18,7 +18,6 @@ lazy_static! {
 pub fn configure_fetters() -> Result<FettersSettings, FettersError> {
     let project_directory =
         ProjectDirs::from("", "", "fetters").ok_or(FettersError::ApplicationError)?;
-
     let config_path = project_directory.config_dir().join("fetters.toml");
 
     if !config_path.exists() {
@@ -47,7 +46,7 @@ pub fn add_new_job_status(new_status: &str, new_color: &str) -> Result<(), Fette
 
     let mut config = FettersSettings::read_from(config_path.to_string_lossy().to_string())?;
 
-    let fixed_status = new_status.replace(' ', "-").to_lowercase();
+    let fixed_status = new_status.replace(' ', "-").trim().to_lowercase();
     let fixed_color = new_color.to_lowercase();
 
     config
