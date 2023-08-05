@@ -3,7 +3,6 @@
 // Disables error variant lint raised for `errors.rs`.
 #![allow(clippy::enum_variant_names)]
 // Disables too many arguments lint raised for the modules in the `subcommands/` directory.
-// TODO: Implement a cleaner solution that doesn't require deactivateing this lint.
 #![allow(clippy::too_many_arguments)]
 
 use ansi_term::Color;
@@ -11,7 +10,7 @@ use clap::Parser;
 use cli::{Args, Subcommands};
 use errors::FettersError;
 use lazy_static::lazy_static;
-use subcommands::{add::add_job, list::list_jobs, open::open_job_link};
+use subcommands::{add, delete, insights, list, open, resume::generate_resume, update};
 
 mod cli;
 mod errors;
@@ -66,15 +65,15 @@ async fn main() -> Result<(), FettersError> {
                     title,
                 )?;
             }
-            Subcommands::Delete {
-                query,
-                links,
-                notes,
-                stint,
-                titles,
-            } => {}
+            Subcommands::AutoResume { save_to } => {
+                generate_resume(&fetters_settings, save_to).await?;
+            }
+            Subcommands::Delete { query } => {
+                delete::delete_job(&mut connection, query)?;
+            }
             Subcommands::Insights { date_range, stint } => {
-                insights::display_insights(&mut connection, date_range, &fetters_settings, stint)?;
+                insights::display_insights(&mut connection, date_range, &fetters_settings, stint)
+                    .await?;
             }
             Subcommands::List { query } => {
                 list::list_jobs(&mut connection, &fetters_settings, query)?;
@@ -82,13 +81,9 @@ async fn main() -> Result<(), FettersError> {
             Subcommands::Open { id } => {
                 open::open_job_link(&mut connection, id)?;
             }
-            Subcommands::Update {
-                query,
-                links,
-                notes,
-                stint,
-                titles,
-            } => {}
+            Subcommands::Update { query } => {
+                update::update_job(&mut connection, query)?;
+            }
         }
     }
 

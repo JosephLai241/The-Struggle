@@ -67,20 +67,9 @@ pub enum Subcommands {
     },
     /// Delete an existing job application.
     Delete {
-        /// The query string for the particular job application.
+        /// The query (regex) string for the particular job application. This query searches for
+        /// matching strings in the job application company, title, notes, and stint.
         query: String,
-        /// Include searching for text in links.
-        #[arg(long)]
-        links: bool,
-        /// Include searching for text in notes.
-        #[arg(long)]
-        notes: bool,
-        /// Include searching for text in the stint.
-        #[arg(long)]
-        stint: bool,
-        /// Include searching for text in job titles.
-        #[arg(long)]
-        titles: bool,
     },
     /// Display job application insights in a piechart. Set a ChatGPT API key to receive a more
     /// in-depth summary of your job applications.
@@ -105,9 +94,8 @@ pub enum Subcommands {
     },
     /// List all or search for a particular job application.
     List {
-        /// The query (regex) string for the particular job application. If this is provided
-        /// without any other flags, all flags are enabled and the query will be applied to all
-        /// fields.
+        /// The query (regex) string for the particular job application. This query searches for
+        /// matching strings in the job application company, title, notes, and stint.
         query: Option<String>,
     },
     /// Open a job application in the browser if a link was also provided.
@@ -117,20 +105,9 @@ pub enum Subcommands {
     },
     /// Update an existing job application.
     Update {
-        /// The query string for the particular job application.
+        /// The query (regex) string for the particular job application. This query searches for
+        /// matching strings in the job application company, title, notes, and stint.
         query: String,
-        /// Include searching for text in links.
-        #[arg(long)]
-        links: bool,
-        /// Include searching for text in notes.
-        #[arg(long)]
-        notes: bool,
-        /// Include searching for text in the stint.
-        #[arg(long)]
-        stint: bool,
-        /// Include searching for text in job titles.
-        #[arg(long)]
-        titles: bool,
     },
 }
 
