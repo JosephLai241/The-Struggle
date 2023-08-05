@@ -46,7 +46,6 @@ lazy_static! {
     /// The `MadSkin` that is applied to the Markdown resume.
     static ref MADSKIN: MadSkin = {
         let mut skin = MadSkin::default();
-        //skin.set_headers_fg(rgb(250, 189, 47));
         skin.set_headers_fg(rgb(183, 65, 14));
 
         skin
