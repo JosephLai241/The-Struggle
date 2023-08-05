@@ -1,10 +1,27 @@
 //! Contains all models pertaining to job listings.
 
 use chrono::Local;
+use diesel::{sqlite::Sqlite, Insertable, Queryable, Selectable};
 use serde::{Deserialize, Serialize};
 
+use crate::schema::job_data;
+
 /// Contains all attributes associated with a job application.
-#[derive(Clone, Debug, Deserialize, Eq, Ord, PartialEq, PartialOrd, Serialize)]
+#[derive(
+    Clone,
+    Debug,
+    Deserialize,
+    Eq,
+    Insertable,
+    Ord,
+    PartialEq,
+    PartialOrd,
+    Queryable,
+    Selectable,
+    Serialize,
+)]
+#[diesel(table_name = job_data)]
+#[diesel(check_for_backend(Sqlite))]
 pub struct Job {
     /// The ID of this record in SQLite.
     pub id: Option<i32>,

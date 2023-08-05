@@ -1,10 +1,15 @@
 //! Contains all models pertaining to stints (application phases).
 
 use chrono::Local;
+use diesel::{sqlite::Sqlite, Insertable, Queryable, Selectable};
 use serde::{Deserialize, Serialize};
 
+use crate::schema::stints;
+
 /// Contains all attributes associated with a stint.
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Selectable, Serialize)]
+#[diesel(table_name = stints)]
+#[diesel(check_for_backend(Sqlite))]
 pub struct Stint {
     /// The ID of this record in SQLite.
     pub id: Option<i32>,
