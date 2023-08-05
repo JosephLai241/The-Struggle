@@ -21,14 +21,10 @@ pub fn configure_fetters() -> Result<FettersSettings, FettersError> {
     let config_path = project_directory.config_dir().join("fetters.toml");
 
     if !config_path.exists() {
-        match &config_path.parent() {
-            Some(parent) => fs::create_dir_all(parent)?,
-            None => {
-                return Err(FettersError::PathError(
-                    "Failed to retrieve fetters application directory path!".to_string(),
-                ))
-            }
-        }
+        let parent = &config_path.parent().ok_or(FettersError::PathError(
+            "Failed to retrieve fetters application directory path!".to_string(),
+        ))?;
+        fs::create_dir_all(parent)?;
 
         fs::write(&config_path, *TOML_CONFIG)?;
     }
