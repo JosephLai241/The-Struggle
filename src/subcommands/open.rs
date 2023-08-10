@@ -24,7 +24,7 @@ pub fn open_job_link(connection: &mut SqliteConnection, id: i32) -> Result<(), F
                     "{}",
                     Color::Green
                         .bold()
-                        .paint("🖥️ Opening the job listing in your default browser...")
+                        .paint("🖥️  Opening the job listing in your default browser...")
                 );
 
                 open::that(link)?;
