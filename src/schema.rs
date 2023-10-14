@@ -23,7 +23,4 @@ diesel::table! {
 
 diesel::joinable!(job_data -> stints (stint));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    job_data,
-    stints,
-);
+diesel::allow_tables_to_appear_in_same_query!(job_data, stints,);
