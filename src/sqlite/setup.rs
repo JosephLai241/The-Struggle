@@ -6,9 +6,7 @@ use directories::ProjectDirs;
 use crate::errors::FettersError;
 
 /// Open a connnection to the SQLite instance. Creates a new SQLite instance if it does not already
-/// exist. Also creates the following tables if they do not already exist:
-/// - `job_data` - Contains all job listings.
-/// - `stints` - Contains all stints (application phases).
+/// exist.
 pub fn open_sqlite() -> Result<SqliteConnection, FettersError> {
     let project_directory =
         ProjectDirs::from("", "", "fetters").ok_or(FettersError::ApplicationError)?;
