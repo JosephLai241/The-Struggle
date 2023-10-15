@@ -36,6 +36,19 @@ pub enum FettersError {
     #[error("Inquire error: {0}")]
     InquireError(#[from] inquire::InquireError),
 
+    /// Something fucked up while attempting to parse the job ID from the `Select` menu's selected
+    /// option.
+    #[error("Job ID parse error: Failed to capture the job ID from the selected job!")]
+    JobIDCaptureError,
+
+    /// Something fucked up when attempting to parse a string into an integer.
+    #[error("Failed to parse the stringified job ID to an integer! {0}")]
+    JobIdParseError(std::num::ParseIntError),
+
+    /// Something fucked up when attempting to select a particular job.
+    #[error("Job selection error: {0}")]
+    JobSelectionError(String),
+
     /// Something fucked up while interacting with system paths.
     #[error("{0}")]
     PathError(String),
@@ -51,4 +64,10 @@ pub enum FettersError {
     /// Something fucked up while serializing TOML.
     #[error("TOML error: {0}")]
     TOMLSerError(#[from] toml::ser::Error),
+}
+
+impl From<std::num::ParseIntError> for FettersError {
+    fn from(value: std::num::ParseIntError) -> Self {
+        Self::JobIdParseError(value)
+    }
 }
