@@ -5,7 +5,6 @@ use std::collections::{BTreeMap, HashMap};
 use ansi_term::{Color, Style};
 use diesel::SqliteConnection;
 use inquire::{Confirm, Select};
-use lazy_static::lazy_static;
 use regex::Regex;
 
 use crate::{
@@ -15,12 +14,7 @@ use crate::{
     utils,
 };
 
-lazy_static! {
-    /// The regex expression used for extracting the job ID from the square brackets in the
-    /// `Select` menu's option list.
-    static ref JOB_ID_REGEX: Regex = Regex::new(r"\[(\d+)\]")
-        .expect("FAILED TO CREATE THE REGEX EXPRESSION TO MATCH JOB IDS FROM THE SELECTION MENU!");
-}
+use super::utils::JOB_ID_REGEX;
 
 /// Delete a job from the SQLite database.
 pub fn delete_job(
