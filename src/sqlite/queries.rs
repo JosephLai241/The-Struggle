@@ -55,6 +55,21 @@ pub fn write_stint(
     Ok(())
 }
 
+/// Update a job in the SQLite instance.
+pub fn update_job(
+    connection: &mut SqliteConnection,
+    job_id: i32,
+    updated_job: Job,
+) -> Result<(), FettersError> {
+    use crate::schema::job_data::dsl::*;
+
+    diesel::update(job_data.filter(id.eq(job_id)))
+        .set(updated_job)
+        .execute(connection)?;
+
+    Ok(())
+}
+
 /// Delete a job from the SQLite instance.
 pub fn delete_job(connection: &mut SqliteConnection, job_id: i32) -> Result<(), FettersError> {
     use crate::schema::job_data::dsl::*;
