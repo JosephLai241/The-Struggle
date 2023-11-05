@@ -17,6 +17,7 @@ path = "src/main.rs"
 
 [dependencies]
 ansi_term = "0.12.1"
+bat = "0.23.0"
 chatgpt_rs = "1.1.13"
 chrono = "0.4.26"
 clap = { version = "4.3.19", features = ["derive"] }
