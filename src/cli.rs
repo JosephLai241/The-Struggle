@@ -65,11 +65,23 @@ pub enum Subcommands {
         #[arg(short, long)]
         title: Option<String>,
     },
+    /// Set or reset configuration settings to a custom value or back to its default value.
+    Config {
+        #[command(subcommand)]
+        subcommand: ConfigSubcommands,
+    },
     /// Delete an existing job application.
     Delete {
+        /// The ID of the job you want to delete.
+        #[arg(short, long)]
+        id: Option<i32>,
         /// The query (regex) string for the particular job application. This query searches for
         /// matching strings in the job application company, title, notes, and stint.
-        query: String,
+        #[arg(short, long)]
+        query: Option<String>,
+        /// Skip deletion confirmation and immediately delete the job.
+        #[arg(short = 'y', long = "yes")]
+        skip_confirmation: bool,
     },
     /// Display job application insights in a piechart. Set a ChatGPT API key to receive a more
     /// in-depth summary of your job applications.
@@ -105,33 +117,77 @@ pub enum Subcommands {
     },
     /// Update an existing job application.
     Update {
+        /// Update a job with a new company name.
+        #[arg(short, long)]
+        company: Option<String>,
+        /// The ID of the job you want to delete.
+        #[arg(short, long)]
+        id: Option<i32>,
+        /// Update a job with a new link.
+        #[arg(short, long)]
+        link: Option<String>,
+        /// Update a job with new notes.
+        #[arg(short, long)]
+        notes: Option<String>,
+        /// Update a job with a new status.
+        #[arg(short, long)]
+        status: Option<String>,
+        /// Update a job with a new stint.
+        #[arg(short, long)]
+        stint: Option<String>,
+        /// Update a job with a new title.
+        #[arg(short, long)]
+        title: Option<String>,
         /// The query (regex) string for the particular job application. This query searches for
         /// matching strings in the job application company, title, notes, and stint.
-        query: String,
+        #[arg(short, long)]
+        query: Option<String>,
     },
+}
+
+#[derive(Debug, Subcommand)]
+pub enum ConfigSubcommands {
+    /// Delete a value stored in a configuration table. This may be used to modify the preset job
+    /// titles, job status mappings, and ChatGPT API key.
+    Delete {
+        /// The TOML path to the setting.
+        toml_path: String,
+    },
+    /// Reset the value for the given configuration setting to its default value.
+    Reset {
+        /// The TOML path to the setting.
+        toml_path: String,
+    },
+    /// Set a new value for a given configuration setting.
+    Set {
+        /// The TOML path to the setting.
+        toml_path: String,
+        /// The new value to set.
+        new_value: String,
+    },
+    /// Show the current configuration file.
+    Show,
 }
 
 /// Check the provided status option against the status options defined in the configuration file.
 fn check_status_options(status: &str) -> Result<String, String> {
-    match config::configure_fetters() {
-        Ok(fetters_settings) => {
-            let lowercase_status_options = fetters_settings
-                .presets
-                .status_mappings
-                .clone()
-                .into_keys()
-                .map(|status| status.to_lowercase())
-                .collect::<Vec<String>>();
+    let fetters_settings = config::configure_fetters()
+        .map_err(|error| format!("Failed to load fetters configuration! {error}"))?;
 
-            if lowercase_status_options.contains(&status.to_lowercase()) {
-                Ok(status.to_string())
-            } else {
-                Err(format!(
+    let lowercase_status_options = fetters_settings
+        .presets
+        .status_mappings
+        .clone()
+        .into_keys()
+        .map(|status| status.to_lowercase())
+        .collect::<Vec<String>>();
+
+    if lowercase_status_options.contains(&status.to_lowercase()) {
+        Ok(status.to_string())
+    } else {
+        Err(format!(
                     "Invalid status! Add a new status with a new job listing or choose from one of the following: {:?}",
-                    fetters_settings.presets.status_mappings.into_keys().collect::<Vec<String>>()
-                ))
-            }
-        }
-        Err(error) => Err(format!("Failed to load fetters configuration! {error}")),
+            fetters_settings.presets.status_mappings.into_keys().collect::<Vec<String>>()
+        ))
     }
 }
