@@ -22,24 +22,18 @@ use crate::{
 /// Update a tracked job application.
 pub fn update_job(
     connection: &mut SqliteConnection,
-    query_args: &QueryArgs,
+    query_args: &mut QueryArgs,
     current_sprint: &QueriedSprint,
 ) -> Result<(), FettersError> {
     let default_sprint = Some(current_sprint.name.clone());
 
+    // Search the default sprint if no sprint filter was specified.
+    if let None = query_args.sprint {
+        query_args.sprint = default_sprint;
+    }
+
     let mut job_repo = JobRepository { connection };
-    let all_jobs = job_repo.list_jobs(
-        &query_args.company,
-        &query_args.link,
-        &query_args.notes,
-        if let None = &query_args.sprint {
-            &default_sprint
-        } else {
-            &query_args.sprint
-        },
-        &query_args.status,
-        &query_args.title,
-    )?;
+    let all_jobs = job_repo.list_jobs(&query_args)?;
 
     if all_jobs.is_empty() {
         return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));

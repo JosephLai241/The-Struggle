@@ -4,6 +4,7 @@ use diesel::prelude::*;
 use diesel::sqlite::Sqlite;
 use diesel::{delete, insert_into, update};
 
+use crate::cli::QueryArgs;
 use crate::errors::FettersError;
 use crate::models::{JobUpdate, NewJob, QueriedJob, TabledJob};
 use crate::schema::{jobs, sprints, statuses, titles};
@@ -67,15 +68,7 @@ impl<'a> JobRepository<'a> {
     }
 
     /// List all jobs matching the query.
-    pub fn list_jobs(
-        &mut self,
-        company: &Option<String>,
-        link: &Option<String>,
-        notes: &Option<String>,
-        sprint: &Option<String>,
-        status: &Option<String>,
-        title: &Option<String>,
-    ) -> Result<Vec<TabledJob>, FettersError> {
+    pub fn list_jobs(&mut self, query_args: &QueryArgs) -> Result<Vec<TabledJob>, FettersError> {
         let mut query = jobs::table
             .left_join(titles::table.on(jobs::title_id.eq(titles::id)))
             .left_join(statuses::table.on(jobs::status_id.eq(statuses::id)))
@@ -91,27 +84,27 @@ impl<'a> JobRepository<'a> {
             ))
             .into_boxed::<Sqlite>();
 
-        if let Some(company) = company {
+        if let Some(company) = &query_args.company {
             query = query.filter(jobs::company_name.like(format!("%{}%", company)));
         }
 
-        if let Some(link) = link {
+        if let Some(link) = &query_args.link {
             query = query.filter(jobs::link.like(format!("%{}%", link)));
         }
 
-        if let Some(notes) = notes {
+        if let Some(notes) = &query_args.notes {
             query = query.filter(jobs::notes.like(format!("%{}%", notes)));
         }
 
-        if let Some(sprint) = sprint {
+        if let Some(sprint) = &query_args.sprint {
             query = query.filter(sprints::name.like(format!("%{}%", sprint)));
         }
 
-        if let Some(status) = status {
+        if let Some(status) = &query_args.status {
             query = query.filter(statuses::name.like(format!("%{}%", status)));
         }
 
-        if let Some(title) = title {
+        if let Some(title) = &query_args.title {
             query = query.filter(titles::name.like(format!("%{}%", title)));
         }
 

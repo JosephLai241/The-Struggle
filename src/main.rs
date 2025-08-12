@@ -16,6 +16,7 @@ use owo_colors::OwoColorize;
 
 use crate::cli::{Cli, Command};
 use crate::commands::add::add_job;
+use crate::commands::delete::delete_job;
 use crate::commands::list::list_jobs;
 use crate::commands::update::update_job;
 use crate::config::configuration::Config;
@@ -53,7 +54,11 @@ fn main() -> Result<(), FettersError> {
             }
         }
         Command::Config { show } => (),
-        Command::Delete(query_args) => (),
+        Command::Delete(query_args) => {
+            if let Err(error) = delete_job(&mut database.connection, &query_args, &current_sprint) {
+                println!("{}", error.red().bold());
+            }
+        }
         Command::List(query_args) => {
             if let Err(error) = list_jobs(&mut database.connection, &query_args, &current_sprint) {
                 println!("{}", error.red().bold());
@@ -66,8 +71,10 @@ fn main() -> Result<(), FettersError> {
             show_all,
             set,
         } => (),
-        Command::Update(query_args) => {
-            if let Err(error) = update_job(&mut database.connection, &query_args, &current_sprint) {
+        Command::Update(mut query_args) => {
+            if let Err(error) =
+                update_job(&mut database.connection, &mut query_args, &current_sprint)
+            {
                 println!("{}", error.red().bold());
             }
         }

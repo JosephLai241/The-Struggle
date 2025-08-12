@@ -14,14 +14,7 @@ pub fn list_jobs(
     current_sprint: &QueriedSprint,
 ) -> Result<(), FettersError> {
     let mut job_repo = JobRepository { connection };
-    let all_jobs = job_repo.list_jobs(
-        &query_args.company,
-        &query_args.link,
-        &query_args.notes,
-        &query_args.sprint,
-        &query_args.status,
-        &query_args.title,
-    )?;
+    let all_jobs = job_repo.list_jobs(&query_args)?;
 
     display_jobs(
         &all_jobs,
