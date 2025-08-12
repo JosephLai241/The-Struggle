@@ -54,7 +54,7 @@ pub struct NewJob<'a> {
 }
 
 /// This struct defines an updated job application that will overwrite an existing one in SQLite.
-#[derive(Debug, AsChangeset)]
+#[derive(Debug, Default, AsChangeset)]
 #[diesel(table_name = jobs)]
 #[diesel(check_for_backend(Sqlite))]
 pub struct JobUpdate<'a> {
@@ -157,6 +157,16 @@ pub struct QueriedSprint {
     pub start_date: String,
     /// The end date for this sprint.
     pub end_date: Option<String>,
+}
+
+impl Display for QueriedSprint {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{} (Start Date: {}, End Date: {:?})",
+            self.name, self.start_date, self.end_date
+        )
+    }
 }
 
 /// This struct defines a new status that will be written to the `sprints` table in SQLite.
