@@ -33,10 +33,7 @@ pub enum Command {
     /// List job applications.
     List(QueryArgs),
     /// Open a link associated with a job (based on the record's 'ID') in your browser.
-    Open {
-        /// The ID of the record associated with the link.
-        job_id: i32,
-    },
+    Open(QueryArgs),
     /// Configuration options for job sprints.
     Sprint {
         #[arg(short, long, help = "Display the current sprint name.")]
