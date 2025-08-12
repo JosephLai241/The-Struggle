@@ -4,6 +4,7 @@ use std::fmt::{self, Display, Formatter};
 
 use diesel::sqlite::Sqlite;
 use diesel::{AsChangeset, Insertable, Queryable, Selectable};
+use owo_colors::OwoColorize;
 use tabled::Tabled;
 use tabled::derive::display;
 
@@ -104,15 +105,39 @@ pub struct TabledJob {
     pub notes: Option<String>,
 }
 
+impl TabledJob {
+    /// Colorize a string based on the `status` field of the job application.
+    fn colorize_field(&self, field_name: &str) -> String {
+        if let Some(ref status) = self.status {
+            match status {
+                val if val == "GHOSTED" => {
+                    return field_name.white().bold().to_string();
+                }
+                val if val == "HIRED" => return field_name.green().bold().to_string(),
+                val if val == "IN PROGRESS" => return field_name.yellow().bold().to_string(),
+                val if val == "NOT HIRING ANYMORE" => {
+                    return field_name.fg_rgb::<201, 201, 201>().to_string();
+                }
+                val if val == "OFFER RECEIVED" => return field_name.magenta().bold().to_string(),
+                val if val == "PENDING" => return field_name.blue().bold().to_string(),
+                val if val == "REJECTED" => return field_name.red().bold().to_string(),
+                _ => return field_name.to_string(),
+            }
+        }
+
+        return field_name.to_string();
+    }
+}
+
 impl Display for TabledJob {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "{} (Company: {}, Title: {}, Status: {})",
-            self.id,
-            self.company_name,
-            self.title.clone().unwrap_or("".to_string()),
-            self.status.clone().unwrap_or("".to_string())
+            "ID: {} | Company: {} | Title: {} | Status: {}",
+            self.id.white().bold(),
+            self.colorize_field(&self.company_name),
+            self.colorize_field(&self.title.clone().unwrap_or("".to_string())),
+            self.colorize_field(&self.status.clone().unwrap_or("".to_string()))
         )
     }
 }
