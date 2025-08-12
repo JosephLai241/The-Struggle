@@ -2,3 +2,4 @@
 
 pub mod dirs;
 pub mod display;
+pub mod titles;
