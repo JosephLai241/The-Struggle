@@ -2,7 +2,6 @@
 
 use chrono::Local;
 use diesel::insert_into;
-use diesel::insert_or_ignore_into;
 use diesel::prelude::*;
 
 use crate::errors::FettersError;
@@ -56,8 +55,8 @@ impl<'a> SprintRepository<'a> {
             .first(self.connection)?)
     }
 
-    /// Retrieves all job sprint titles.
-    pub fn get_all_titles(&mut self) -> Result<Vec<QueriedSprint>, FettersError> {
+    /// Retrieves all job sprints.
+    pub fn get_all_sprints(&mut self) -> Result<Vec<QueriedSprint>, FettersError> {
         use crate::schema::sprints::dsl::*;
 
         Ok(sprints
