@@ -2,19 +2,19 @@
 
 use chrono::Local;
 use diesel::sqlite::SqliteConnection;
-use inquire::{Select, Text};
+use inquire::{Confirm, Select, Text};
 use owo_colors::OwoColorize;
 use tabled::{
     Table,
     settings::{
-        Alignment, Color, Style,
+        Alignment, Color, Remove, Style,
         location::Locator,
         object::{Columns, Rows},
         style::LineText,
     },
 };
 
-use crate::models::{NewJob, NewTitle, QueriedJob, QueriedStatus, QueriedTitle};
+use crate::models::{NewJob, NewTitle, QueriedStatus, QueriedTitle, TabledJob};
 use crate::repositories::{job::JobRepository, statuses::StatusRepository, title::TitleRepository};
 use crate::{errors::FettersError, models::QueriedSprint};
 
@@ -24,40 +24,92 @@ pub fn add_job(
     company_name: &str,
     current_sprint: &QueriedSprint,
 ) -> Result<(), FettersError> {
-    let title = create_or_use_title(connection)?;
+    let title_type = create_or_use_title(connection)?;
     let status = select_status(connection)?;
     let link = input_link()?;
     let notes = input_notes()?;
 
-    let new_job = NewJob {
-        company_name,
-        created: Local::now().date_naive().format("%Y-%m-%d").to_string(),
-        title_id: title.id,
-        status_id: status.id,
-        link: link.as_deref(),
-        notes: notes.as_deref(),
-        sprint_id: current_sprint.id,
+    let created = Local::now().date_naive().format("%Y-%m-%d").to_string();
+
+    let tabled_job = TabledJob {
+        // NOTE: The ID is set to an arbitrary value to satisfy struct requirements.
+        id: 0,
+        created: created.clone(),
+        company_name: company_name.to_string(),
+        title: Some(match title_type {
+            TitleType::NewTitle(ref title) => title.to_string(),
+            TitleType::QueriedTitle(ref queried_title) => queried_title.name.to_string(),
+        }),
+        status: Some(status.name),
+        link: link.clone(),
+        notes: notes.clone(),
     };
 
-    // TODO: ADD CONFIRMATION PROMPT HERE BEFORE WRITING ANYTHING TO SQLITE (including title,
-    // modify create_new_title()).
+    display_job(&tabled_job)?;
 
-    let mut job_repo = JobRepository { connection };
-    let queried_job = job_repo.add_job(new_job)?;
+    loop {
+        match Confirm::new("Confirm new entry?").prompt_skippable()? {
+            Some(true) => {
+                let title_id = match title_type {
+                    TitleType::NewTitle(new_title) => {
+                        let mut title_repo = TitleRepository { connection };
+                        title_repo.add_title(NewTitle { name: &new_title })?.id
+                    }
+                    TitleType::QueriedTitle(queried_title) => queried_title.id,
+                };
+                let new_job = NewJob {
+                    company_name: company_name,
+                    created,
+                    title_id,
+                    status_id: status.id,
+                    link: link.as_deref(),
+                    notes: notes.as_deref(),
+                    sprint_id: current_sprint.id,
+                };
 
-    display_job(connection, &queried_job)?;
+                let mut job_repo = JobRepository { connection };
+                job_repo.add_job(new_job)?;
 
-    Ok(())
+                println!(
+                    "{}",
+                    format!(
+                        "\nCreated new entry for sprint [{}]!\n",
+                        current_sprint.name
+                    )
+                    .green()
+                    .bold()
+                );
+
+                return Ok(());
+            }
+            Some(false) => {
+                println!("{}", "Cancelled.".red().bold());
+                return Ok(());
+            }
+            None => println!("{}", "Invalid input, try again".red().bold()),
+        }
+    }
+}
+
+/// Contains all variants that may be returned from the create_or_use_title() function.
+enum TitleType {
+    /// The user has created a new title.
+    NewTitle(String),
+    /// The user has selected an existing title.
+    QueriedTitle(QueriedTitle),
 }
 
 /// Display the `Select` menu for existing job titles or create a new title.
-fn create_or_use_title(connection: &mut SqliteConnection) -> Result<QueriedTitle, FettersError> {
+fn create_or_use_title(connection: &mut SqliteConnection) -> Result<TitleType, FettersError> {
     let mut title_repo = TitleRepository { connection };
     let existing_titles = title_repo.get_all_titles()?;
 
     let queried_title = if existing_titles.is_empty() {
-        println!("{}", "There are currently no stored job titles!".cyan());
-        create_new_title(&mut title_repo)?
+        println!(
+            "{}",
+            "There are currently no stored job titles!".yellow().bold()
+        );
+        create_new_title()?
     } else {
         get_existing_or_create_title(&mut title_repo, existing_titles)?
     };
@@ -66,11 +118,11 @@ fn create_or_use_title(connection: &mut SqliteConnection) -> Result<QueriedTitle
 }
 
 /// Create a new job title.
-fn create_new_title(title_repo: &mut TitleRepository) -> Result<QueriedTitle, FettersError> {
+fn create_new_title() -> Result<TitleType, FettersError> {
     loop {
         match Text::new("Enter a new job title:").prompt_skippable()? {
             Some(name) if !name.trim().is_empty() => {
-                return Ok(title_repo.add_title(NewTitle { name: &name })?);
+                return Ok(TitleType::NewTitle(name));
             }
             Some(_) | None => println!("{}", "Please enter a title!".red().bold()),
         }
@@ -81,7 +133,7 @@ fn create_new_title(title_repo: &mut TitleRepository) -> Result<QueriedTitle, Fe
 fn get_existing_or_create_title(
     title_repo: &mut TitleRepository,
     existing_titles: Vec<QueriedTitle>,
-) -> Result<QueriedTitle, FettersError> {
+) -> Result<TitleType, FettersError> {
     let existing_or_new = Select::new(
         "Do you want to choose an existing job title or create a new one?",
         vec!["Existing", "New"],
@@ -95,14 +147,14 @@ fn get_existing_or_create_title(
                 Select::new("Select a title:", existing_titles).prompt_skippable()?;
 
             if let Some(title) = title_selection {
-                Ok(title_repo.get_title(title.id)?)
+                Ok(TitleType::QueriedTitle(title_repo.get_title(title.id)?))
             } else {
                 Err(FettersError::UnknownError(
                     "No selection was provided.".to_string(),
                 ))
             }
         } else {
-            Ok(create_new_title(title_repo)?)
+            Ok(create_new_title()?)
         }
     } else {
         Err(FettersError::UnknownError(
@@ -139,14 +191,12 @@ fn input_notes() -> Result<Option<String>, FettersError> {
 }
 
 /// Display the attributes of the newly added job in a table.
-fn display_job(connection: &mut SqliteConnection, job: &QueriedJob) -> Result<(), FettersError> {
-    let mut job_repo = JobRepository { connection };
-    let tabled_job = job_repo.get_job(job.id)?;
-
-    let mut table = Table::new([tabled_job]);
+fn display_job(job: &TabledJob) -> Result<(), FettersError> {
+    let mut table = Table::new([job]);
     table
         .with(LineText::new("New job", Rows::first()).offset(2))
         .with(Style::rounded())
+        .with(Remove::column(Columns::first()))
         .modify(Columns::first(), Alignment::left())
         .modify(Locator::content("GHOSTED"), Color::FG_BRIGHT_WHITE)
         .modify(Locator::content("HIRED"), Color::FG_BRIGHT_GREEN)
