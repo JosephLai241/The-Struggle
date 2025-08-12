@@ -1,11 +1,10 @@
 //! Contains a function called by the CLI when updating a job.
 
 use diesel::SqliteConnection;
+use inquire::Select;
 
 use crate::{
-    errors::FettersError,
-    models::QueriedSprint,
-    repositories::{job::JobRepository, sprint::SprintRepository},
+    errors::FettersError, models::QueriedSprint, repositories::job::JobRepository,
     utils::display::display_jobs,
 };
 
@@ -47,7 +46,13 @@ pub fn update_job(
         return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
     }
 
-    display_jobs(all_jobs, &current_sprint.name);
+    display_jobs(&all_jobs, &current_sprint.name);
+
+    let selected_job = Select::new(
+        "Select the ID of the job you want to modify:",
+        all_jobs.into_iter().map(|job| job.id).collect(),
+    )
+    .prompt_skippable()?;
 
     // Display table of matched jobs
     // display select menu containing IDs for each of those matched jobs

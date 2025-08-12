@@ -3,9 +3,7 @@
 use diesel::SqliteConnection;
 
 use crate::{
-    errors::FettersError,
-    models::QueriedSprint,
-    repositories::{job::JobRepository, sprint::SprintRepository},
+    errors::FettersError, models::QueriedSprint, repositories::job::JobRepository,
     utils::display::display_jobs,
 };
 
@@ -23,7 +21,7 @@ pub fn list_jobs(
     let mut job_repo = JobRepository { connection };
     let all_jobs = job_repo.list_jobs(company, link, notes, sprint, status, title)?;
 
-    display_jobs(all_jobs, &sprint.as_ref().unwrap_or(&current_sprint.name));
+    display_jobs(&all_jobs, &sprint.as_ref().unwrap_or(&current_sprint.name));
 
     Ok(())
 }

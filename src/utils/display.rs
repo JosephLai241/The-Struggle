@@ -9,7 +9,7 @@ use tabled::{
 use crate::models::TabledJob;
 
 /// Display jobs in a table.
-pub fn display_jobs(jobs: Vec<TabledJob>, sprint_name: &str) {
+pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
     // TODO: SHOW THE SPRINT AT THE TOP OF THE TABLE INSTEAD OF THE SEPARATE COLUMN.
     let mut table = Table::new(jobs);
 
