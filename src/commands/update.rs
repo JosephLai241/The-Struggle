@@ -33,20 +33,17 @@ pub fn update_job(
     }
 
     let mut job_repo = JobRepository { connection };
-    let all_jobs = job_repo.list_jobs(&query_args)?;
+    let matched_jobs = job_repo.list_jobs(&query_args)?;
 
-    if all_jobs.is_empty() {
+    if matched_jobs.is_empty() {
         return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
     }
 
-    display_jobs(&all_jobs, &current_sprint.name);
+    display_jobs(&matched_jobs, &current_sprint.name);
 
-    if let Some(job_id) = Select::new(
-        "Select the ID of the job you want to modify:",
-        all_jobs.into_iter().map(|job| job.id).collect(),
-    )
-    .with_vim_mode(true)
-    .prompt_skippable()?
+    if let Some(job) = Select::new("Select the ID of the job you want to modify:", matched_jobs)
+        .with_vim_mode(true)
+        .prompt_skippable()?
     {
         if let Some(selections) = MultiSelect::new(
             "Select the fields you want to update:",
@@ -97,7 +94,7 @@ pub fn update_job(
                     };
 
                     let mut job_repo = JobRepository { connection };
-                    job_repo.update_job(job_id, job_update)?;
+                    job_repo.update_job(job.id, job_update)?;
 
                     println!(
                         "{}",

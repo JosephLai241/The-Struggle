@@ -75,7 +75,7 @@ pub struct JobUpdate<'a> {
 /// This struct defines a job application with the title, status, and sprint name after querying
 /// SQLite for those fields based on their record IDs and is used when displaying job applications
 /// in tables.
-#[derive(Debug, Queryable, Tabled)]
+#[derive(Clone, Debug, Queryable, Tabled)]
 pub struct TabledJob {
     /// The SQLite ID.
     #[tabled(rename = "ID")]
@@ -102,6 +102,19 @@ pub struct TabledJob {
     #[tabled(rename = "Notes")]
     #[tabled(display("display::option", "unvalidated"))]
     pub notes: Option<String>,
+}
+
+impl Display for TabledJob {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "{} (Company: {}, Title: {}, Status: {})",
+            self.id,
+            self.company_name,
+            self.title.clone().unwrap_or("".to_string()),
+            self.status.clone().unwrap_or("".to_string())
+        )
+    }
 }
 
 /// This struct defines a new job title that will be written to the `titles` table in SQLite.
