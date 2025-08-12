@@ -53,25 +53,9 @@ fn main() -> Result<(), FettersError> {
             }
         }
         Command::Config { show } => (),
-        Command::Delete { company } => (),
-        Command::List {
-            company,
-            link,
-            notes,
-            sprint,
-            status,
-            title,
-        } => {
-            if let Err(error) = list_jobs(
-                &mut database.connection,
-                &company,
-                &link,
-                &notes,
-                &sprint,
-                &status,
-                &title,
-                &current_sprint,
-            ) {
+        Command::Delete(query_args) => (),
+        Command::List(query_args) => {
+            if let Err(error) = list_jobs(&mut database.connection, &query_args, &current_sprint) {
                 println!("{}", error.red().bold());
             }
         }
@@ -82,24 +66,8 @@ fn main() -> Result<(), FettersError> {
             show_all,
             set,
         } => (),
-        Command::Update {
-            company,
-            link,
-            notes,
-            sprint,
-            status,
-            title,
-        } => {
-            if let Err(error) = update_job(
-                &mut database.connection,
-                &company,
-                &link,
-                &notes,
-                &sprint,
-                &status,
-                &title,
-                &current_sprint,
-            ) {
+        Command::Update(query_args) => {
+            if let Err(error) = update_job(&mut database.connection, &query_args, &current_sprint) {
                 println!("{}", error.red().bold());
             }
         }

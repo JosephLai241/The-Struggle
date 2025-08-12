@@ -29,45 +29,9 @@ pub enum Command {
         show: bool,
     },
     /// Delete a tracked job application.
-    Delete { company: String },
+    Delete(QueryArgs),
     /// List job applications.
-    List {
-        #[arg(
-            short,
-            long,
-            help = "Filter results by company name. Supports searching with partial text."
-        )]
-        company: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by links. Supports searching with partial text."
-        )]
-        link: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by notes. Supports searching with partial text."
-        )]
-        notes: Option<String>,
-        #[arg(
-            long,
-            help = "Filter results by sprint name. Supports searching with partial text."
-        )]
-        sprint: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by application status. Supports searching with partial text."
-        )]
-        status: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by job title. Supports searching with partial text."
-        )]
-        title: Option<String>,
-    },
+    List(QueryArgs),
     /// Open a link associated with a job (based on the record's 'ID') in your browser.
     Open {
         /// The ID of the record associated with the link.
@@ -85,41 +49,45 @@ pub enum Command {
         set: Option<String>,
     },
     /// Update a tracked job application.
-    Update {
-        #[arg(
-            short,
-            long,
-            help = "Filter results by company name. Supports searching with partial text."
-        )]
-        company: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by links. Supports searching with partial text."
-        )]
-        link: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by notes. Supports searching with partial text."
-        )]
-        notes: Option<String>,
-        #[arg(
-            long,
-            help = "Filter results by sprint name. Supports searching with partial text."
-        )]
-        sprint: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by application status. Supports searching with partial text."
-        )]
-        status: Option<String>,
-        #[arg(
-            short,
-            long,
-            help = "Filter results by job title. Supports searching with partial text."
-        )]
-        title: Option<String>,
-    },
+    Update(QueryArgs),
+}
+
+/// All flags you can use to query jobs.
+#[derive(Debug, Parser)]
+pub struct QueryArgs {
+    #[arg(
+        short,
+        long,
+        help = "Filter results by company name. Supports searching with partial text."
+    )]
+    pub company: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by links. Supports searching with partial text."
+    )]
+    pub link: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by notes. Supports searching with partial text."
+    )]
+    pub notes: Option<String>,
+    #[arg(
+        long,
+        help = "Filter results by sprint name. Supports searching with partial text."
+    )]
+    pub sprint: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by application status. Supports searching with partial text."
+    )]
+    pub status: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by job title. Supports searching with partial text."
+    )]
+    pub title: Option<String>,
 }

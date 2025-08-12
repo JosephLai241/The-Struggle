@@ -6,6 +6,7 @@ use owo_colors::OwoColorize;
 use strum::{Display, EnumIter, IntoEnumIterator};
 
 use crate::{
+    cli::QueryArgs,
     errors::FettersError,
     models::{JobUpdate, NewTitle, QueriedSprint},
     repositories::{
@@ -21,28 +22,23 @@ use crate::{
 /// Update a tracked job application.
 pub fn update_job(
     connection: &mut SqliteConnection,
-    company: &Option<String>,
-    link: &Option<String>,
-    notes: &Option<String>,
-    sprint: &Option<String>,
-    status: &Option<String>,
-    title: &Option<String>,
+    query_args: &QueryArgs,
     current_sprint: &QueriedSprint,
 ) -> Result<(), FettersError> {
     let default_sprint = Some(current_sprint.name.clone());
 
     let mut job_repo = JobRepository { connection };
     let all_jobs = job_repo.list_jobs(
-        company,
-        link,
-        notes,
-        if let None = sprint {
+        &query_args.company,
+        &query_args.link,
+        &query_args.notes,
+        if let None = &query_args.sprint {
             &default_sprint
         } else {
-            sprint
+            &query_args.sprint
         },
-        status,
-        title,
+        &query_args.status,
+        &query_args.title,
     )?;
 
     if all_jobs.is_empty() {
