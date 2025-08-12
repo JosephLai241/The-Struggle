@@ -41,15 +41,13 @@ pub fn update_job(
 
     display_jobs(&matched_jobs, &current_sprint.name);
 
-    if let Some(job) = Select::new("Select the job you want to modify:", matched_jobs)
-        .with_vim_mode(true)
-        .prompt_skippable()?
+    if let Some(job) =
+        Select::new("Select the job you want to modify:", matched_jobs).prompt_skippable()?
     {
         if let Some(selections) = MultiSelect::new(
             "Select the fields you want to update:",
             UpdatableField::iter().collect(),
         )
-        .with_vim_mode(true)
         .prompt_skippable()?
         {
             let mut new_company_name: Option<String> = None;
@@ -183,9 +181,7 @@ fn set_new_sprint(
     let mut sprint_repo = SprintRepository { connection };
     let all_sprints = sprint_repo.get_all_sprints()?;
 
-    let sprint_selection = Select::new("Select a new sprint:", all_sprints)
-        .with_vim_mode(true)
-        .prompt_skippable()?;
+    let sprint_selection = Select::new("Select a new sprint:", all_sprints).prompt_skippable()?;
 
     loop {
         match sprint_selection {
@@ -206,9 +202,7 @@ fn set_new_status(
     let mut status_repo = StatusRepository { connection };
     let all_statuses = status_repo.get_all_statuses()?;
 
-    let status_selection = Select::new("Select a new status:", all_statuses)
-        .with_vim_mode(true)
-        .prompt_skippable()?;
+    let status_selection = Select::new("Select a new status:", all_statuses).prompt_skippable()?;
 
     loop {
         match status_selection {
