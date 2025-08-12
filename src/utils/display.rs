@@ -7,7 +7,6 @@ use tabled::{
         Alignment, Color, Remove, Style,
         location::Locator,
         object::{Columns, Rows},
-        style::LineText,
     },
 };
 
@@ -15,11 +14,9 @@ use crate::models::TabledJob;
 
 /// Display jobs in a table.
 pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
-    // TODO: SHOW THE SPRINT AT THE TOP OF THE TABLE INSTEAD OF THE SEPARATE COLUMN.
     let mut table = Table::new(jobs);
 
     table
-        .with(LineText::new(format!("{sprint_name} sprint"), Rows::first()).offset(2))
         .with(Style::rounded())
         .modify(Rows::first(), Color::FG_BRIGHT_WHITE)
         .modify(Locator::content("GHOSTED"), Color::rgb_fg(133, 133, 133))
