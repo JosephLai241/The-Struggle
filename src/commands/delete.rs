@@ -30,9 +30,8 @@ pub fn delete_job(
         &query_args.sprint.as_ref().unwrap_or(&current_sprint.name),
     );
 
-    if let Some(job) = Select::new("Select the ID of the job you want to delete:", matched_jobs)
-        .with_vim_mode(true)
-        .prompt_skippable()?
+    if let Some(job) =
+        Select::new("Select the job you want to delete:", matched_jobs).prompt_skippable()?
     {
         match Confirm::new("Confirm deletion?").prompt_skippable()? {
             Some(true) => {

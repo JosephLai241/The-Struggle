@@ -41,7 +41,7 @@ pub fn update_job(
 
     display_jobs(&matched_jobs, &current_sprint.name);
 
-    if let Some(job) = Select::new("Select the ID of the job you want to modify:", matched_jobs)
+    if let Some(job) = Select::new("Select the job you want to modify:", matched_jobs)
         .with_vim_mode(true)
         .prompt_skippable()?
     {

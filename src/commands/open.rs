@@ -34,7 +34,6 @@ pub fn open_application(
         "Select the job applications you want to open in the browser:",
         matched_jobs,
     )
-    .with_vim_mode(true)
     .prompt_skippable()?
     {
         for job in selected_jobs {

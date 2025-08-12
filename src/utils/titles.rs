@@ -53,7 +53,6 @@ fn get_existing_or_create_title(
         "Do you want to choose an existing job title or create a new one?",
         vec!["Existing", "New"],
     )
-    .with_vim_mode(true)
     .prompt_skippable()?;
 
     if let Some(selection) = existing_or_new {
