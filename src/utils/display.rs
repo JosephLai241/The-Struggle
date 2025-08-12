@@ -4,7 +4,7 @@ use owo_colors::OwoColorize;
 use tabled::{
     Table, Tabled,
     settings::{
-        Alignment, Color, Remove, Style,
+        Alignment, Color, Modify, Panel, Remove, Style,
         location::Locator,
         object::{Columns, Rows},
     },
@@ -18,6 +18,13 @@ pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
 
     table
         .with(Style::rounded())
+        .with(Panel::header(
+            format!("{sprint_name} SPRINT [{} JOBS LISTED]", jobs.len())
+                .green()
+                .bold()
+                .to_string(),
+        ))
+        .with(Modify::list(Rows::first(), Alignment::center()))
         .modify(Rows::first(), Color::FG_BRIGHT_WHITE)
         .modify(Locator::content("GHOSTED"), Color::rgb_fg(133, 133, 133))
         .modify(Locator::content("HIRED"), Color::FG_BRIGHT_GREEN)
@@ -30,10 +37,6 @@ pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
         .modify(Locator::content("PENDING"), Color::FG_BRIGHT_BLUE)
         .modify(Locator::content("REJECTED"), Color::FG_BRIGHT_RED);
 
-    println!(
-        "\n{}\n",
-        format!("{sprint_name} SPRINT").green().bold().underline()
-    );
     println!("{table}");
 }
 
