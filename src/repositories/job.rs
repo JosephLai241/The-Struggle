@@ -48,25 +48,6 @@ impl<'a> JobRepository<'a> {
             .get_result(self.connection)?)
     }
 
-    /// Search for a job by its record ID.
-    pub fn get_job(&mut self, job_id: i32) -> Result<TabledJob, FettersError> {
-        Ok(jobs::table
-            .left_join(titles::table.on(jobs::title_id.eq(titles::id)))
-            .left_join(statuses::table.on(jobs::status_id.eq(statuses::id)))
-            .left_join(sprints::table.on(jobs::sprint_id.eq(sprints::id)))
-            .select((
-                jobs::id,
-                jobs::created,
-                jobs::company_name,
-                titles::name.nullable(),
-                statuses::name.nullable(),
-                jobs::link,
-                jobs::notes,
-            ))
-            .filter(jobs::id.eq(job_id))
-            .first::<TabledJob>(self.connection)?)
-    }
-
     /// List all jobs matching the query.
     pub fn list_jobs(&mut self, query_args: &QueryArgs) -> Result<Vec<TabledJob>, FettersError> {
         let mut query = jobs::table
