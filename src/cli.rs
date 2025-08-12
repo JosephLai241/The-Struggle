@@ -10,9 +10,6 @@ pub struct Cli {
     /// Run a subcommand.
     #[command(subcommand)]
     pub command: Command,
-
-    #[arg(long, help = "Show the ASCII art.")]
-    pub art: bool,
 }
 
 /// Contains all subcommands for `fetters`.
@@ -23,8 +20,12 @@ pub enum Command {
         /// The name of the company.
         company: String,
     },
+    /// Display the ASCII art.
+    Banner,
     /// Configure `fetters` by opening its config file.
     Config {
+        #[arg(short, long, help = "Edit the configuration file.")]
+        edit: bool,
         #[arg(short, long, help = "Display the current configuration settings.")]
         show: bool,
     },
@@ -32,7 +33,7 @@ pub enum Command {
     Delete(QueryArgs),
     /// List job applications.
     List(QueryArgs),
-    /// Open a link associated with a job (based on the record's 'ID') in your browser.
+    /// Open the web link in your default browser or the local file associated with a job application.
     Open(QueryArgs),
     /// Configuration options for job sprints.
     Sprint {
