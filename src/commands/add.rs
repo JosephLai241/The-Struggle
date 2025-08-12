@@ -86,13 +86,13 @@ fn get_existing_or_create_title(
         "Do you want to choose an existing job title or create a new one?",
         vec!["Existing", "New"],
     )
+    .with_vim_mode(true)
     .prompt_skippable()?;
 
     if let Some(selection) = existing_or_new {
         if selection == "Existing" {
-            let title_selection = Select::new("Select a title:", existing_titles)
-                .with_vim_mode(true)
-                .prompt_skippable()?;
+            let title_selection =
+                Select::new("Select a title:", existing_titles).prompt_skippable()?;
 
             if let Some(title) = title_selection {
                 Ok(title_repo.get_title(title.id)?)
@@ -116,9 +116,8 @@ fn select_status(connection: &mut SqliteConnection) -> Result<QueriedStatus, Fet
     let mut status_repo = StatusRepository { connection };
     let all_statuses = status_repo.get_all_statuses()?;
 
-    let selected = Select::new("Select a status for this application:", all_statuses)
-        .with_vim_mode(true)
-        .prompt_skippable()?;
+    let selected =
+        Select::new("Select a status for this application:", all_statuses).prompt_skippable()?;
 
     if let Some(status) = selected {
         Ok(status)
