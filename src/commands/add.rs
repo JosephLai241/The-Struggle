@@ -26,10 +26,7 @@ pub fn add_job(
     let link = input_link()?;
     let notes = input_notes()?;
 
-    let created = Local::now()
-        .date_naive()
-        .format("%Y-%m-%d %H:%M:%S")
-        .to_string();
+    let created = Local::now().format("%Y-%m-%d %H:%M:%S").to_string();
 
     let tabled_job = TabledJob {
         // NOTE: The ID is set to an arbitrary value to satisfy struct requirements.
