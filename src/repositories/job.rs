@@ -1,11 +1,13 @@
 //! Contains the job repository abstraction class.
 
+use diesel::dsl::count;
 use diesel::prelude::*;
 use diesel::sqlite::Sqlite;
 use diesel::{delete, insert_into, update};
 
 use crate::cli::QueryArgs;
 use crate::errors::FettersError;
+use crate::models::insight::CountAndPercentage;
 use crate::models::{
     job::{JobUpdate, NewJob, QueriedJob, TabledJob},
     sprint::QueriedSprint,
@@ -114,5 +116,100 @@ impl<'a> JobRepository<'a> {
         }
 
         Ok(query.load::<TabledJob>(self.connection)?)
+    }
+
+    /// Get the total number of jobs in the database.
+    fn count_total_jobs(&mut self) -> Result<i64, FettersError> {
+        use crate::schema::jobs::dsl::*;
+
+        Ok(jobs.select(count(id)).first(self.connection)?)
+    }
+
+    /// Get the total number of jobs in the database by sprint.
+    fn count_total_jobs_by_sprint(
+        &mut self,
+        current_sprint: &QueriedSprint,
+    ) -> Result<i64, FettersError> {
+        use crate::schema::jobs;
+
+        Ok(jobs::table
+            .left_join(sprints::table.on(jobs::sprint_id.eq(current_sprint.id)))
+            .select(count(jobs::id))
+            .first(self.connection)?)
+    }
+
+    /// Get the number of job applications and percentages per status for a given sprint.
+    pub fn count_jobs_per_status(
+        &mut self,
+        current_sprint: &QueriedSprint,
+    ) -> Result<Vec<CountAndPercentage>, FettersError> {
+        use crate::schema::{jobs, statuses};
+
+        let total_jobs = self.count_total_jobs()?;
+        let total_jobs_in_sprint = self.count_total_jobs_by_sprint(current_sprint)?;
+
+        let job_counts = jobs::table
+            .left_join(statuses::table.on(jobs::status_id.eq(statuses::id)))
+            .left_join(sprints::table.on(jobs::sprint_id.eq(current_sprint.id)))
+            .group_by(statuses::name)
+            .select((statuses::name.nullable(), count(jobs::id)))
+            .load::<(Option<String>, i64)>(self.connection)?;
+
+        let mut jobs_per_status: Vec<CountAndPercentage> = Vec::new();
+        for (status_name, count) in job_counts {
+            if let Some(status) = status_name {
+                jobs_per_status.push(CountAndPercentage {
+                    label: status,
+                    count,
+                    sprint_percentage: format!(
+                        "{:.2}%",
+                        (count as f64 / total_jobs_in_sprint as f64) * 100.0
+                    ),
+                    overall_percentage: format!(
+                        "{:.2}%",
+                        (count as f64 / total_jobs as f64) * 100.0
+                    ),
+                });
+            }
+        }
+
+        Ok(jobs_per_status)
+    }
+
+    /// Get the number of job applications and percentages for a given sprint.
+    pub fn count_jobs_per_sprint(
+        &mut self,
+        current_sprint: &QueriedSprint,
+    ) -> Result<Vec<CountAndPercentage>, FettersError> {
+        use crate::schema::{jobs, sprints};
+
+        let total_jobs = self.count_total_jobs()?;
+        let total_jobs_in_sprint = self.count_total_jobs_by_sprint(current_sprint)?;
+
+        let counts = jobs::table
+            .left_join(sprints::table.on(jobs::sprint_id.eq(sprints::id)))
+            .group_by(sprints::name)
+            .select((sprints::name.nullable(), count(jobs::id)))
+            .load::<(Option<String>, i64)>(self.connection)?;
+
+        let mut jobs_per_sprint: Vec<CountAndPercentage> = Vec::new();
+        for (sprint_name, count) in counts {
+            if let Some(sprint_name) = sprint_name {
+                jobs_per_sprint.push(CountAndPercentage {
+                    label: sprint_name,
+                    count,
+                    sprint_percentage: format!(
+                        "{:.2}%",
+                        (count as f64 / total_jobs_in_sprint as f64) * 100.0
+                    ),
+                    overall_percentage: format!(
+                        "{:.2}%",
+                        (count as f64 / total_jobs as f64) * 100.0
+                    ),
+                });
+            }
+        }
+
+        Ok(jobs_per_sprint)
     }
 }
