@@ -27,18 +27,6 @@ pub struct StatusRepository<'a> {
 }
 
 impl<'a> StatusRepository<'a> {
-    /// Adds a new status to the `status` table.
-    ///
-    /// FUTURE: IMPLEMENT UPDATE TO ENABLE THIS FEATURE.
-    pub fn add_status(&mut self, new_status: NewStatus) -> Result<QueriedStatus, FettersError> {
-        use crate::schema::statuses::dsl::*;
-
-        Ok(insert_into(statuses)
-            .values(&new_status)
-            .returning(QueriedStatus::as_returning())
-            .get_result(self.connection)?)
-    }
-
     /// Retrieves all statuses.
     pub fn get_all_statuses(&mut self) -> Result<Vec<QueriedStatus>, FettersError> {
         use crate::schema::statuses::dsl::*;
