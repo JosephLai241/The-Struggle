@@ -17,7 +17,14 @@ pub fn list_jobs(
     let all_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
 
     if all_jobs.is_empty() {
-        return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
+        return Err(FettersError::NoJobsAvailable(
+            query_args
+                .sprint
+                .clone()
+                .as_ref()
+                .unwrap_or(&current_sprint.name.clone())
+                .to_string(),
+        ));
     }
 
     display_jobs(

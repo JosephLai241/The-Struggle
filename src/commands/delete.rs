@@ -26,7 +26,14 @@ pub fn delete_job(
     let matched_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
 
     if matched_jobs.is_empty() {
-        return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
+        return Err(FettersError::NoJobsAvailable(
+            query_args
+                .sprint
+                .clone()
+                .as_ref()
+                .unwrap_or(&current_sprint.name.clone())
+                .to_string(),
+        ));
     }
 
     display_jobs(
