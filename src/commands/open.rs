@@ -23,7 +23,7 @@ pub fn open_application(
     }
 
     let mut job_repo = JobRepository { connection };
-    let matched_jobs = job_repo.list_jobs(&query_args)?;
+    let matched_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
 
     display_jobs(
         &matched_jobs,

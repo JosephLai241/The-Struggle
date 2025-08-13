@@ -14,7 +14,7 @@ pub fn list_jobs(
     current_sprint: &QueriedSprint,
 ) -> Result<(), FettersError> {
     let mut job_repo = JobRepository { connection };
-    let all_jobs = job_repo.list_jobs(&query_args)?;
+    let all_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
 
     if all_jobs.is_empty() {
         return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
