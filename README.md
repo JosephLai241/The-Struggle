@@ -183,7 +183,7 @@ A select menu will appear and the selected sprint will be used to track applicat
 
 ## Adding a Job
 
-> ![NOTE]
+> [!NOTE]
 >
 > If you are utilizing [different sprints](#managing-job-sprints), the job application will be added to your current sprint.
 
@@ -200,7 +200,7 @@ A series of `inquire` prompts will show to set the job title, application status
 
 ## Updating or Deleting a Job
 
-> ![NOTE]
+> [!NOTE]
 >
 > If you are utilizing [different sprints](#managing-job-sprints), these subcommands will search for jobs within your current sprint that match your query.
 
@@ -236,7 +236,7 @@ The `update` subcommand will display a `MultiSelect` `inquire` prompt to select 
 
 ## Listing/Searching Jobs
 
-> ![NOTE]
+> [!NOTE]
 >
 > If you are utilizing [different sprints](#managing-job-sprints), this subcommand will search for jobs within your current sprint that match your query.
 
@@ -268,7 +268,7 @@ Jobs matching your query parameters will be displayed in a table.
 
 ## Display Job Insights
 
-> ![NOTE]
+> [!NOTE]
 >
 > If you are utilizing [different sprints](#managing-job-sprints), this subcommand will display insights for your current sprint.
 
@@ -280,7 +280,7 @@ fetters insights
 
 ## Opening Links
 
-> ![NOTE]
+> [!NOTE]
 >
 > If you are utilizing [different sprints](#managing-job-sprints), this subcommand will search for jobs within your current sprint that match your query.
 
