@@ -27,6 +27,8 @@ pub enum Command {
     Config(ConfigOption),
     /// Delete a tracked job application.
     Delete(QueryArgs),
+    /// Show job application inslghts.
+    Insights,
     /// List job applications.
     List(QueryArgs),
     /// Open the web link in your default browser or the local file associated with a job application.
