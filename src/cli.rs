@@ -23,12 +23,8 @@ pub enum Command {
     /// Display the ASCII art.
     Banner,
     /// Configure `fetters` by opening its config file.
-    Config {
-        #[arg(short, long, help = "Edit the configuration file.")]
-        edit: bool,
-        #[arg(short, long, help = "Display the current configuration settings.")]
-        show: bool,
-    },
+    #[command(subcommand)]
+    Config(ConfigOption),
     /// Delete a tracked job application.
     Delete(QueryArgs),
     /// List job applications.
@@ -36,16 +32,8 @@ pub enum Command {
     /// Open the web link in your default browser or the local file associated with a job application.
     Open(QueryArgs),
     /// Configuration options for job sprints.
-    Sprint {
-        #[arg(short, long, help = "Display the current sprint name.")]
-        current: bool,
-        #[arg(short, long, help = "Create a new job sprint.")]
-        new: bool,
-        #[arg(long, help = "Show all job sprints tracked by fetters.")]
-        show_all: bool,
-        #[arg(long, help = "Set the current job sprint.")]
-        set: Option<String>,
-    },
+    #[command(subcommand)]
+    Sprint(SprintOption),
     /// Update a tracked job application.
     Update(QueryArgs),
 }
@@ -88,4 +76,31 @@ pub struct QueryArgs {
         help = "Filter results by job title. Supports searching with partial text."
     )]
     pub title: Option<String>,
+}
+
+/// All subcommands for interacting with the configuration file for `fetters`.
+#[derive(Debug, Subcommand)]
+pub enum ConfigOption {
+    /// Edit the configuration file. You typically don't need to use this command as fetters will
+    /// set these fields with other subcommands. However, this is available if you absolutely need
+    /// to manually change values.
+    Edit,
+    /// Display the current configuration settings
+    Show,
+}
+
+/// All subcommands for managing job sprints.
+#[derive(Debug, Subcommand)]
+pub enum SprintOption {
+    /// Display the current sprint name.
+    Current,
+    /// Create a new job sprint.
+    New {
+        #[arg(short, long, help = "Override the default sprint name (YYYY-MM-DD).")]
+        name: Option<String>,
+    },
+    /// Show all job sprints tracked by `fetters`.
+    ShowAll,
+    /// Set the current job sprint.
+    Set,
 }
