@@ -180,6 +180,8 @@ pub struct NewSprint<'a> {
     pub start_date: &'a str,
     /// The end date for this sprint.
     pub end_date: Option<&'a str>,
+    /// The number of jobs in this sprint.
+    pub num_jobs: &'a i32,
 }
 
 /// This struct defines the sprint object returned from querying SQLite.
@@ -200,6 +202,9 @@ pub struct QueriedSprint {
     #[tabled(rename = "End Date")]
     #[tabled(display("display::option", "N/A"))]
     pub end_date: Option<String>,
+    /// The number of jobs in this sprint.
+    #[tabled(rename = "# of Jobs")]
+    pub num_jobs: i32,
 }
 
 impl Display for QueriedSprint {
