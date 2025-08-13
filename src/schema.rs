@@ -41,9 +41,4 @@ diesel::joinable!(jobs -> sprints (sprint_id));
 diesel::joinable!(jobs -> statuses (status_id));
 diesel::joinable!(jobs -> titles (title_id));
 
-diesel::allow_tables_to_appear_in_same_query!(
-    jobs,
-    sprints,
-    statuses,
-    titles,
-);
+diesel::allow_tables_to_appear_in_same_query!(jobs, sprints, statuses, titles,);
