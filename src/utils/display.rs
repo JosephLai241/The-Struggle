@@ -10,14 +10,14 @@ use tabled::{
     },
 };
 
-use crate::models::TabledJob;
+use crate::models::{QueriedSprint, TabledJob};
 
 /// Display jobs in a table.
 pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
     let mut table = Table::new(jobs);
 
     table
-        .with(Style::rounded())
+        .with(Style::blank())
         .with(Panel::header(
             format!("{sprint_name} SPRINT [{} JOBS LISTED]", jobs.len())
                 .green()
@@ -37,14 +37,14 @@ pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
         .modify(Locator::content("PENDING"), Color::FG_BRIGHT_BLUE)
         .modify(Locator::content("REJECTED"), Color::FG_BRIGHT_RED);
 
-    println!("{table}");
+    println!("\n{table}\n");
 }
 
 /// Display a single job. This generic function works with any struct that implements `Tabled`.
 pub fn display_single_job<T: Tabled>(job: T) {
     let mut table = Table::new([job]);
     table
-        .with(Style::rounded())
+        .with(Style::blank())
         .with(Remove::column(Columns::first()))
         .modify(Columns::first(), Alignment::left())
         .modify(Locator::content("GHOSTED"), Color::FG_BRIGHT_WHITE)
@@ -58,5 +58,18 @@ pub fn display_single_job<T: Tabled>(job: T) {
         .modify(Locator::content("PENDING"), Color::FG_BRIGHT_BLUE)
         .modify(Locator::content("REJECTED"), Color::FG_BRIGHT_RED);
 
-    println!("{table}");
+    println!("\n{table}\n");
+}
+
+/// Display sprint metadata.
+pub fn display_sprint(queried_sprints: &Vec<QueriedSprint>, table_header: &str) {
+    let mut table = Table::new(queried_sprints);
+
+    table
+        .with(Panel::header(table_header.green().bold().to_string()))
+        .with(Modify::list(Rows::first(), Alignment::center()))
+        .with(Modify::list(Rows::one(1), Color::FG_BRIGHT_BLUE))
+        .with(Style::blank());
+
+    println!("\n{table}\n");
 }
