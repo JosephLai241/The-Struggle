@@ -5,9 +5,14 @@ use diesel::sqlite::SqliteConnection;
 use inquire::{Confirm, Select, Text};
 use owo_colors::OwoColorize;
 
-use crate::{errors::FettersError, models::QueriedSprint, utils::display::display_single_job};
+use crate::{errors::FettersError, utils::display::display_single_job};
 use crate::{
-    models::{NewJob, NewTitle, QueriedStatus, TabledJob},
+    models::{
+        job::{NewJob, TabledJob},
+        sprint::QueriedSprint,
+        status::QueriedStatus,
+        title::NewTitle,
+    },
     utils::titles::create_or_use_title,
 };
 use crate::{

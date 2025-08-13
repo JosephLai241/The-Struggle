@@ -6,7 +6,10 @@ use diesel::{delete, insert_into, update};
 
 use crate::cli::QueryArgs;
 use crate::errors::FettersError;
-use crate::models::{JobUpdate, NewJob, QueriedJob, QueriedSprint, TabledJob};
+use crate::models::{
+    job::{JobUpdate, NewJob, QueriedJob, TabledJob},
+    sprint::QueriedSprint,
+};
 use crate::repositories::sprint::SprintRepository;
 use crate::schema::{jobs, sprints, statuses, titles};
 

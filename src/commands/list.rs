@@ -3,8 +3,8 @@
 use diesel::SqliteConnection;
 
 use crate::{
-    cli::QueryArgs, errors::FettersError, models::QueriedSprint, repositories::job::JobRepository,
-    utils::display::display_jobs,
+    cli::QueryArgs, errors::FettersError, models::sprint::QueriedSprint,
+    repositories::job::JobRepository, utils::display::display_jobs,
 };
 
 /// List all job applications stored in the `jobs` SQLite table.

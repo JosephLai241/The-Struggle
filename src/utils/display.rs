@@ -10,7 +10,7 @@ use tabled::{
     },
 };
 
-use crate::models::{QueriedSprint, TabledJob};
+use crate::models::{job::TabledJob, sprint::QueriedSprint};
 
 /// Display jobs in a table.
 pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {

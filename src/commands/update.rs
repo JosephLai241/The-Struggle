@@ -8,7 +8,7 @@ use strum::{Display, EnumIter, IntoEnumIterator};
 use crate::{
     cli::QueryArgs,
     errors::FettersError,
-    models::{JobUpdate, NewTitle, QueriedSprint},
+    models::{job::JobUpdate, sprint::QueriedSprint, title::NewTitle},
     repositories::{
         job::JobRepository, sprint::SprintRepository, statuses::StatusRepository,
         title::TitleRepository,

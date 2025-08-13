@@ -8,7 +8,7 @@ use owo_colors::OwoColorize;
 use crate::{
     config::configuration::Config,
     errors::FettersError,
-    models::{NewSprint, QueriedSprint, SprintUpdate},
+    models::sprint::{NewSprint, QueriedSprint, SprintUpdate},
     repositories::sprint::SprintRepository,
     utils::display::display_sprint,
 };

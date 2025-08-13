@@ -5,8 +5,8 @@ use inquire::{Confirm, Select};
 use owo_colors::OwoColorize;
 
 use crate::{
-    cli::QueryArgs, errors::FettersError, models::QueriedSprint, repositories::job::JobRepository,
-    utils::display::display_jobs,
+    cli::QueryArgs, errors::FettersError, models::sprint::QueriedSprint,
+    repositories::job::JobRepository, utils::display::display_jobs,
 };
 
 /// Delete a tracked job application.

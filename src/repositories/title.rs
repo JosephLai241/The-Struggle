@@ -4,7 +4,7 @@ use diesel::insert_into;
 use diesel::prelude::*;
 
 use crate::errors::FettersError;
-use crate::models::{NewTitle, QueriedTitle};
+use crate::models::title::{NewTitle, QueriedTitle};
 
 /// Contains all methods pertaining to CRUD operations for the `titles` table.
 pub struct TitleRepository<'a> {

@@ -1,4 +1,4 @@
-//! Contains all models used for `fetters`.
+//! Contains all models for job applications.
 
 use std::fmt::{self, Display, Formatter};
 
@@ -8,7 +8,7 @@ use owo_colors::OwoColorize;
 use tabled::Tabled;
 use tabled::derive::display;
 
-use crate::schema::{jobs, sprints, statuses, titles};
+use crate::schema::jobs;
 
 /// This struct defines the job object returned from querying SQLite.
 #[allow(dead_code)]
@@ -140,120 +140,5 @@ impl Display for TabledJob {
             self.colorize_field(&self.title.clone().unwrap_or("".to_string())),
             self.colorize_field(&self.status.clone().unwrap_or("".to_string()))
         )
-    }
-}
-
-/// This struct defines a new job title that will be written to the `titles` table in SQLite.
-#[derive(Debug, Insertable)]
-#[diesel(table_name = titles)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct NewTitle<'a> {
-    /// The job title.
-    pub name: &'a str,
-}
-
-/// This struct defines the title object returned from querying SQLite.
-#[derive(Debug, Queryable, Selectable)]
-#[diesel(table_name = titles)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct QueriedTitle {
-    /// The SQLite ID.
-    pub id: i32,
-    /// The job title.
-    pub name: String,
-}
-
-/// Implementing `Display` allows this struct to be displayed in the `Select` Inquire menu.
-impl Display for QueriedTitle {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name)
-    }
-}
-
-/// This struct defines a new sprint title that will be written to the `sprints` table in SQLite.
-#[derive(Debug, Insertable)]
-#[diesel(table_name = sprints)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct NewSprint<'a> {
-    /// The sprint title.
-    pub name: &'a str,
-    /// The start date for this sprint.
-    pub start_date: &'a str,
-    /// The end date for this sprint.
-    pub end_date: Option<&'a str>,
-    /// The number of jobs in this sprint.
-    pub num_jobs: &'a i32,
-}
-
-/// This struct defines the sprint object returned from querying SQLite.
-#[derive(Debug, Queryable, Selectable, Tabled)]
-#[diesel(table_name = sprints)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct QueriedSprint {
-    /// The SQLite ID.
-    #[tabled(skip)]
-    pub id: i32,
-    /// The sprint title.
-    #[tabled(rename = "Sprint Name")]
-    pub name: String,
-    /// The start date for this sprint.
-    #[tabled(rename = "Start Date")]
-    pub start_date: String,
-    /// The end date for this sprint.
-    #[tabled(rename = "End Date")]
-    #[tabled(display("display::option", "N/A"))]
-    pub end_date: Option<String>,
-    /// The number of jobs in this sprint.
-    #[tabled(rename = "# of Jobs")]
-    pub num_jobs: i32,
-}
-
-impl Display for QueriedSprint {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(
-            f,
-            "{} (Start Date: {}, End Date: {:?})",
-            self.name, self.start_date, self.end_date
-        )
-    }
-}
-
-/// This struct defines an updated sprint that will overwrite an existing one in SQLite.
-#[derive(Debug, Default, AsChangeset)]
-#[diesel(table_name = sprints)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct SprintUpdate<'a> {
-    /// The sprint title.
-    pub name: Option<&'a str>,
-    /// The start date for this sprint.
-    pub start_date: Option<&'a str>,
-    /// The end date for this sprint.
-    pub end_date: Option<&'a str>,
-}
-
-/// This struct defines a new status that will be written to the `sprints` table in SQLite.
-#[derive(Debug, Insertable)]
-#[diesel(table_name = statuses)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct NewStatus<'a> {
-    /// The status name.
-    pub name: &'a str,
-}
-
-/// This struct defines the status object returned from querying SQLite.
-#[derive(Debug, Queryable, Selectable)]
-#[diesel(table_name = statuses)]
-#[diesel(check_for_backend(Sqlite))]
-pub struct QueriedStatus {
-    /// The SQLite ID.
-    pub id: i32,
-    /// The status title.
-    pub name: String,
-}
-
-/// Implementing `Display` allows this struct to be displayed in the `Select` Inquire menu.
-impl Display for QueriedStatus {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.name)
     }
 }

@@ -5,8 +5,8 @@ use inquire::MultiSelect;
 use owo_colors::OwoColorize;
 
 use crate::{
-    cli::QueryArgs, errors::FettersError, models::QueriedSprint, repositories::job::JobRepository,
-    utils::display::display_jobs,
+    cli::QueryArgs, errors::FettersError, models::sprint::QueriedSprint,
+    repositories::job::JobRepository, utils::display::display_jobs,
 };
 
 /// Open the link associated with a job application in the browser.

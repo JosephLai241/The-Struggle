@@ -6,8 +6,7 @@ use diesel::insert_into;
 use diesel::prelude::*;
 
 use crate::errors::FettersError;
-use crate::models::SprintUpdate;
-use crate::models::{NewSprint, QueriedSprint};
+use crate::models::sprint::{NewSprint, QueriedSprint, SprintUpdate};
 use crate::schema::sprints;
 
 /// Contains all methods pertaining to CRUD operations for the `sprints` table.

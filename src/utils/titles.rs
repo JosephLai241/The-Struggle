@@ -4,7 +4,9 @@ use diesel::SqliteConnection;
 use inquire::{Select, Text};
 use owo_colors::OwoColorize;
 
-use crate::{errors::FettersError, models::QueriedTitle, repositories::title::TitleRepository};
+use crate::{
+    errors::FettersError, models::title::QueriedTitle, repositories::title::TitleRepository,
+};
 
 /// Contains all variants that may be returned from the create_or_use_title() function.
 pub enum TitleType {

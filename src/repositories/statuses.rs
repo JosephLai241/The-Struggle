@@ -5,7 +5,7 @@ use diesel::prelude::*;
 use lazy_static::lazy_static;
 
 use crate::errors::FettersError;
-use crate::models::{NewStatus, QueriedStatus};
+use crate::models::status::{NewStatus, QueriedStatus};
 
 lazy_static! {
     /// Contains all default statuses that will be stored into the `statuses` SQLite table on the
