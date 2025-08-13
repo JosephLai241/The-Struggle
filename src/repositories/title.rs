@@ -13,14 +13,18 @@ pub struct TitleRepository<'a> {
 
 impl<'a> TitleRepository<'a> {
     /// Adds a new job title into the `titles` table.
-    /// TODO: UPDATE TO IGNORE IF ALREADY EXISTS. ALSO STANDARDIZE CAPITALIZATION?
     pub fn add_title(&mut self, new_title: NewTitle) -> Result<QueriedTitle, FettersError> {
         use crate::schema::titles::dsl::*;
 
-        Ok(insert_into(titles)
+        insert_into(titles)
             .values(&new_title)
-            .returning(QueriedTitle::as_returning())
-            .get_result(self.connection)?)
+            .on_conflict(name)
+            .do_nothing()
+            .execute(self.connection)?;
+
+        Ok(titles
+            .filter(name.eq(new_title.name))
+            .first(self.connection)?)
     }
 
     /// Retrieves an existing job title by ID.
