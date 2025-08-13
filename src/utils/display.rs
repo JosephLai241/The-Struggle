@@ -2,12 +2,12 @@
 
 use owo_colors::OwoColorize;
 use tabled::{
-    Table, Tabled,
     settings::{
-        Alignment, Color, Modify, Panel, Remove, Style, Width,
         location::Locator,
         object::{Columns, Rows},
+        Alignment, Color, Modify, Panel, Remove, Style, Width,
     },
+    Table, Tabled,
 };
 
 use crate::models::{job::TabledJob, sprint::QueriedSprint};

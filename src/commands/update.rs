@@ -15,7 +15,7 @@ use crate::{
     },
     utils::{
         display::display_jobs,
-        titles::{TitleType, create_or_use_title},
+        titles::{create_or_use_title, TitleType},
     },
 };
 

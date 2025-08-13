@@ -1,7 +1,7 @@
 //! Contains a utility function for running migrations on startup.
 
 use diesel::SqliteConnection;
-use diesel_migrations::{EmbeddedMigrations, MigrationHarness, embed_migrations};
+use diesel_migrations::{embed_migrations, EmbeddedMigrations, MigrationHarness};
 use owo_colors::OwoColorize;
 
 use crate::errors::FettersError;

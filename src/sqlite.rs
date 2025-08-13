@@ -1,7 +1,7 @@
 //! Contains all functionality pertaining to interacting with SQLite.
 
-use diesel::Connection;
 use diesel::sqlite::SqliteConnection;
+use diesel::Connection;
 
 use crate::errors::FettersError;
 

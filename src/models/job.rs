@@ -5,8 +5,8 @@ use std::fmt::{self, Display, Formatter};
 use diesel::sqlite::Sqlite;
 use diesel::{AsChangeset, Insertable, Queryable, Selectable};
 use owo_colors::OwoColorize;
-use tabled::Tabled;
 use tabled::derive::display;
+use tabled::Tabled;
 
 use crate::schema::jobs;
 
