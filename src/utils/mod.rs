@@ -2,4 +2,5 @@
 
 pub mod display;
 pub mod migrations;
+pub mod prompt;
 pub mod titles;

@@ -10,7 +10,7 @@ use crate::{
     errors::FettersError,
     models::sprint::{NewSprint, QueriedSprint, SprintUpdate},
     repositories::sprint::SprintRepository,
-    utils::display::display_sprint,
+    utils::{display::display_sprint, prompt::get_inquire_config},
 };
 
 /// Display the current sprint and its metadata in a table.
@@ -79,7 +79,9 @@ pub fn set_sprint(connection: &mut SqliteConnection, config: Config) -> Result<(
     let mut sprint_repo = SprintRepository { connection };
     let all_sprints = sprint_repo.get_all_sprints()?;
 
-    let sprint_selection = Select::new("Select a new sprint:", all_sprints).prompt_skippable()?;
+    let sprint_selection = Select::new("Select a new sprint:", all_sprints)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?;
     loop {
         match sprint_selection {
             Some(queried_sprint) => {

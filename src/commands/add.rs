@@ -5,6 +5,7 @@ use diesel::sqlite::SqliteConnection;
 use inquire::{Confirm, Select, Text};
 use owo_colors::OwoColorize;
 
+use crate::utils::prompt::get_inquire_config;
 use crate::{errors::FettersError, utils::display::display_single_job};
 use crate::{
     models::{
@@ -50,7 +51,11 @@ pub fn add_job(
     display_single_job(&tabled_job);
 
     loop {
-        match Confirm::new("Confirm new entry?").prompt_skippable()? {
+        match Confirm::new("Confirm new entry?")
+            .with_default(true)
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?
+        {
             Some(true) => {
                 let title_id = match title_type {
                     TitleType::NewTitle(new_title) => {
@@ -97,8 +102,9 @@ fn select_status(connection: &mut SqliteConnection) -> Result<QueriedStatus, Fet
     let mut status_repo = StatusRepository { connection };
     let all_statuses = status_repo.get_all_statuses()?;
 
-    let selected =
-        Select::new("Select a status for this application:", all_statuses).prompt_skippable()?;
+    let selected = Select::new("Select a status for this application:", all_statuses)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?;
 
     if let Some(status) = selected {
         Ok(status)
@@ -111,10 +117,18 @@ fn select_status(connection: &mut SqliteConnection) -> Result<QueriedStatus, Fet
 
 /// Input an optional link to the job application.
 fn input_link() -> Result<Option<String>, FettersError> {
-    Ok(Text::new("[OPTIONAL] Enter a link to this job application:").prompt_skippable()?)
+    Ok(
+        Text::new("[OPTIONAL] Enter a link to this job application:")
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?,
+    )
 }
 
 /// Input optional notes for the job application.
 fn input_notes() -> Result<Option<String>, FettersError> {
-    Ok(Text::new("[OPTIONAL] Enter any notes for this job application:").prompt_skippable()?)
+    Ok(
+        Text::new("[OPTIONAL] Enter any notes for this job application:")
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?,
+    )
 }

@@ -5,8 +5,11 @@ use inquire::{Confirm, Select};
 use owo_colors::OwoColorize;
 
 use crate::{
-    cli::QueryArgs, errors::FettersError, models::sprint::QueriedSprint,
-    repositories::job::JobRepository, utils::display::display_jobs,
+    cli::QueryArgs,
+    errors::FettersError,
+    models::sprint::QueriedSprint,
+    repositories::job::JobRepository,
+    utils::{display::display_jobs, prompt::get_inquire_config},
 };
 
 /// Delete a tracked job application.
@@ -41,10 +44,15 @@ pub fn delete_job(
         &query_args.sprint.as_ref().unwrap_or(&current_sprint.name),
     );
 
-    if let Some(job) =
-        Select::new("Select the job you want to delete:", matched_jobs).prompt_skippable()?
+    if let Some(job) = Select::new("Select the job you want to delete:", matched_jobs)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?
     {
-        match Confirm::new("Confirm deletion?").prompt_skippable()? {
+        match Confirm::new("Confirm deletion?")
+            .with_default(true)
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?
+        {
             Some(true) => {
                 let mut job_repo = JobRepository { connection };
                 job_repo.delete_job(job.id)?;

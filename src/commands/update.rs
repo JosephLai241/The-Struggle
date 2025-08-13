@@ -15,7 +15,8 @@ use crate::{
     },
     utils::{
         display::display_jobs,
-        titles::{create_or_use_title, TitleType},
+        prompt::get_inquire_config,
+        titles::{TitleType, create_or_use_title},
     },
 };
 
@@ -48,13 +49,15 @@ pub fn update_job(
 
     display_jobs(&matched_jobs, &current_sprint.name);
 
-    if let Some(job) =
-        Select::new("Select the job you want to modify:", matched_jobs).prompt_skippable()?
+    if let Some(job) = Select::new("Select the job you want to modify:", matched_jobs)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?
     {
         if let Some(selections) = MultiSelect::new(
             "Select the fields you want to update:",
             UpdatableField::iter().collect(),
         )
+        .with_render_config(get_inquire_config())
         .prompt_skippable()?
         {
             let mut new_company_name: Option<String> = None;
@@ -87,7 +90,11 @@ pub fn update_job(
                 }
             }
 
-            match Confirm::new("Confirm updates?").prompt_skippable()? {
+            match Confirm::new("Confirm updates?")
+                .with_default(true)
+                .with_render_config(get_inquire_config())
+                .prompt_skippable()?
+            {
                 Some(true) => {
                     let job_update = JobUpdate {
                         company_name: new_company_name.as_deref(),
@@ -156,7 +163,12 @@ fn input_prompt(updatable_field: &UpdatableField) -> Result<String, FettersError
     };
 
     loop {
-        match (Text::new(message).prompt_skippable()?, updatable_field) {
+        match (
+            Text::new(message)
+                .with_render_config(get_inquire_config())
+                .prompt_skippable()?,
+            updatable_field,
+        ) {
             (Some(input), _) if !input.trim().is_empty() => {
                 return Ok(input);
             }
@@ -188,7 +200,9 @@ fn set_new_sprint(
     let mut sprint_repo = SprintRepository { connection };
     let all_sprints = sprint_repo.get_all_sprints()?;
 
-    let sprint_selection = Select::new("Select a new sprint:", all_sprints).prompt_skippable()?;
+    let sprint_selection = Select::new("Select a new sprint:", all_sprints)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?;
 
     loop {
         match sprint_selection {
@@ -209,7 +223,9 @@ fn set_new_status(
     let mut status_repo = StatusRepository { connection };
     let all_statuses = status_repo.get_all_statuses()?;
 
-    let status_selection = Select::new("Select a new status:", all_statuses).prompt_skippable()?;
+    let status_selection = Select::new("Select a new status:", all_statuses)
+        .with_render_config(get_inquire_config())
+        .prompt_skippable()?;
 
     loop {
         match status_selection {

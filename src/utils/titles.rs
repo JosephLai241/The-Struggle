@@ -6,6 +6,7 @@ use owo_colors::OwoColorize;
 
 use crate::{
     errors::FettersError, models::title::QueriedTitle, repositories::title::TitleRepository,
+    utils::prompt::get_inquire_config,
 };
 
 /// Contains all variants that may be returned from the create_or_use_title() function.
@@ -37,7 +38,10 @@ pub fn create_or_use_title(connection: &mut SqliteConnection) -> Result<TitleTyp
 /// Create a new job title.
 fn create_new_title() -> Result<TitleType, FettersError> {
     loop {
-        match Text::new("Enter a new job title:").prompt_skippable()? {
+        match Text::new("Enter a new job title:")
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?
+        {
             Some(name) if !name.trim().is_empty() => {
                 return Ok(TitleType::NewTitle(name));
             }
@@ -55,12 +59,14 @@ fn get_existing_or_create_title(
         "Do you want to choose an existing job title or create a new one?",
         vec!["Existing", "New"],
     )
+    .with_render_config(get_inquire_config())
     .prompt_skippable()?;
 
     if let Some(selection) = existing_or_new {
         if selection == "Existing" {
-            let title_selection =
-                Select::new("Select a title:", existing_titles).prompt_skippable()?;
+            let title_selection = Select::new("Select a title:", existing_titles)
+                .with_render_config(get_inquire_config())
+                .prompt_skippable()?;
 
             if let Some(title) = title_selection {
                 Ok(TitleType::QueriedTitle(title_repo.get_title(title.id)?))

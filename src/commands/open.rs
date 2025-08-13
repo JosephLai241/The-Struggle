@@ -5,8 +5,11 @@ use inquire::MultiSelect;
 use owo_colors::OwoColorize;
 
 use crate::{
-    cli::QueryArgs, errors::FettersError, models::sprint::QueriedSprint,
-    repositories::job::JobRepository, utils::display::display_jobs,
+    cli::QueryArgs,
+    errors::FettersError,
+    models::sprint::QueriedSprint,
+    repositories::job::JobRepository,
+    utils::{display::display_jobs, prompt::get_inquire_config},
 };
 
 /// Open the link associated with a job application in the browser.
@@ -45,6 +48,7 @@ pub fn open_application(
         "Select the job applications you want to open in the browser:",
         matched_jobs,
     )
+    .with_render_config(get_inquire_config())
     .prompt_skippable()?
     {
         for job in selected_jobs {

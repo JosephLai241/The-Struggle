@@ -2,15 +2,15 @@
 
 use owo_colors::OwoColorize;
 use tabled::{
+    Table, Tabled,
     settings::{
+        Alignment, Color, Modify, Panel, Remove, Style, Width,
         location::Locator,
         object::{Columns, Rows},
-        Alignment, Color, Modify, Panel, Remove, Style, Width,
     },
-    Table, Tabled,
 };
 
-use crate::models::{job::TabledJob, sprint::QueriedSprint};
+use crate::models::{insight::CountAndPercentage, job::TabledJob, sprint::QueriedSprint};
 
 /// Display jobs in a table.
 pub fn display_jobs(jobs: &Vec<TabledJob>, sprint_name: &str) {
@@ -69,6 +69,19 @@ pub fn display_single_job<T: Tabled>(job: T) {
 /// Display sprint metadata.
 pub fn display_sprint(queried_sprints: &Vec<QueriedSprint>, table_header: &str) {
     let mut table = Table::new(queried_sprints);
+
+    table
+        .with(Panel::header(table_header.green().bold().to_string()))
+        .with(Modify::list(Rows::first(), Alignment::center()))
+        .with(Modify::list(Rows::one(1), Color::FG_BRIGHT_BLUE))
+        .with(Style::blank());
+
+    println!("\n{table}\n");
+}
+
+/// Display insights information.
+pub fn display_insights(count_and_percentages: Vec<CountAndPercentage>, table_header: &str) {
+    let mut table = Table::new(count_and_percentages);
 
     table
         .with(Panel::header(table_header.green().bold().to_string()))
