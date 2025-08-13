@@ -25,6 +25,10 @@ pub fn delete_job(
     let mut job_repo = JobRepository { connection };
     let matched_jobs = job_repo.list_jobs(&query_args)?;
 
+    if matched_jobs.is_empty() {
+        return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
+    }
+
     display_jobs(
         &matched_jobs,
         &query_args.sprint.as_ref().unwrap_or(&current_sprint.name),

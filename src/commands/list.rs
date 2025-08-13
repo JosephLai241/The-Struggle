@@ -16,6 +16,10 @@ pub fn list_jobs(
     let mut job_repo = JobRepository { connection };
     let all_jobs = job_repo.list_jobs(&query_args)?;
 
+    if all_jobs.is_empty() {
+        return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
+    }
+
     display_jobs(
         &all_jobs,
         &query_args.sprint.as_ref().unwrap_or(&current_sprint.name),
