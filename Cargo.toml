@@ -7,6 +7,7 @@ keywords = ["application", "command-line-tool", "job"]
 license = "MIT"
 name = "fetters"
 readme = "README.md"
+repository = "https://github.com/JosephLai241/fetters"
 version = "3.0.0"
 
 [dependencies]
