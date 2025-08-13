@@ -1,10 +1,12 @@
 //! Contains the job sprint repository abstraction class.
 
 use chrono::Local;
+use diesel::dsl::update;
 use diesel::insert_into;
 use diesel::prelude::*;
 
 use crate::errors::FettersError;
+use crate::models::SprintUpdate;
 use crate::models::{NewSprint, QueriedSprint};
 
 /// Contains all methods pertaining to CRUD operations for the `sprints` table.
@@ -45,14 +47,18 @@ impl<'a> SprintRepository<'a> {
             )
     }
 
-    /// Retrieves an existing job sprint by ID.
-    pub fn get_sprint(&mut self, sprint_id: i32) -> Result<QueriedSprint, FettersError> {
+    /// Update an existing sprint with new changes.
+    pub fn update_sprint(
+        &mut self,
+        sprint_id: i32,
+        changes: SprintUpdate,
+    ) -> Result<QueriedSprint, FettersError> {
         use crate::schema::sprints::dsl::*;
 
-        Ok(sprints
-            .find(sprint_id)
-            .select(QueriedSprint::as_select())
-            .first(self.connection)?)
+        Ok(update(sprints.find(sprint_id))
+            .set(&changes)
+            .returning(QueriedSprint::as_returning())
+            .get_result(self.connection)?)
     }
 
     /// Retrieves all job sprints.
