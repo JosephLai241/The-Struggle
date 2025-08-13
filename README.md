@@ -38,8 +38,7 @@
   - [Listing/Searching Jobs](#listingsearching-jobs)
   - [Display Job Insights](#showing-job-insights)
   - [Opening Links](#opening-links)
-- [Releases](#releases)
-- [Why Rust?](#why-rust)
+- [Conclusion](#conclusion)
 
 # Introduction
 
@@ -307,6 +306,10 @@ Options:
 ```
 
 Jobs matching your query parameters will be displayed in a table. Once a job is selected, the link will be opened in your default browser or document viewer based on the file type.
+
+# Conclusion
+
+I wish you the best of luck with finding a job. We all know how rough it is out there. I hope this little CLI tool helps you track your applications during the struggle and that you won't have to use this for too long until you find your next opportunity 🤞🏻.
 
 [projectdirs documentation]: https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html#method.data_dir
 [releases]: https://github.com/JosephLai241/fetters/releases
