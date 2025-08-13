@@ -22,10 +22,19 @@ pub enum FettersError {
     #[error("Inquire error: {0}")]
     InquireError(#[from] inquire::error::InquireError),
 
+    /// Something fucked up when running the SQLite migrations with `diesel_migrations`.
+    #[error("Failed to run migrations!")]
+    MigrationFailure,
+
     /// This error may be raised if the user tries to update or delete a job, but no job
     /// applications have been tracked for the current sprint.
     #[error("No job applications tracked for the current sprint [{0}]")]
     NoJobsAvailable(String),
+
+    /// This error may be raised if the user attempts to create two new sprints in the same day,
+    /// causing a sprint naming conflict (all sprint names should be unique).
+    #[error("There is already a sprint with name {0}. Try renaming the sprint.")]
+    SprintNameConflict(String),
 
     /// Something went wrong when trying to connect to the SQLite database.
     #[error("Failed to connect to SQLite database: {0}")]
