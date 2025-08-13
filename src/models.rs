@@ -11,6 +11,7 @@ use tabled::derive::display;
 use crate::schema::{jobs, sprints, statuses, titles};
 
 /// This struct defines the job object returned from querying SQLite.
+#[allow(dead_code)]
 #[derive(Debug, Queryable, Selectable)]
 #[diesel(table_name = jobs)]
 #[diesel(check_for_backend(Sqlite))]
