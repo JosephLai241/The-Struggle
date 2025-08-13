@@ -89,19 +89,19 @@ pub struct TabledJob {
     pub company_name: String,
     /// The job title.
     #[tabled(rename = "Title")]
-    #[tabled(display("display::option", "unvalidated"))]
+    #[tabled(display("display::option", "N/A"))]
     pub title: Option<String>,
     /// The application status.
     #[tabled(rename = "Status")]
-    #[tabled(display("display::option", "unvalidated"))]
+    #[tabled(display("display::option", "N/A"))]
     pub status: Option<String>,
     /// The link to the job application.
     #[tabled(rename = "Link")]
-    #[tabled(display("display::option", "unvalidated"))]
+    #[tabled(display("display::option", "N/A"))]
     pub link: Option<String>,
     /// Any notes about this job application.
     #[tabled(rename = "Notes")]
-    #[tabled(display("display::option", "unvalidated"))]
+    #[tabled(display("display::option", "N/A"))]
     pub notes: Option<String>,
 }
 
@@ -183,17 +183,22 @@ pub struct NewSprint<'a> {
 }
 
 /// This struct defines the sprint object returned from querying SQLite.
-#[derive(Debug, Queryable, Selectable)]
+#[derive(Debug, Queryable, Selectable, Tabled)]
 #[diesel(table_name = sprints)]
 #[diesel(check_for_backend(Sqlite))]
 pub struct QueriedSprint {
     /// The SQLite ID.
+    #[tabled(skip)]
     pub id: i32,
     /// The sprint title.
+    #[tabled(rename = "Sprint Name")]
     pub name: String,
     /// The start date for this sprint.
+    #[tabled(rename = "Start Date")]
     pub start_date: String,
     /// The end date for this sprint.
+    #[tabled(rename = "End Date")]
+    #[tabled(display("display::option", "N/A"))]
     pub end_date: Option<String>,
 }
 
@@ -205,6 +210,19 @@ impl Display for QueriedSprint {
             self.name, self.start_date, self.end_date
         )
     }
+}
+
+/// This struct defines an updated sprint that will overwrite an existing one in SQLite.
+#[derive(Debug, Default, AsChangeset)]
+#[diesel(table_name = sprints)]
+#[diesel(check_for_backend(Sqlite))]
+pub struct SprintUpdate<'a> {
+    /// The sprint title.
+    pub name: Option<&'a str>,
+    /// The start date for this sprint.
+    pub start_date: Option<&'a str>,
+    /// The end date for this sprint.
+    pub end_date: Option<&'a str>,
 }
 
 /// This struct defines a new status that will be written to the `sprints` table in SQLite.
