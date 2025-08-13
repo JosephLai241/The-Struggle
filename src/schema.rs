@@ -19,6 +19,7 @@ diesel::table! {
         name -> Text,
         start_date -> Text,
         end_date -> Nullable<Text>,
+        num_jobs -> Integer,
     }
 }
 

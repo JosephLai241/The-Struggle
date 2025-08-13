@@ -8,6 +8,7 @@ use diesel::prelude::*;
 use crate::errors::FettersError;
 use crate::models::SprintUpdate;
 use crate::models::{NewSprint, QueriedSprint};
+use crate::schema::sprints;
 
 /// Contains all methods pertaining to CRUD operations for the `sprints` table.
 pub struct SprintRepository<'a> {
@@ -40,6 +41,7 @@ impl<'a> SprintRepository<'a> {
                         name: sprint_name,
                         start_date: &Local::now().date_naive().format("%Y-%m-%d").to_string(),
                         end_date: None,
+                        num_jobs: &0,
                     };
                     self.add_job_sprint(new_sprint)
                 },
@@ -68,5 +70,23 @@ impl<'a> SprintRepository<'a> {
         Ok(sprints
             .select(QueriedSprint::as_select())
             .load(self.connection)?)
+    }
+
+    /// Increment the `num_jobs` count for a particular sprint.
+    pub fn increment_num_jobs(&mut self, sprint_id: i32) -> Result<(), FettersError> {
+        update(sprints::table.filter(sprints::id.eq(sprint_id)))
+            .set(sprints::num_jobs.eq(sprints::num_jobs + 1))
+            .execute(self.connection)?;
+
+        Ok(())
+    }
+
+    /// Decrement the `num_jobs` count for a particular sprint.
+    pub fn decrement_num_jobs(&mut self, sprint_id: i32) -> Result<(), FettersError> {
+        update(sprints::table.filter(sprints::id.eq(sprint_id)))
+            .set(sprints::num_jobs.eq(sprints::num_jobs - 1))
+            .execute(self.connection)?;
+
+        Ok(())
     }
 }

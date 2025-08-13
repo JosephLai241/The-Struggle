@@ -51,6 +51,7 @@ pub fn create_new_sprint(
         name: &new_sprint_name,
         start_date: &today,
         end_date: None,
+        num_jobs: &0,
     })?;
 
     // Write the new sprint to the configuration file.

@@ -7,6 +7,7 @@ use diesel::{delete, insert_into, update};
 use crate::cli::QueryArgs;
 use crate::errors::FettersError;
 use crate::models::{JobUpdate, NewJob, QueriedJob, QueriedSprint, TabledJob};
+use crate::repositories::sprint::SprintRepository;
 use crate::schema::{jobs, sprints, statuses, titles};
 
 /// Contains all methods pertaining to CRUD operations for the `jobs` table.
@@ -19,10 +20,17 @@ impl<'a> JobRepository<'a> {
     pub fn add_job(&mut self, new_job: NewJob) -> Result<QueriedJob, FettersError> {
         use crate::schema::jobs::dsl::*;
 
-        Ok(insert_into(jobs)
+        let queried_job = insert_into(jobs)
             .values(&new_job)
             .returning(QueriedJob::as_returning())
-            .get_result(self.connection)?)
+            .get_result(self.connection)?;
+
+        let mut sprint_repo = SprintRepository {
+            connection: self.connection,
+        };
+        sprint_repo.increment_num_jobs(new_job.sprint_id)?;
+
+        Ok(queried_job)
     }
 
     /// Updates an existing job with new changes.
@@ -43,9 +51,16 @@ impl<'a> JobRepository<'a> {
     pub fn delete_job(&mut self, job_id: i32) -> Result<QueriedJob, FettersError> {
         use crate::schema::jobs::dsl::*;
 
-        Ok(delete(jobs.find(job_id))
+        let queried_job = delete(jobs.find(job_id))
             .returning(QueriedJob::as_returning())
-            .get_result(self.connection)?)
+            .get_result(self.connection)?;
+
+        let mut sprint_repo = SprintRepository {
+            connection: self.connection,
+        };
+        sprint_repo.decrement_num_jobs(queried_job.sprint_id)?;
+
+        Ok(queried_job)
     }
 
     /// List all jobs matching the query.
