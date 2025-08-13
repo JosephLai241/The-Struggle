@@ -6,7 +6,7 @@ use diesel::{delete, insert_into, update};
 
 use crate::cli::QueryArgs;
 use crate::errors::FettersError;
-use crate::models::{JobUpdate, NewJob, QueriedJob, TabledJob};
+use crate::models::{JobUpdate, NewJob, QueriedJob, QueriedSprint, TabledJob};
 use crate::schema::{jobs, sprints, statuses, titles};
 
 /// Contains all methods pertaining to CRUD operations for the `jobs` table.
@@ -49,7 +49,11 @@ impl<'a> JobRepository<'a> {
     }
 
     /// List all jobs matching the query.
-    pub fn list_jobs(&mut self, query_args: &QueryArgs) -> Result<Vec<TabledJob>, FettersError> {
+    pub fn list_jobs(
+        &mut self,
+        query_args: &QueryArgs,
+        current_sprint: &QueriedSprint,
+    ) -> Result<Vec<TabledJob>, FettersError> {
         let mut query = jobs::table
             .left_join(titles::table.on(jobs::title_id.eq(titles::id)))
             .left_join(statuses::table.on(jobs::status_id.eq(statuses::id)))
@@ -65,6 +69,12 @@ impl<'a> JobRepository<'a> {
             ))
             .into_boxed::<Sqlite>();
 
+        if let Some(sprint) = &query_args.sprint {
+            query = query.filter(sprints::name.like(format!("%{}%", sprint)));
+        } else {
+            query = query.filter(sprints::id.eq(current_sprint.id));
+        }
+
         if let Some(company) = &query_args.company {
             query = query.filter(jobs::company_name.like(format!("%{}%", company)));
         }
@@ -75,10 +85,6 @@ impl<'a> JobRepository<'a> {
 
         if let Some(notes) = &query_args.notes {
             query = query.filter(jobs::notes.like(format!("%{}%", notes)));
-        }
-
-        if let Some(sprint) = &query_args.sprint {
-            query = query.filter(sprints::name.like(format!("%{}%", sprint)));
         }
 
         if let Some(status) = &query_args.status {
