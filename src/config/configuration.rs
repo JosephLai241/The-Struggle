@@ -1,6 +1,6 @@
 //! Contains all functionality pertaining to modifying the configuration file for `fetters`.
 
-use std::fs::{create_dir_all, read_to_string, File};
+use std::fs::{File, create_dir_all, read_to_string};
 use std::io::Write;
 use std::path::PathBuf;
 
