@@ -29,12 +29,12 @@ pub fn update_job(
     let default_sprint = Some(current_sprint.name.clone());
 
     // Search the default sprint if no sprint filter was specified.
-    if let None = query_args.sprint {
+    if query_args.sprint.is_none() {
         query_args.sprint = default_sprint;
     }
 
     let mut job_repo = JobRepository { connection };
-    let matched_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
+    let matched_jobs = job_repo.list_jobs(query_args, current_sprint)?;
 
     if matched_jobs.is_empty() {
         return Err(FettersError::NoJobsAvailable(
@@ -52,77 +52,75 @@ pub fn update_job(
     if let Some(job) = Select::new("Select the job you want to modify:", matched_jobs)
         .with_render_config(get_inquire_config())
         .prompt_skippable()?
-    {
-        if let Some(selections) = MultiSelect::new(
+        && let Some(selections) = MultiSelect::new(
             "Select the fields you want to update:",
             UpdatableField::iter().collect(),
         )
         .with_render_config(get_inquire_config())
         .prompt_skippable()?
+    {
+        let mut new_company_name: Option<String> = None;
+        let mut new_link: Option<String> = None;
+        let mut new_notes: Option<String> = None;
+        let mut new_sprint_id: Option<i32> = None;
+        let mut new_status_id: Option<i32> = None;
+        let mut new_title_id: Option<i32> = None;
+
+        for selection in selections {
+            match selection {
+                UpdatableField::CompanyName => {
+                    new_company_name = Some(input_prompt(&selection)?);
+                }
+                UpdatableField::Link => {
+                    new_link = Some(input_prompt(&selection)?);
+                }
+                UpdatableField::Notes => {
+                    new_notes = Some(input_prompt(&selection)?);
+                }
+                UpdatableField::Sprint => {
+                    set_new_sprint(connection, &mut new_sprint_id)?;
+                }
+                UpdatableField::Status => {
+                    set_new_status(connection, &mut new_status_id)?;
+                }
+                UpdatableField::Title => {
+                    set_new_title(connection, &mut new_title_id)?;
+                }
+            }
+        }
+
+        match Confirm::new("Confirm updates?")
+            .with_default(true)
+            .with_render_config(get_inquire_config())
+            .prompt_skippable()?
         {
-            let mut new_company_name: Option<String> = None;
-            let mut new_link: Option<String> = None;
-            let mut new_notes: Option<String> = None;
-            let mut new_sprint_id: Option<i32> = None;
-            let mut new_status_id: Option<i32> = None;
-            let mut new_title_id: Option<i32> = None;
+            Some(true) => {
+                let job_update = JobUpdate {
+                    company_name: new_company_name.as_deref(),
+                    title_id: new_title_id,
+                    status_id: new_status_id,
+                    link: new_link.as_deref(),
+                    notes: new_notes.as_deref(),
+                    sprint_id: new_sprint_id,
+                };
 
-            for selection in selections {
-                match selection {
-                    UpdatableField::CompanyName => {
-                        new_company_name = Some(input_prompt(&selection)?);
-                    }
-                    UpdatableField::Link => {
-                        new_link = Some(input_prompt(&selection)?);
-                    }
-                    UpdatableField::Notes => {
-                        new_notes = Some(input_prompt(&selection)?);
-                    }
-                    UpdatableField::Sprint => {
-                        set_new_sprint(connection, &mut new_sprint_id)?;
-                    }
-                    UpdatableField::Status => {
-                        set_new_status(connection, &mut new_status_id)?;
-                    }
-                    UpdatableField::Title => {
-                        set_new_title(connection, &mut new_title_id)?;
-                    }
-                }
+                let mut job_repo = JobRepository { connection };
+                job_repo.update_job(job.id, job_update)?;
+
+                println!(
+                    "{}",
+                    format!("\nUpdated entry for sprint [{}]!\n", current_sprint.name)
+                        .green()
+                        .bold()
+                );
+
+                return Ok(());
             }
-
-            match Confirm::new("Confirm updates?")
-                .with_default(true)
-                .with_render_config(get_inquire_config())
-                .prompt_skippable()?
-            {
-                Some(true) => {
-                    let job_update = JobUpdate {
-                        company_name: new_company_name.as_deref(),
-                        title_id: new_title_id,
-                        status_id: new_status_id,
-                        link: new_link.as_deref(),
-                        notes: new_notes.as_deref(),
-                        sprint_id: new_sprint_id,
-                    };
-
-                    let mut job_repo = JobRepository { connection };
-                    job_repo.update_job(job.id, job_update)?;
-
-                    println!(
-                        "{}",
-                        format!("\nUpdated entry for sprint [{}]!\n", current_sprint.name)
-                            .green()
-                            .bold()
-                    );
-
-                    return Ok(());
-                }
-                Some(false) => {
-                    println!("{}", "Cancelled.".red().bold());
-                    return Ok(());
-                }
-                None => println!("{}", "Invalid input, try again".red().bold()),
+            Some(false) => {
+                println!("{}", "Cancelled.".red().bold());
+                return Ok(());
             }
+            None => println!("{}", "Invalid input, try again".red().bold()),
         }
     }
 

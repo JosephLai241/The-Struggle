@@ -65,7 +65,7 @@ pub fn add_job(
                     TitleType::QueriedTitle(queried_title) => queried_title.id,
                 };
                 let new_job = NewJob {
-                    company_name: company_name,
+                    company_name,
                     created,
                     title_id,
                     status_id: status.id,

@@ -126,7 +126,7 @@ impl TabledJob {
             }
         }
 
-        return field_name.to_string();
+        field_name.to_string()
     }
 }
 

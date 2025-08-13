@@ -40,14 +40,14 @@ impl<'a> StatusRepository<'a> {
     pub fn seed_statuses(&mut self) -> Result<(), FettersError> {
         use crate::schema::statuses::dsl::*;
 
-        for status in DEFAULT_STATUSES.to_vec() {
+        for status in DEFAULT_STATUSES.iter().copied() {
             let exists = statuses
                 .filter(name.eq(status))
                 .select(QueriedStatus::as_select())
                 .first(self.connection)
                 .optional()?;
 
-            if let None = exists {
+            if exists.is_none() {
                 let new_status = NewStatus { name: status };
                 insert_into(statuses)
                     .values(&new_status)

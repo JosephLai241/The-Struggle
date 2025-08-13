@@ -31,10 +31,7 @@ impl Config {
         if !config_path.exists() {
             println!(
                 "{}",
-                format!(
-                    "{}",
-                    "ℹ️ Config file not found, creating default at {config_path:?}".cyan()
-                ),
+                "ℹ️ Config file not found, creating default at {config_path:?}".cyan()
             );
 
             Self::create_default_config(&config_path)?;

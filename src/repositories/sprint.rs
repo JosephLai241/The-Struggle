@@ -44,7 +44,7 @@ impl<'a> SprintRepository<'a> {
                     };
                     self.add_job_sprint(new_sprint)
                 },
-                |sprint| Ok(sprint),
+                Ok,
             )
     }
 

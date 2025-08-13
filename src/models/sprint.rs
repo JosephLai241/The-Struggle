@@ -67,5 +67,5 @@ pub struct SprintUpdate<'a> {
     /// The start date for this sprint.
     pub start_date: Option<&'a str>,
     /// The end date for this sprint.
-    pub end_date: Option<&'a str>,
+    pub end_date: Option<Option<&'a str>>,
 }

@@ -42,7 +42,7 @@ pub fn create_new_sprint(
         SprintUpdate {
             name: None,
             start_date: None,
-            end_date: Some(&today),
+            end_date: Some(Some(&today)),
         },
     )?;
 
@@ -55,7 +55,7 @@ pub fn create_new_sprint(
     })?;
 
     // Write the new sprint to the configuration file.
-    let mut new_config = Config::from(config);
+    let mut new_config = config;
     new_config.current_sprint = queried_sprint.name.clone();
     new_config.save_to_file()?;
 
@@ -75,9 +75,25 @@ pub fn show_all_sprints(connection: &mut SqliteConnection) -> Result<(), Fetters
 }
 
 /// Set the current sprint by selecting one of the options in the `Select` menu.
-pub fn set_sprint(connection: &mut SqliteConnection, config: Config) -> Result<(), FettersError> {
+pub fn set_sprint(
+    connection: &mut SqliteConnection,
+    config: Config,
+    current_sprint: &QueriedSprint,
+) -> Result<(), FettersError> {
+    let today = Local::now().format("%Y-%m-%d").to_string();
+
     let mut sprint_repo = SprintRepository { connection };
     let all_sprints = sprint_repo.get_all_sprints()?;
+
+    if all_sprints.len() == 1 {
+        println!(
+            "{}",
+            "There is currently only one sprint available. Create a new one to set a different sprint."
+                .yellow()
+                .bold()
+        );
+        return Ok(());
+    }
 
     let sprint_selection = Select::new("Select a new sprint:", all_sprints)
         .with_render_config(get_inquire_config())
@@ -85,10 +101,30 @@ pub fn set_sprint(connection: &mut SqliteConnection, config: Config) -> Result<(
     loop {
         match sprint_selection {
             Some(queried_sprint) => {
-                let mut new_config = Config::from(config);
+                let mut new_config = config;
                 new_config.current_sprint = queried_sprint.name;
 
                 new_config.save_to_file()?;
+
+                // Update the current sprint's `end_date` field.
+                sprint_repo.update_sprint(
+                    current_sprint.id,
+                    SprintUpdate {
+                        name: None,
+                        start_date: None,
+                        end_date: Some(Some(&today)),
+                    },
+                )?;
+
+                // Remove the end date of the selected sprint.
+                sprint_repo.update_sprint(
+                    queried_sprint.id,
+                    SprintUpdate {
+                        name: None,
+                        start_date: None,
+                        end_date: Some(None),
+                    },
+                )?;
 
                 println!(
                     "{}",

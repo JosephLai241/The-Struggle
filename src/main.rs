@@ -114,7 +114,7 @@ fn main() -> Result<(), FettersError> {
                 }
             }
             SprintOption::Set => {
-                if let Err(error) = set_sprint(&mut database.connection, config) {
+                if let Err(error) = set_sprint(&mut database.connection, config, &current_sprint) {
                     println!("{}", error.red().bold());
                 }
             }

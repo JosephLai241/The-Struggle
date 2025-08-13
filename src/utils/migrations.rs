@@ -14,7 +14,7 @@ pub fn run_migrations(connection: &mut SqliteConnection) -> Result<(), FettersEr
     if let Err(error) = connection.run_pending_migrations(MIGRATIONS) {
         println!(
             "{}",
-            format!("FAILED TO RUN SQLITE MIGRATIONS: {}", error.to_string())
+            format!("FAILED TO RUN SQLITE MIGRATIONS: {}", error)
                 .red()
                 .bold()
         );

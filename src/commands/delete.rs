@@ -21,12 +21,12 @@ pub fn delete_job(
     let default_sprint = Some(current_sprint.name.clone());
 
     // Search the default sprint if no sprint filter was specified.
-    if let None = query_args.sprint {
+    if query_args.sprint.is_none() {
         query_args.sprint = default_sprint;
     }
 
     let mut job_repo = JobRepository { connection };
-    let matched_jobs = job_repo.list_jobs(&query_args, current_sprint)?;
+    let matched_jobs = job_repo.list_jobs(query_args, current_sprint)?;
 
     if matched_jobs.is_empty() {
         return Err(FettersError::NoJobsAvailable(
@@ -41,7 +41,7 @@ pub fn delete_job(
 
     display_jobs(
         &matched_jobs,
-        &query_args.sprint.as_ref().unwrap_or(&current_sprint.name),
+        query_args.sprint.as_ref().unwrap_or(&current_sprint.name),
     );
 
     if let Some(job) = Select::new("Select the job you want to delete:", matched_jobs)
