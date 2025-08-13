@@ -2,7 +2,7 @@
 
 use std::fs::{File, create_dir_all, read_to_string};
 use std::io::Write;
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use chrono::Local;
 use directories::ProjectDirs;
@@ -15,10 +15,12 @@ use crate::errors::FettersError;
 /// Contains all configuration settings that will be stored in `fetters.toml`.
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
+    /// The path to the configuration file.
+    pub config_path: PathBuf,
+    /// The current job sprint.
+    pub current_sprint: String,
     /// The path to the SQLite database.
     pub db_path: String,
-    /// The current job sprint.
-    pub sprint: String,
 }
 
 impl Config {
@@ -38,13 +40,14 @@ impl Config {
             Self::create_default_config(&config_path)?;
 
             let config = Config {
+                config_path: config_path.clone(),
+                current_sprint: Local::now().date_naive().format("%Y-%m-%d").to_string(),
                 db_path: Self::get_data_dir_path()?
                     .join("fetters.db")
                     .to_string_lossy()
                     .into_owned(),
-                sprint: Local::now().date_naive().format("%Y-%m-%d").to_string(),
             };
-            config.save_to_file(&config_path)?;
+            config.save_to_file()?;
 
             Ok(config)
         } else {
@@ -56,7 +59,7 @@ impl Config {
     }
 
     /// Get the project config directory path.
-    fn get_config_dir_path() -> Result<PathBuf, FettersError> {
+    pub fn get_config_dir_path() -> Result<PathBuf, FettersError> {
         if let Some(ref project_directory) = ProjectDirs::from("", "", "fetters") {
             return Ok(project_directory.config_dir().to_owned());
         }
@@ -85,9 +88,9 @@ impl Config {
     }
 
     /// Save the current config to the `fetters.toml` file by overwriting it.
-    fn save_to_file(&self, path: &Path) -> Result<(), FettersError> {
+    pub fn save_to_file(&self) -> Result<(), FettersError> {
         let toml_str = toml::to_string_pretty(&self)?;
-        let mut file = File::create(path)?;
+        let mut file = File::create(self.config_path.clone())?;
         file.write_all(toml_str.as_bytes())?;
 
         Ok(())
