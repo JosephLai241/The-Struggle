@@ -52,12 +52,12 @@ pub fn display_single_job<T: Tabled>(job: T) {
         .with(Modify::list(Rows::first(), Color::FG_BRIGHT_CYAN))
         .modify(Columns::one(4), Width::truncate(23).suffix("..."))
         .modify(Columns::one(5), Width::wrap(40).keep_words(true))
-        .modify(Locator::content("GHOSTED"), Color::FG_BRIGHT_WHITE)
+        .modify(Locator::content("GHOSTED"), Color::rgb_fg(133, 133, 133))
         .modify(Locator::content("HIRED"), Color::FG_BRIGHT_GREEN)
         .modify(Locator::content("IN PROGRESS"), Color::FG_BRIGHT_YELLOW)
         .modify(
             Locator::content("NOT HIRING ANYMORE"),
-            Color::rgb_fg(201, 201, 201),
+            Color::rgb_fg(117, 117, 117),
         )
         .modify(Locator::content("OFFER RECEIVED"), Color::FG_BRIGHT_MAGENTA)
         .modify(Locator::content("PENDING"), Color::FG_BRIGHT_BLUE)
