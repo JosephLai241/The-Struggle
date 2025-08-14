@@ -69,13 +69,19 @@ pub fn update_job(
         for selection in selections {
             match selection {
                 UpdatableField::CompanyName => {
-                    new_company_name = Some(input_prompt(&selection)?);
+                    new_company_name = Some(input_prompt(&selection, &job.company_name)?);
                 }
                 UpdatableField::Link => {
-                    new_link = Some(input_prompt(&selection)?);
+                    new_link = Some(input_prompt(
+                        &selection,
+                        &job.link.clone().unwrap_or("".to_string()),
+                    )?);
                 }
                 UpdatableField::Notes => {
-                    new_notes = Some(input_prompt(&selection)?);
+                    new_notes = Some(input_prompt(
+                        &selection,
+                        &job.notes.clone().unwrap_or("".to_string()),
+                    )?);
                 }
                 UpdatableField::Sprint => {
                     set_new_sprint(connection, &mut new_sprint_id)?;
@@ -151,7 +157,10 @@ enum UpdatableField {
 }
 
 /// Show an input prompt for text-based fields.
-fn input_prompt(updatable_field: &UpdatableField) -> Result<String, FettersError> {
+fn input_prompt(
+    updatable_field: &UpdatableField,
+    previous_value: &str,
+) -> Result<String, FettersError> {
     let message = match updatable_field {
         UpdatableField::CompanyName => "Enter a new company name:",
         UpdatableField::Title => "Enter a new job title:",
@@ -163,6 +172,7 @@ fn input_prompt(updatable_field: &UpdatableField) -> Result<String, FettersError
     loop {
         match (
             Text::new(message)
+                .with_initial_value(previous_value)
                 .with_render_config(get_inquire_config())
                 .prompt_skippable()?,
             updatable_field,
