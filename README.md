@@ -205,7 +205,7 @@ fetters add <COMPANY_NAME>
 
 A series of `inquire` prompts will show to set the job title, application status, link, and any notes.
 
-<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/69b54ab1-0d6a-48cc-8a87-421f339453b2" />
+<img width="1831" height="985" alt="image" src="https://github.com/user-attachments/assets/20513052-5b9e-4927-8c2d-89e7d4cd8d3d" />
 
 ## Updating or Deleting a Job
 
