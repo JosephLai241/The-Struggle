@@ -1,93 +1,108 @@
-//! Defining command-line interface flags.
+//! Contains all CLI options.
 
-use structopt::StructOpt;
+use clap::{Parser, Subcommand};
 
-/// This struct contains all flags that are used in this program.
-#[derive(Debug, PartialEq, StructOpt)]
-#[structopt(
-    name = "The Struggle", 
-    about = "A command line tool for tracking your job applications"
-)]
-pub struct Args {
-    /// Flag for adding a job listing to the spreadsheet.
-    #[structopt(
-        short = "a", 
-        long = "add", 
-        help = "Add a new job to the spreadsheet"
-    )]
-    pub add: Option<String>,
-
-    /// Flag for updating an existing job listing.
-    #[structopt(
-        short = "u", 
-        long = "update", 
-        help = "Update an existing job"
-    )]
-    pub update: Option<String>,
-
-    /// Flag for deleting an existing job listing.
-    #[structopt(
-        short = "d", 
-        long = "delete", 
-        help = "Delete an existing job"
-    )]
-    pub delete: Option<String>,
-
-    /// Flag for searching for an existing job listing.
-    #[structopt(
-        short = "s",
-        long = "search",
-        help = "Search for an existing job"
-    )]
-    pub search: Option<String>,
-
-    /// Flag for listing all existing job listings.
-    #[structopt(
-        short = "l", 
-        long = "list", 
-        help = "List all saved job applications",
-    )]
-    pub list: bool,
-
-    /// Flag for displaying job application insights.
-    #[structopt(
-        short = "i", 
-        long = "insights", 
-        help = "Display job application insights",
-    )]
-    pub insights: bool,
+/// Contains all CLI options for `fetters`.
+#[derive(Debug, Parser)]
+#[command(name = "fetters")]
+#[command(about, version)]
+pub struct Cli {
+    /// Run a subcommand.
+    #[command(subcommand)]
+    pub command: Command,
 }
 
-/// Return Args struct.
-pub fn get_args() -> Args {
-    return Args::from_args();
+/// Contains all subcommands for `fetters`.
+#[derive(Debug, Subcommand)]
+pub enum Command {
+    /// Track a new job application.
+    Add {
+        /// The name of the company.
+        company: String,
+    },
+    /// Display the ASCII art.
+    Banner,
+    /// Configure `fetters` by opening its config file.
+    #[command(subcommand)]
+    Config(ConfigOption),
+    /// Delete a tracked job application.
+    Delete(QueryArgs),
+    /// Show job application inslghts.
+    Insights,
+    /// List job applications.
+    List(QueryArgs),
+    /// Open the web link in your default browser or the local file associated with a job application.
+    Open(QueryArgs),
+    /// Configuration options for job sprints.
+    #[command(subcommand)]
+    Sprint(SprintOption),
+    /// Update a tracked job application.
+    Update(QueryArgs),
 }
 
-#[cfg(test)]
-mod test_cli {
-    use super::*;
+/// All flags you can use to query jobs.
+#[derive(Debug, Parser)]
+pub struct QueryArgs {
+    #[arg(
+        short,
+        long,
+        help = "Filter results by company name. Supports searching with partial text."
+    )]
+    pub company: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by links. Supports searching with partial text."
+    )]
+    pub link: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by notes. Supports searching with partial text."
+    )]
+    pub notes: Option<String>,
+    #[arg(
+        long,
+        help = "Filter results by sprint name. Supports searching with partial text."
+    )]
+    pub sprint: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by application status. Supports searching with partial text."
+    )]
+    pub status: Option<String>,
+    #[arg(
+        short,
+        long,
+        help = "Filter results by job title. Supports searching with partial text."
+    )]
+    pub title: Option<String>,
+}
 
-    use assert_cmd::Command;
+/// All subcommands for interacting with the configuration file for `fetters`.
+#[derive(Debug, Subcommand)]
+pub enum ConfigOption {
+    /// Edit the configuration file. You typically don't need to use this command as fetters will
+    /// set these fields with other subcommands. However, this is available if you absolutely need
+    /// to manually change values.
+    Edit,
+    /// Display the current configuration settings
+    Show,
+}
 
-    #[test]
-    fn test_invalid_arg() {
-        Command::cargo_bin("ts")
-            .unwrap()
-            .arg("-q")
-            .assert()
-            .failure();
-    }
-
-    #[test]
-    fn test_get_args() {
-        let args = get_args();
-        assert_eq!(Args {
-            add: None,
-            update: None,
-            delete: None,
-            search: None,
-            list: false,
-            insights: false
-        }, args);
-    }
+/// All subcommands for managing job sprints.
+#[derive(Debug, Subcommand)]
+pub enum SprintOption {
+    /// Display the current sprint name.
+    Current,
+    /// Create a new job sprint.
+    New {
+        #[arg(short, long, help = "Override the default sprint name (YYYY-MM-DD).")]
+        name: Option<String>,
+    },
+    /// Show all job sprints tracked by `fetters`.
+    ShowAll,
+    /// Set the current job sprint.
+    Set,
 }

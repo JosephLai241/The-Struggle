@@ -1,71 +1,132 @@
-//! It really is a struggle out there.
+//! `fetters` - a CLI tool for tracking your job applications.
 
-mod add;
 mod cli;
-mod delete;
-mod insights;
-mod list;
-mod mcsv;
-mod model;
-mod prompt;
-mod search;
-mod table;
-mod titles;
-mod update;
+mod commands;
+mod config;
+mod errors;
+mod models;
+mod repositories;
+mod schema;
+mod sqlite;
+mod utils;
 
-use ansi_term::*;
+use clap::Parser;
+use lazy_static::lazy_static;
+use owo_colors::OwoColorize;
 
-fn main() {
-    titles::main_title();
+use crate::cli::{Cli, Command, ConfigOption, SprintOption};
+use crate::commands::add::add_job;
+use crate::commands::config::edit_config;
+use crate::commands::delete::delete_job;
+use crate::commands::insights::show_insights;
+use crate::commands::list::list_jobs;
+use crate::commands::open::open_application;
+use crate::commands::sprint::{
+    create_new_sprint, set_sprint, show_all_sprints, show_current_sprint,
+};
+use crate::commands::update::update_job;
+use crate::config::configuration::Config;
+use crate::errors::FettersError;
+use crate::repositories::{sprint::SprintRepository, statuses::StatusRepository};
+use crate::sqlite::Database;
+use crate::utils::migrations::run_migrations;
 
-    match cli::get_args() {
-        cli::Args { add: Some(company), .. } => {
-            let new_job = add::add_job(company);
-            search::print_selection(
-                search::DataType::Singular(&new_job), 
-                "NEW JOB".to_string());
-            
-            add::confirm_add(new_job);
+lazy_static! {
+    /// ASCII art for `fetters`.
+    static ref ASCII_ART: &'static [u8; 695] = include_bytes!("../art.txt");
+}
+
+/// Run `fetters`.
+fn main() -> Result<(), FettersError> {
+    let config = Config::load_or_create()?;
+    let mut database = Database::new_connection(&config.db_path)?;
+
+    run_migrations(&mut database.connection)?;
+
+    // Ensure the default statuses are stored in the `statuses` SQLite table.
+    let mut status_repo = StatusRepository {
+        connection: &mut database.connection,
+    };
+    status_repo.seed_statuses()?;
+
+    let mut sprint_repo = SprintRepository {
+        connection: &mut database.connection,
+    };
+    let current_sprint = sprint_repo.get_current_sprint(&config.current_sprint)?;
+
+    let cli = Cli::parse();
+
+    match cli.command {
+        Command::Add { company } => {
+            if let Err(error) = add_job(&mut database.connection, &company, &current_sprint) {
+                println!("{}", error.red().bold());
+            }
+        }
+        Command::Banner => println!("{}", String::from_utf8_lossy(&ASCII_ART[..]).red().bold()),
+        Command::Config(config_option) => match config_option {
+            ConfigOption::Edit => {
+                if let Err(error) = edit_config() {
+                    println!("{}", error.red().bold());
+                }
+            }
+            ConfigOption::Show => {
+                println!("{config:#?}");
+            }
         },
-        cli::Args { update: Some(company), .. } => {
-            let mut master = mcsv::get_jobs().unwrap();
-
-            let match_indexes = search::print_matches(&company, &master);
-            let job_index = search::select_match(match_indexes);
-
-            let section_int = update::select_attribute();
-            let update = update::get_update(section_int);
-            update::change_attribute(job_index, &mut master, update);
-            search::print_selection(
-                search::DataType::Btm(job_index, &master), 
-                "UPDATED JOB".to_string());
-
-            update::update_job(&mut master);
+        Command::Delete(mut query_args) => {
+            if let Err(error) =
+                delete_job(&mut database.connection, &mut query_args, &current_sprint)
+            {
+                println!("{}", error.red().bold());
+            }
+        }
+        Command::Insights => {
+            if let Err(error) = show_insights(&mut database.connection, &current_sprint) {
+                println!("{}", error.red().bold());
+            }
+        }
+        Command::List(query_args) => {
+            if let Err(error) = list_jobs(&mut database.connection, &query_args, &current_sprint) {
+                println!("{}", error.red().bold());
+            }
+        }
+        Command::Open(mut query_args) => {
+            if let Err(error) =
+                open_application(&mut database.connection, &mut query_args, &current_sprint)
+            {
+                println!("{}", error.red().bold());
+            }
+        }
+        Command::Sprint(sprint_option) => match sprint_option {
+            SprintOption::Current => {
+                show_current_sprint(current_sprint);
+            }
+            SprintOption::New { name } => {
+                if let Err(error) =
+                    create_new_sprint(&mut database.connection, &name, config, &current_sprint)
+                {
+                    println!("{}", error.red().bold());
+                }
+            }
+            SprintOption::ShowAll => {
+                if let Err(error) = show_all_sprints(&mut database.connection) {
+                    println!("{}", error.red().bold());
+                }
+            }
+            SprintOption::Set => {
+                if let Err(error) = set_sprint(&mut database.connection, config, &current_sprint) {
+                    println!("{}", error.red().bold());
+                }
+            }
         },
-        cli::Args { delete: Some(company), .. } => {
-            let mut master = mcsv::get_jobs().unwrap();
-
-            let match_indexes = search::print_matches(&company, &master);
-            let job_index = search::select_match(match_indexes);
-            search::print_selection(
-                search::DataType::Btm(job_index, &master), 
-                "SELECTED JOB".to_string());
-
-            delete::delete_job(job_index, &mut master);
-        },
-        cli::Args { search: Some(company), .. } => {
-            let master = mcsv::get_jobs().unwrap();
-            search::print_matches(&company, &master);
-        },
-        cli::Args { list: true, .. } => {
-            let master = mcsv::get_jobs().unwrap();
-            list::list_jobs(master);
-        },
-        cli::Args { insights: true, .. } => {
-            let master = mcsv::get_jobs().unwrap();
-            let job_stats = insights::get_stats(master);
-            insights::display_insights(job_stats);
-        },
-        _ => println!("{}\n", Colour::Red.bold().paint("NO ARGUMENTS GIVEN 👎"))
+        Command::Update(mut query_args) => {
+            if let Err(error) =
+                update_job(&mut database.connection, &mut query_args, &current_sprint)
+            {
+                println!("{}", error.red().bold());
+            }
+        }
     }
+
+    Ok(())
 }

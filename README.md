@@ -1,264 +1,335 @@
-     __             
-    /\ \__     👎   
-    \ \ ,_\   ____  
-     \ \ \/  /',__\ 
-      \ \ \_/\__, `\
-       \ \__\/\____/
-        \/__/\/___/... The Struggle
+```
+                            _
+      .::::::::::.        -(_)====u         .::::::::::.
+    .::::''''''::::.                      .::::''''''::::.
+  .:::'          `::::....          ....::::'          `:::.
+ .::'             `:::::::|        |:::::::'             `::.
+.::|               |::::::|_ ___ __|::::::|               |::.
+`--'               |::::::|_()__()_|::::::|               `--'
+ :::               |::-o::|        |::o-::|               :::
+ `::.             .|::::::|        |::::::|.             .::'
+  `:::.          .::\-----'        `-----/::.          .:::'
+    `::::......::::'                      `::::......::::'
+      `::::::::::'                          `::::::::::'
+                           fetters
+```
 
-![GitHub top language](https://img.shields.io/github/languages/top/JosephLai241/The-Struggle?color=yellow&logo=Rust)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/JosephLai241/The-Struggle/Rust?logo=github)][Github Actions]
-![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/The-Struggle)
-
-A command-line tool that helps you track your job applications. 
-
-Written in Rust. Tested with Rust 1.54.0.
-
-This program is also available in Python, located on the [Python branch][Python branch].
+[![GitHub Workflow Status](https://github.com/JosephLai241/fetters/actions/workflows/rust.yml/badge.svg)](https://github.com/JosephLai241/fetters/actions/workflows/rust.yml)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/JosephLai241/fetters)
 
 # Table of Contents
 
-* [Introduction](#introduction)
-    + [What Does It Do?](#what-does-it-do)
-    + [Why?](#why)
-* [Installation](#installation)
-    + [Compile From Source](#compile-from-source)
-    + [Or Download a Binary](#or-download-a-binary)
-* [Stored Attributes](#stored-attributes)
-* [Read This Before You Run the Program](#read-this-before-you-run-the-program)
-* [Walkthrough](#walkthrough)
-    + [Adding a Job](#adding-a-job)
-    + [Updating or Deleting a Job](#updating-or-deleting-a-job)
-    + [Search for an Existing Job](#search-for-an-existing-job)
-    + [Listing Stored Jobs](#listing-stored-jobs)
-    + [Display Job Insights](#showing-job-insights)
-* [Releases](#releases)
-* [Why Rust?](#why-rust)
- 
+- [Introduction](#introduction)
+  - [What Does It Do?](#what-does-it-do)
+- [Installation](#installation)
+  - [`cargo install`](#cargo-install)
+  - [Compile From Source](#compile-from-source)
+  - [Or Download a Binary](#or-download-a-binary)
+- [Stored Attributes](#stored-attributes)
+- [Job Sprints](#job-sprints)
+- [Walkthrough](#walkthrough)
+  - [Managing Job Sprints](#managing-job-sprints)
+    - [Creating a New Sprint](#creating-a-new-sprint)
+    - [Show Current Job Sprint](#show-current-job-sprint)
+    - [Show All Job Sprints](#show-all-job-sprints)
+    - [Switch to a Different Sprint](#switch-to-a-different-sprint)
+  - [Adding a Job](#adding-a-job)
+  - [Updating or Deleting a Job](#updating-or-deleting-a-job)
+  - [Listing/Searching Jobs](#listingsearching-jobs)
+  - [Display Job Insights](#showing-job-insights)
+  - [Opening Links](#opening-links)
+- [Conclusion](#conclusion)
+
 # Introduction
+
+> [!IMPORTANT]
+> **Requires SQLite v3.35.0+ installed on your system.**
+
+`fetters` is a command-line tool that helps you track your job applications all in one place. The process of adding, updating, searching, or deleting job applications is very simple and fast.
+
+You can create different "job sprints" (phases when you are looking for a new job) with this program and track the number of applications you sent during each period, providing a singular tool and space for you to track them.
 
 ## What Does It Do?
 
-`The-Struggle` performs CRUD operations on a local spreadsheet (which is automatically generated for you) and simplifies the process of tracking your applications. It is very fast because:
+This program stores job applications, job titles, and sprints into a local SQLite database. This SQLite database is automatically created for you on the initial run and is stored in the project directory on your machine (see the documentation for [`directories::ProjectDirs::data_dir()`][projectdirs documentation] for the exact path on your platform).
 
-1) It is written in Rust - it is so fast it feels as if the output was hardcoded.
-2) Doing these operations from the terminal is much faster than opening up a spreadsheet and manually editing it.
+This program enables you to:
 
-Its features include:
-
-* Add, update, or delete job applications from the spreadsheet
-* Display/search for tracked job applications, using [ANSI Terminal][ANSI Terminal] and [PrettyTable][PrettyTable] to color-code and neatly display applications in a table within your terminal.
-* Display insights for tracked applications, such as:
-    + The total number of tracked applications
-    + The total number and percentage of applications:
-        * That are pending a response
-        * That are currently in progress
-        * Where you have received an offer
-        * Where you have been rejected from
-        * Where you have been hired at
-
-## Why?
-
-I graduated from college in June 2020 and have been applying to ***tons*** of companies in attempt to kick off my developer career. It has been very difficult for me to break into the industry because I am a self-taught developer (no CS degree) and I graduated in the midst of the COVID-19 pandemic.
-
-The number of applications that I have sent out is so high, it has become hard to keep track of every company as well as where my application stands in the interview process (if I even pass the resume stage). I decided to make a command-line tool in attempt to help me keep track of my applications and the status of each one. I thought the tool was pretty useful so I put it on here. 
-
-Thank you for trying this program and I hope it will help you keep track of your applications as well. It is tough out there, man.
+- Add, update, and delete job applications from the database.
+- List/search for tracked job applications. Each entry is color-coded based on the application status.
+- Display application insights (ie. How many applications are in progress, how many have been rejected, how many are in pending status, etc.).
+- Group job applications by sprints.
 
 # Installation
 
-> ***NOTE:*** This program initializes and reads from files in your current working directory. Run `The-Struggle` in a directory in which you would like all your records to be stored.
-> 
-> The complimentary spreadsheet `job_applications.csv` will be created in whichever directory you move the `ts` binary to.
+## `cargo install`
+
+You can run `cargo install` to install this on your machine:
+
+```
+cargo install fetters
+```
 
 ## Compile From Source
 
-First, you will need a [Rust installation][Rust Official Site] in order to compile The Struggle.
-
-Then run these commands to build The Struggle:
+You can compile this program from source with the following commands:
 
 ```
-$ git clone https://www.github.com/JosephLai241/The-Struggle
-$ cd The-Struggle
+$ git clone https://www.github.com/JosephLai241/fetters
+$ cd fetters
 $ cargo build --release
 ```
 
-To check if The Struggle built correctly:
+To check if it built correctly:
 
 ```
-$ ./target/release/ts -V
+$ ./target/release/fetters -V
 ```
 
-You can then move the `ts` binary to another directory so you do not have to type that path to run The Struggle. Check if the binary was moved correctly:
+You can then move the `fetters` binary to another directory so you do not have to type that path to run it. Check if the binary was moved correctly:
 
 ```
-$ mv target/release/ts /some/directory/
+$ mv target/release/fetters /some/directory/
 $ cd /some/directory
-$ ./ts -V
+$ ./fetters -V
 ```
 
 ## Or Download a Binary
 
-If you do not want to compile `The-Struggle`, you can also download a binary attached to a release in the [Releases][Releases] section.
+If you do not want to compile `fetters`, you can also download a binary attached to a release in the [Releases] section.
 
 # Stored Attributes
 
-Each application will store the following information:
+Each record stores the following fields:
 
-* `DATE ADDED`
-* `COMPANY`
-* `JOB TITLE`
-* `STATUS`
-* `NOTES`
+- Created timestamp (`YYYY-MM-DD HH:MM:SS`)
+- Company name
+- Job title
+- Application status
+- [Optional] Link to the application
+- [Optional] Notes
+- Job Sprint
 
-`DATE ADDED` is automatically calculated based on Rust's [chrono][chrono].
+The job status is color-coded in the table. Here is a table mapping each status to its color:
 
-`COMPANY`, `JOB TITLE`, and `NOTES` are all based on user input.
+| Status             | Color     |
+| ------------------ | --------- |
+| GHOSTED            | Gray      |
+| HIRED              | Green     |
+| IN PROGRESS        | Yellow    |
+| NOT HIRING ANYMORE | Dark Gray |
+| OFFER RECEIVED     | Magenta   |
+| PENDING            | Blue      |
+| REJECTED           | Red       |
 
-`STATUS` has a few options you can choose from. Each status is mapped to a color and will colorize your job listing within the terminal:
+# Job Sprints
 
-| Application Status | Color   |
-|--------------------|---------|
-| PENDING            | Blue    |
-| IN PROGRESS        | Yellow  |
-| OFFER RECEIVED     | Magenta |
-| HIRED              | Green   |
-| REJECTED           | Red     |
+A job sprint is a period of time when you are actively submitting job applications. `fetters` allows you to organize your job applications into sprints so that it is easy to tell during which time period an application was submitted.
 
-# Read This Before You Run the Program
-
-You have to add a job on the initial run of this program. Adding a job on the initial run will create a CSV spreadsheet titled `job_applications.csv` within your current working directory. All other functionality of the program will not work prior to adding the first job because there is no valid spreadsheet to read from. 
-
-**DO NOT** create `job_applications.csv` manually. The program will create the file for you. Creating an empty `job_applications.csv` before running the `-a` flag will cause issues for you later on. 
+See the [Managing Job Sprints](#managing-job-sprints) section for more details.
 
 # Walkthrough
 
-Use `-h` or `--help` if you forget the arguments or do not want to read this walkthrough.
+## Managing Job Sprints
+
+You can configure different job sprints to group job applications based on periods of time in which you are actively submitting job applications.
+
+**A new job sprint will be created for you on the initial run. You do not have to worry about managing sprints if you don't plan on grouping your job applications by sprint.**
+
+Job sprints are labeled with the date on which they are created (`YYYY-MM-DD`) by default but can be overridden with a custom name when creating a new sprint.
+
+### Creating a New Sprint
+
+The default name for a sprint is the current date (`YYYY-MM-DD`). You can optionally override the name of the sprint by providing the `-n/--name` flag.
+
+Run the following command to create a new sprint:
+
+```
+fetters sprint new (-n <NAME>)
+```
+
+An error will be raised if you try to create a new sprint but there is already another sprint with an identical name.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/cc537948-1650-489e-bc44-234d10956718" />
+
+### Show Current Job Sprint
+
+Run the following command to show the current job sprint:
+
+```
+fetters sprint current
+```
+
+This will display a table containing the sprint name, start date, end date (if applicable), and the total number of applications in the sprint.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/0a30e6d0-585f-4fe8-b081-2a40af8c95e2" />
+
+### Show All Job Sprints
+
+Run the following command to show all job sprints:
+
+```
+fetters sprint show-all
+```
+
+Like the `current` subcommand, this will display a table containing all sprints, start dates, end dates (if applicable), and the total number of applications tracked in each sprint.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/3eded37d-4968-4937-8da5-c482a6754f51" />
+
+### Switch to a Different Sprint
+
+Run the following command to switch to or set a different sprint:
+
+```
+fetters sprint set
+```
+
+A select menu will appear and the selected sprint will be used to track applications until you decide to switch to a different sprint or create a new one.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/fcd06558-ff31-438e-a85e-b5d9064d1083" />
 
 ## Adding a Job
 
-![Add Job][Add Job]
+> [!NOTE]
+>
+> If you are utilizing [different sprints](#managing-job-sprints), the job application will be added to your current sprint.
 
-As stated before, **this has to be the first command you run.** Doing so will create `job_applications.csv` in your current working directory.
+Run the following command to track a new job application:
 
 ```
-$ ./ts -a COMPANY_NAME
+fetters add <COMPANY_NAME>
 ```
 
-> ***NOTE:*** Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `$ ./ts -a H&M` will cause problems for you if you do not wrap `H&M` in quotes.
+> [!TIP]
+> Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `fetters add H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
-You will then enter the job title at the company, select the status of the job listing, then enter any notes on the job listing. You can just enter through the notes prompt to leave it blank.
+A series of `inquire` prompts will show to set the job title, application status, link, and any notes.
 
-The job listing will be written to `job_applications.csv` after you confirm.
+<img width="1831" height="985" alt="image" src="https://github.com/user-attachments/assets/20513052-5b9e-4927-8c2d-89e7d4cd8d3d" />
 
 ## Updating or Deleting a Job
 
-> ***TIP:*** You do not have to type the exact company name when updating or deleting a job. The program uses regex to search for existing job listings. You can just type a letter or pattern of letters present in the company name. This will return all job listings with company names that include that letter or pattern.
+> [!NOTE]
 >
-> For example, if you have stored job applications from Uber, Hulu, and YouTube and search for just the letter `u`, the program will list all three of those companies. You can then choose which company you would like to update or delete from that list.
+> If you are utilizing [different sprints](#managing-job-sprints), these subcommands will search for jobs within your current sprint that match your query.
 
-**Updating an existing job**
-
-![Update Job][Update Job]
+Run the following commands to update or delete a tracked job application:
 
 ```
-$ ./ts -u COMPANY_NAME
+fetters update
+fetters delete
 ```
 
-Use the `NUMBER` in the far left column to pick the job you want to delete:
-
-Choose the section you want to update. You can modify the job's company name, job title, application status, or notes.
-
-The job listing will be updated in `job_applications.csv` after you confirm.
-
-**Deleting an existing job**
-
-![Delete Job][Delete Job]
+These commands support querying all stored attributes. Here is an example using all of the query options:
 
 ```
-$ ./ts -d COMPANY_NAME
+fetters update [OPTIONS]
+fetters delete [OPTIONS]
+
+Options:
+  -c, --company <COMPANY_NAME>   Filter results by company name.
+  -l, --link <LINK>              Filter results by links.
+  -n, --notes <NOTES>            Filter results by notes.
+      --sprint <SPRINT>          Filter results by sprint name.
+  -s, --status <STATUS>          Filter results by application status.
+  -t, --title <TITLE>            Filter results by job title.
 ```
 
-Identical to updating, you can just enter a letter or pattern in the company name and use the `NUMBER` in the far left column to choose the job you want to delete.
+> [!TIP]
+>
+> All query options support partial text searching via the SQL `LIKE` operator.
 
-The job listing will then be deleted from `job_applications.csv` after you confirm.
+The `delete` subcommand is very fast. A table of job applications (matching the query parameters or all applications if no query is provided) will be displayed, followed by an `inquire` prompt to select the job to delete.
 
-## Search for an Existing Job
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/2f41af0a-4009-40f4-b419-af742f6a0787" />
 
-![Search Jobs][Search Jobs]
+The `update` subcommand will display a `MultiSelect` `inquire` prompt to select all the fields you want to update. `inquire` prompts will only show depending on the fields you have selected.
+
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/42de1c6e-5e3c-4e16-ab50-03aaf7110b6f" />
+
+## Listing/Searching Jobs
+
+> [!NOTE]
+>
+> If you are utilizing [different sprints](#managing-job-sprints), this subcommand will search for jobs within your current sprint that match your query.
+
+Run the following command to list or search job applications:
 
 ```
-$ ./ts -s COMPANY_NAME
+fetters list
 ```
 
-Use this command to quickly search for an existing job. Matches are displayed in a PrettyTable. Like the update and delete commands, you can simply search for letters that are present in the company name to return a match.
-
-## Listing Stored Jobs
-
-![List Jobs][List Jobs]
+Like the [`update` and `delete` subcommands](#updating-or-deleting-a-job), this also supports the same query options:
 
 ```
-$ ./ts -l
+fetters list [OPTIONS]
+
+Options:
+  -c, --company <COMPANY_NAME>   Filter results by company name.
+  -l, --link <LINK>              Filter results by links.
+  -n, --notes <NOTES>            Filter results by notes.
+      --sprint <SPRINT>          Filter results by sprint name.
+  -s, --status <STATUS>          Filter results by application status.
+  -t, --title <TITLE>            Filter results by job title.
 ```
 
-Job applications are sorted by date (descending) and are colorized based on the application status. See the application status and color table in the [Stored Attributes](#stored-attributes) section for details.
+> [!TIP]
+>
+> All query options support partial text searching via the SQL `LIKE` operator.
+
+Jobs matching your query parameters will be displayed in a table.
+
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/41ba1eea-9502-4075-a0f7-52b40473e35d" />
 
 ## Display Job Insights
 
-![Insights][Insights]
+> [!NOTE]
+>
+> If you are utilizing [different sprints](#managing-job-sprints), this subcommand will display insights for your current sprint.
+
+Run the following command to show job application insights:
 
 ```
-$ ./ts -i
+fetters insights
 ```
 
-You can display some insights about the jobs that are stored in the spreadsheet. The program will print how many jobs are listed under each job status as well as its percentage within the spreadsheet.
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/2c4404fa-9e52-49b5-a548-e052c4c29435" />
 
-Each cell is also colorized based on the table described in the [Stored Attributes](#stored-attributes) section.
+## Opening Links
 
-# Releases
+> [!NOTE]
+>
+> If you are utilizing [different sprints](#managing-job-sprints), this subcommand will search for jobs within your current sprint that match your query.
 
-* **May 18, 2020:** v1.0.0 (Python Edition). Features include:
-    + Add a new job
-    + Update an existing job
-    + Delete an existing job
-    + List all stored jobs
-    + Print job application insights
+Each record provides an optional link field. This field can be a URL to the job application (ie. `https://linkedin.com/jobs/view/...`) or a path to a local file (ie. a PDF or Word document).
 
-* **July 4, 2020:** v2.0.0 (Rust Edition).
-    + Unfortunately had to remove the optional list sorting method since Rust's PrettyTable currently does not have some kind of `sort()` method.
-    + Insights will now only display all job status insights rather than including options to only display a specific status. I figure most people would not bother using any of the other options anyways.
-    + Deploying with Travis CI.
-    + *Scary fast*.
-* **August 4, 2021:** v2.0.1.
-    + Previously, prompts would end with a newline character, so user-entered data would appear on a new line underneath the prompt. They are now inline with user-entered data.
-    + Added a new flag, `-s`/`--search`, to search for an existing job.
-    + Formatting and refactoring throughout the source code.
+Run the following command to open the URL or file:
 
-# Why Rust?
+```
+fetters open
+```
 
-I chose Rust because one of my best friends [Luke Schenk][Luke] told me Rust is amazing and encouraged me to try it. Also, I have finished too many projects in Python and wanted to add some variety to my portfolio. Rust and Python are two very different languages, so Rust is just the perfect choice for me since I am looking to get better at programming in a language besides Python.
+Like the `update`, `delete`, and `list` subcommands, this also supports the same query options:
 
-<!-- BADGES -->
-[Github Actions]: https://github.com/JosephLai241/The-Struggle/actions?query=workflow%3ARust
+```
+fetters open [OPTIONS]
 
-<!-- REPO LINKS -->
-[Python branch]: https://github.com/JosephLai241/The-Struggle/tree/python
-[Releases]: https://github.com/JosephLai241/The-Struggle/releases
+Options:
+  -c, --company <COMPANY_NAME>   Filter results by company name.
+  -l, --link <LINK>              Filter results by links.
+  -n, --notes <NOTES>            Filter results by notes.
+      --sprint <SPRINT>          Filter results by sprint name.
+  -s, --status <STATUS>          Filter results by application status.
+  -t, --title <TITLE>            Filter results by job title.
+```
 
-<!-- A BROTHER -->
-[Luke]: https://github.com/LukeDSchenk
+Jobs matching your query parameters will be displayed in a table. Once a job is selected, the link will be opened in your default browser or document viewer based on the file type.
 
-<!-- RUST LINKS -->
-[Rust Official Site]: https://www.rust-lang.org/
+<img width="2463" height="1279" alt="image" src="https://github.com/user-attachments/assets/d77b362c-0755-442c-8dc1-cc8d0fe276a3" />
 
-[ANSI Terminal]: https://docs.rs/ansi_term/0.12.1/ansi_term/
-[chrono]: https://docs.rs/chrono/0.4.11/chrono/
-[PrettyTable]: https://docs.rs/prettytable-rs/0.8.0/prettytable/
+# Conclusion
 
-<!-- SCREENSHOTS -->
-[Add Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/add_job.png
-[Delete Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/delete_job.png
-[Insights]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/insights.png
-[List Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/list_jobs.png
-[Search Jobs]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/search_job.png
-[Update Job]: https://github.com/JosephLai241/The-Struggle/blob/demo/screenshots/update_job.png
+I wish you the best of luck with finding a job. We all know how rough it is out there. I hope this little CLI tool helps you track your applications during the struggle and that you won't have to use this for too long until you find your next opportunity 🤞🏻.
+
+[projectdirs documentation]: https://docs.rs/directories/6.0.0/directories/struct.ProjectDirs.html#method.data_dir
+[releases]: https://github.com/JosephLai241/fetters/releases
