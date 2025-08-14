@@ -80,8 +80,16 @@ pub fn display_sprint(queried_sprints: &Vec<QueriedSprint>, table_header: &str) 
 }
 
 /// Display insights information.
-pub fn display_insights(count_and_percentages: Vec<CountAndPercentage>, table_header: &str) {
+pub fn display_insights(
+    count_and_percentages: Vec<CountAndPercentage>,
+    table_header: &str,
+    remove_current_sprint: bool,
+) {
     let mut table = Table::new(count_and_percentages);
+
+    if remove_current_sprint {
+        table.with(Remove::column(Columns::one(2)));
+    }
 
     table
         .with(Panel::header(table_header.green().bold().to_string()))

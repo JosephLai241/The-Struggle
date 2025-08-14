@@ -17,8 +17,8 @@ pub fn show_insights(
     let jobs_per_sprint = job_repo.count_jobs_per_sprint(current_sprint)?;
 
     if !jobs_per_status.is_empty() && !jobs_per_sprint.is_empty() {
-        display_insights(jobs_per_status, "JOBS PER STATUS");
-        display_insights(jobs_per_sprint, "JOBS PER SPRINT");
+        display_insights(jobs_per_status, "JOBS PER STATUS", false);
+        display_insights(jobs_per_sprint, "JOBS PER SPRINT", true);
     } else {
         return Err(FettersError::NoJobsAvailable(current_sprint.name.clone()));
     }
