@@ -150,9 +150,10 @@ impl<'a> JobRepository<'a> {
 
         let job_counts = jobs::table
             .left_join(statuses::table.on(jobs::status_id.eq(statuses::id)))
-            .left_join(sprints::table.on(jobs::sprint_id.eq(current_sprint.id)))
+            .left_join(sprints::table.on(jobs::sprint_id.eq(sprints::id)))
             .group_by(statuses::name)
             .select((statuses::name.nullable(), count(jobs::id)))
+            .filter(sprints::id.eq(current_sprint.id))
             .load::<(Option<String>, i64)>(self.connection)?;
 
         let mut jobs_per_status: Vec<CountAndPercentage> = Vec::new();
