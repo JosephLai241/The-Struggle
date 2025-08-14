@@ -150,6 +150,8 @@ fetters sprint new (-n <NAME>)
 
 An error will be raised if you try to create a new sprint but there is already another sprint with an identical name.
 
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/cc537948-1650-489e-bc44-234d10956718" />
+
 ### Show Current Job Sprint
 
 Run the following command to show the current job sprint:
@@ -159,6 +161,8 @@ fetters sprint current
 ```
 
 This will display a table containing the sprint name, start date, end date (if applicable), and the total number of applications in the sprint.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/0a30e6d0-585f-4fe8-b081-2a40af8c95e2" />
 
 ### Show All Job Sprints
 
@@ -170,6 +174,8 @@ fetters sprint show-all
 
 Like the `current` subcommand, this will display a table containing all sprints, start dates, end dates (if applicable), and the total number of applications tracked in each sprint.
 
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/3eded37d-4968-4937-8da5-c482a6754f51" />
+
 ### Switch to a Different Sprint
 
 Run the following command to switch to or set a different sprint:
@@ -179,6 +185,8 @@ fetters sprint set
 ```
 
 A select menu will appear and the selected sprint will be used to track applications until you decide to switch to a different sprint or create a new one.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/fcd06558-ff31-438e-a85e-b5d9064d1083" />
 
 ## Adding a Job
 
@@ -196,6 +204,8 @@ fetters add <COMPANY_NAME>
 > Use quotes around the company name if it is more than one word or contains special terminal characters. For example, `&` is used to run a command asynchronously (running in the background) in a Bash terminal. Running `fetters add H&M` will cause problems for you if you do not wrap `H&M` in quotes.
 
 A series of `inquire` prompts will show to set the job title, application status, link, and any notes.
+
+<img width="1765" height="943" alt="image" src="https://github.com/user-attachments/assets/69b54ab1-0d6a-48cc-8a87-421f339453b2" />
 
 ## Updating or Deleting a Job
 
@@ -231,7 +241,11 @@ Options:
 
 The `delete` subcommand is very fast. A table of job applications (matching the query parameters or all applications if no query is provided) will be displayed, followed by an `inquire` prompt to select the job to delete.
 
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/2f41af0a-4009-40f4-b419-af742f6a0787" />
+
 The `update` subcommand will display a `MultiSelect` `inquire` prompt to select all the fields you want to update. `inquire` prompts will only show depending on the fields you have selected.
+
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/42de1c6e-5e3c-4e16-ab50-03aaf7110b6f" />
 
 ## Listing/Searching Jobs
 
@@ -265,6 +279,8 @@ Options:
 
 Jobs matching your query parameters will be displayed in a table.
 
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/41ba1eea-9502-4075-a0f7-52b40473e35d" />
+
 ## Display Job Insights
 
 > [!NOTE]
@@ -276,6 +292,8 @@ Run the following command to show job application insights:
 ```
 fetters insights
 ```
+
+<img width="1820" height="943" alt="image" src="https://github.com/user-attachments/assets/2c4404fa-9e52-49b5-a548-e052c4c29435" />
 
 ## Opening Links
 
@@ -306,6 +324,8 @@ Options:
 ```
 
 Jobs matching your query parameters will be displayed in a table. Once a job is selected, the link will be opened in your default browser or document viewer based on the file type.
+
+<img width="2463" height="1279" alt="image" src="https://github.com/user-attachments/assets/d77b362c-0755-442c-8dc1-cc8d0fe276a3" />
 
 # Conclusion
 
