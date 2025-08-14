@@ -36,7 +36,7 @@
   - [Adding a Job](#adding-a-job)
   - [Updating or Deleting a Job](#updating-or-deleting-a-job)
   - [Listing/Searching Jobs](#listingsearching-jobs)
-  - [Display Job Insights](#showing-job-insights)
+  - [Display Job Insights](#display-job-insights)
   - [Opening Links](#opening-links)
 - [Conclusion](#conclusion)
 
@@ -57,6 +57,7 @@ This program enables you to:
 
 - Add, update, and delete job applications from the database.
 - List/search for tracked job applications. Each entry is color-coded based on the application status.
+- Conveniently open links to job applications in your browser (given a URL) or document viewer (given a local filepath).
 - Display application insights (ie. How many applications are in progress, how many have been rejected, how many are in pending status, etc.).
 - Group job applications by sprints.
 
