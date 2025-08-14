@@ -17,7 +17,6 @@ pub fn get_inquire_config() -> RenderConfig<'static> {
     render_config.help_message = StyleSheet::new()
         .with_attr(Attributes::BOLD)
         .with_fg(Color::DarkYellow);
-    render_config.prompt_prefix = Styled::new("⛓️");
 
     render_config
 }
